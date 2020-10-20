@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot</p>
             <h2>If you want to create your own permanent bot, do the following:</h2>
             <p><a href="https://github.com/join" rel="noopener noreferrer" target="_blank">Sign up to GitHub</a>
-            <p>With your GitHub account visit <a href="https://github.com/hyperchessbot/hyperbot rel="noopener noreferrer" target="_blank"">hyperchessbot repo</a>, then click on Fork.
+            <p>With your GitHub account visit <a href="https://github.com/hyperchessbot/hyperbot" rel="noopener noreferrer" target="_blank">hyperchessbot repo</a>, then click on Fork.
             <p><a href="https://signup.heroku.com/" rel="noopener noreferrer" target="_blank">Sign up to Heroku</a>
             <p>At Heroku create a new app using New / Create new app.</p>
             <p>In the app's dashboard go to the Deploy tab. Use the GitHub button to connect the app to your forked repo. You need to deploy the main branch. Enable Automatic Deploys and press Deploy Branch, for the initial deploy.</p>
