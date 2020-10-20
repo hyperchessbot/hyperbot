@@ -19,6 +19,8 @@ engine.init()
 const KEEP_ALIVE_URL = process.env.KEEP_ALIVE_URL
 const KEEP_ALIVE_INTERVAL = parseInt(process.env.KEEP_ALIVE_INTERVAL || "5")
 
+const possibleOpeningMoves = ["e2e4", "d2d4", "c2c4", "g1f3", "e2e3"]
+
 let playingGameId = null
 
 app.use('/', express.static(__dirname))
@@ -99,11 +101,19 @@ function playGame(gameId){
             if(botTurn){
                 console.log(`engine thinking on`, moves)
 
-                engine
+                let enginePromise = engine
                 .chain()                    
                 .position('startpos', moves)
                 .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
-                .then(result => {
+
+                if(moves.length == 0){                    
+                    let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
+                    enginePromise = Promise.resolve({
+                        bestmove: randomOpeningMove
+                    })
+                }
+                
+                enginePromise.then(result => {
                     let bestmove = result.bestmove
 
                     console.log(`bestmove: ${bestmove}`)
