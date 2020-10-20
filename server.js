@@ -106,11 +106,11 @@ function playGame(gameId){
                 .then(result => {
                     let bestmove = result.bestmove
 
-                    console.log("bestmove:", bestmove)
+                    console.log(`bestmove: ${bestmove}`)
 
                     lichessUtils.postApi({
                         url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
-                        callback: content => console.log("move ack:", content)
+                        callback: content => console.log(`move ack: ${content}`)
                     })
                 })
             }
@@ -129,20 +129,21 @@ function streamEvents(){
             let challengeId = challenge.id
 
             if(playingGameId){
-                console.log("can't accept challenge, already playing")
+                console.log(`can't accept challenge ${challengeId}, already playing`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: true, token: process.env.TOKEN,
-                    callback: content => console.log("accept response:", content)
+                    callback: content => console.log(`accept response: ${content}`)
                 })
             }
         }
 
         if(blob.type == "gameStart"){                
+            let gameId = blob.game.id
+
             if(playingGameId){
-                console.log("can't start new game, already playing")
+                console.log(`can't start new game ${gameId}, already playing`)
             }else{
-                let gameId = blob.game.id
                 playGame(gameId)
             }                    
         }
@@ -163,11 +164,12 @@ app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
 
     if(KEEP_ALIVE_URL){
-        console.log("keep alive interval", KEEP_ALIVE_INTERVAL, "url", KEEP_ALIVE_URL)
+        console.log(`keep alive interval: ${KEEP_ALIVE_INTERVAL} , url: ${KEEP_ALIVE_URL}`)
+
         setInterval(_=>{
             let hours = new Date().getHours()
             if((hours > 5)&&(hours<23)){
-                console.log("hours ok", hours, "keep alive")
+                console.log(`hours ok: ${hours}, keep alive`)
                 fetch(KEEP_ALIVE_URL)
             }        
         }, KEEP_ALIVE_INTERVAL * 60 * 1000)
