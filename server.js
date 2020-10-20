@@ -7,6 +7,8 @@ const port = process.env.PORT || 3000
 
 const fetch = require('node-fetch')
 
+const { streamNdjson } = require('./fetchutils')
+
 const Engine = require('node-uci').Engine
 
 const engine = new Engine(path.join(__dirname, 'stockfish12'))
@@ -65,19 +67,6 @@ app.get('/', (req, res) => {
     `)  
 })
 
-function stream(url, callback){
-    fetch(url, {
-        headers: {
-            Authorization: `Bearer ${process.env.TOKEN}`
-        }
-    })
-    .then(response => {
-        response.body.on('data', chunk => {                        
-            callback(chunk.toString())
-        })
-    })
-}
-
 function playGame(gameId){    
     console.log(`playing game : ${gameId}`)
 
@@ -87,130 +76,104 @@ function playGame(gameId){
 
     let botWhite
 
-    let lastGameTick = new Date().getTime()
-
-    let checkGameInterval = setInterval(_=>{
-        if((new Date().getTime() - lastGameTick) > 30 * 1000){
-            console.log(`game ${gameId} timed out ( playing : ${playingGameId} )`)
-            clearInterval(checkGameInterval)
-            
-            if(playingGameId == gameId) playGame(gameId)
+    streamNdjson({url: url, token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
+        console.log(`game ${gameId} timed out ( playing : ${playingGameId} )`)
+        
+        if(playingGameId == gameId) playGame(gameId)
+    }, callback: blob => {        
+        if(blob.type == "gameFull"){                
+            botWhite = blob.white.name == lichessBotName
         }
-    }, 10 * 1000)        
 
-    stream(url, data => {        
-        lastGameTick = new Date().getTime()
+        if(blob.type != "chatLine"){                
+            let moves = []
 
-        try{
-            let blob = JSON.parse(data)
-            console.log(blob)
+            let state = blob.type == "gameFull" ? blob.state : blob
 
-            if(blob.type == "gameFull"){                
-                botWhite = blob.white.name == lichessBotName
+            if(state.moves){
+                moves = state.moves.split(" ")
             }
 
-            if(blob.type != "chatLine"){                
-                let moves = []
+            let whiteMoves = (moves.length % 2) == 0
+            let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
 
-                let state = blob.type == "gameFull" ? blob.state : blob
+            if(botTurn){
+                console.log(`engine thinking on`, moves)
 
-                if(state.moves){
-                    moves = state.moves.split(" ")
-                }
+                engine
+                .chain()                    
+                .position('startpos', moves)
+                .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
+                .then(result => {
+                    let bestmove = result.bestmove
 
-                let whiteMoves = (moves.length % 2) == 0
-                let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
+                    console.log("bestmove:", bestmove)
 
-                if(botTurn){
-                    engine
-                    .chain()                    
-                    .position('startpos', moves)
-                    .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
-                    .then(result => {
-                        let bestmove = result.bestmove
+                    let moveUrl = `https://lichess.org/api/bot/game/${gameId}/move/${bestmove}`
 
-                        console.log("bestmove:", bestmove)
-
-                        let moveUrl = `https://lichess.org/api/bot/game/${gameId}/move/${bestmove}`
-
-                        fetch(moveUrl, {
-                            method:"POST",
-                            body:"",
-                            headers:{
-                                Authorization: `Bearer ${process.env.TOKEN}`
-                            }
-                        })
-                        .then(response=>response.text().then(content=>
-                            console.log("move ack:", content)))
+                    fetch(moveUrl, {
+                        method:"POST",
+                        body:"",
+                        headers:{
+                            Authorization: `Bearer ${process.env.TOKEN}`
+                        }
                     })
-                }
+                    .then(response=>response.text().then(content=>
+                        console.log("move ack:", content)))
+                })
             }
-        }catch(err){/*console.log(err)*/}
-    })
+        }     
+    }})
 }
 
 function streamEvents(){
-    let lastTick = new Date().getTime()
-
-    let checkInterval = setInterval(_=>{
-        if((new Date().getTime() - lastTick) > 30 * 1000){
-            console.log("event stream timed out")
-            clearInterval(checkInterval)
-            
-            streamEvents()
-        }
-    }, 10 * 1000)        
-
     let streamUrl = `https://lichess.org/api/stream/event`
 
-    stream(streamUrl, data => {
-        lastTick = new Date().getTime()
+    streamNdjson({url: streamUrl, token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
+        console.log(`event stream timed out`)
 
-        if(data.match(/[^\s]+/)){
-            try{
-                let blob = JSON.parse(data)
-                console.log(blob)
+        streamEvents()
+    }, callback: blob => {        
+        if(blob.type == "challenge"){
+            let challenge = blob.challenge
+            let challengeId = challenge.id
+            
+            let acceptUrl = `https://lichess.org/api/challenge/${challengeId}/accept`
 
-                if(blob.type == "challenge"){
-                    let challenge = blob.challenge
-                    let challengeId = challenge.id
-                    
-                    let acceptUrl = `https://lichess.org/api/challenge/${challengeId}/accept`
-
-                    if(playingGameId){
-                        console.log("can't accept challenge, already playing")
-                    }else{
-                        fetch(acceptUrl, {
-                            method: "POST",
-                            body: "",
-                            headers: {
-                                Authorization: `Bearer ${process.env.TOKEN}`                        
-                            }
-                        })
-                        .then(response=>response.text().then(content =>
-                            console.log("accept response :", content)))
+            if(playingGameId){
+                console.log("can't accept challenge, already playing")
+            }else{
+                fetch(acceptUrl, {
+                    method: "POST",
+                    body: "",
+                    headers: {
+                        Authorization: `Bearer ${process.env.TOKEN}`                        
                     }
-                }
-
-                if(blob.type == "gameStart"){                
-                    if(playingGameId){
-                        console.log("can't start new game, already playing")
-                    }else{
-                        let gameId = blob.game.id
-                        playGame(gameId)
-                    }                    
-                }
-
-                if(blob.type == "gameFinish"){                
-                    let gameId = blob.game.id
-
-                    if(gameId == playingGameId){
-                        playingGameId = null
-                    }
-                }
-            }catch(err){}
+                })
+                .then(response=>response.text().then(content =>
+                    console.log("accept response :", content)))
+            }
         }
-    })
+
+        if(blob.type == "gameStart"){                
+            if(playingGameId){
+                console.log("can't start new game, already playing")
+            }else{
+                let gameId = blob.game.id
+                playGame(gameId)
+            }                    
+        }
+
+        if(blob.type == "gameFinish"){                
+            let gameId = blob.game.id
+
+            if(gameId == playingGameId){
+                playingGameId = null
+
+                console.log(`game ${gameId} terminated ( playing : ${playingGameId} )`)
+            }
+        }         
+    }})
 }
 
 app.listen(port, _ => {
