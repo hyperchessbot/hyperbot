@@ -82,6 +82,7 @@ function gameChat(gameId, room, text){
     for(currentRoom of rooms) lichessUtils.postApi({
         url: lichessUtils.postChatUrl(gameId), log: true, token: process.env.TOKEN,
         body: `room=${currentRoom}&text=${text}`,
+        contentType: "application/x-www-form-urlencoded",
         callback: content => console.log(`chat response: ${content}`)
     })
 }
