@@ -29,6 +29,51 @@ const possibleOpeningResponses = {
     "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
 }
 
+function makeMove(gamedId, moves){
+    let enginePromise = engine
+        .chain()                    
+        .position('startpos', moves)
+        .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
+
+    if(moves.length == 0){                    
+        let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
+        enginePromise = Promise.resolve({
+            bestmove: randomOpeningMove,
+            random: true
+        })
+    }
+
+    if(moves.length == 1){                    
+        let responses = possibleOpeningResponses[moves[0]]
+
+        if(responses){
+            let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
+            enginePromise = Promise.resolve({
+                bestmove: randomOpeningResponse,
+                random: true
+            })
+        }                    
+    }
+    
+    enginePromise.then(result => {
+        let bestmove = result.bestmove
+
+        console.log(`bestmove: ${bestmove}, ${result.random ? "random":"engine"}`)
+
+        lichessUtils.postApi({
+            url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
+            callback: content => {
+                console.log(`move ack: ${content}`)
+                if(content.match(/error/)){
+                    console.log(`retry move for ${gamedId} ${moves}`)
+
+                    makeMove(gameId, moves)
+                }
+            }
+        })
+    })
+}
+
 let playingGameId = null
 
 app.use('/', express.static(__dirname))
@@ -109,41 +154,7 @@ function playGame(gameId){
             if(botTurn){
                 console.log(`engine thinking on`, moves)
 
-                let enginePromise = engine
-                .chain()                    
-                .position('startpos', moves)
-                .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
-
-                if(moves.length == 0){                    
-                    let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
-                    enginePromise = Promise.resolve({
-                        bestmove: randomOpeningMove,
-                        random: true
-                    })
-                }
-
-                if(moves.length == 1){                    
-                    let responses = possibleOpeningResponses[moves[0]]
-
-                    if(responses){
-                        let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
-                        enginePromise = Promise.resolve({
-                            bestmove: randomOpeningResponse,
-                            random: true
-                        })
-                    }                    
-                }
-                
-                enginePromise.then(result => {
-                    let bestmove = result.bestmove
-
-                    console.log(`bestmove: ${bestmove}, ${result.random ? "random":"engine"}`)
-
-                    lichessUtils.postApi({
-                        url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
-                        callback: content => console.log(`move ack: ${content}`)
-                    })
-                })
+                makeMove(gameId, moves)
             }
         }     
     }})
