@@ -44,7 +44,7 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <h1>Welcome to Hyper Bot !</h1>            
-            <p><a href="https://lichess.org/@/${lichessBotName}">${lichessBotName}</a> is powered by Hyper Bot</p>
+            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot</p>
             <h2>If you want to create your own permanent bot, do the following:</h2>
             <p><a href="https://github.com/join">Sign up to GitHub</a>
             <p>With your GitHub account visit <a href="https://github.com/hyperchessbot/hyperbot">hyperchessbot repo</a>, then click on Fork.
