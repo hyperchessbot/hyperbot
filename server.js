@@ -228,7 +228,7 @@ function streamEvents(){
 function getOnlineBots(){
     return new Promise(resolve=>{
         fetch(`https://lichess.org/player/bots`).then(response=>response.text().then(content=>{
-            resolve(content.match(/\/@\/[^"]+/g).map(m=>m.split("/")[2]))
+            resolve(content.match(/\/@\/[^"]+/g).map(m=>m.split("/")[2]).filter(bot=>bot!=lichessBotName))
         }))
     })
 }
