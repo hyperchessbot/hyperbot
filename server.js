@@ -139,7 +139,7 @@ app.get('/', (req, res) => {
 function playGame(gameId){    
     console.log(`playing game: ${gameId}`)
 
-    gameChat(gameId, "all", `${lichessBotName} running on code https://github.com/hyperchessbot/hyperbot`)
+    gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`)
     gameChat(gameId, "all", `Good luck !`)
 
     playingGameId = gameId
