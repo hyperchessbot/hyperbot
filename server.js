@@ -1,4 +1,5 @@
 const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
+const engineThreads = process.env.ENGINE_THREADS || "1"
 
 const path = require('path')
 const express = require('express')
@@ -34,6 +35,7 @@ function makeMove(gameId, state, moves){
 
     let enginePromise = engine
         .chain()                    
+        .setoption("Threads", engineThreads)
         .position('startpos', moves)
         .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
 
