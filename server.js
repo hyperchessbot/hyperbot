@@ -29,7 +29,9 @@ const possibleOpeningResponses = {
     "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
 }
 
-function makeMove(gamedId, moves){
+function makeMove(gamedId, state, moves){
+    console.log(`engine thinking on ${gameId}, ${moves}`)
+
     let enginePromise = engine
         .chain()                    
         .position('startpos', moves)
@@ -67,7 +69,7 @@ function makeMove(gamedId, moves){
                 if(content.match(/error/)){
                     console.log(`retry move for ${gamedId} ${moves}`)
 
-                    makeMove(gameId, moves)
+                    makeMove(gameId, state, moves)
                 }
             }
         })
@@ -152,9 +154,7 @@ function playGame(gameId){
             let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
 
             if(botTurn){
-                console.log(`engine thinking on`, moves)
-
-                makeMove(gameId, moves)
+                makeMove(gameId, state, moves)
             }
         }     
     }})
