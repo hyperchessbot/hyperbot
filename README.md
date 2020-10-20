@@ -2,7 +2,7 @@
     <html>        
         <body>
             <h1>Welcome to Hyper Bot !</h1>            
-            <h2>If you want to create your own parmanent bot, do the following:</h2>
+            <h2>If you want to create your own permanent bot, do the following:</h2>
             <p><a href="https://github.com/join" rel="noopener noreferrer" target="_blank">Sign up to GitHub</a>
             <p>With your GitHub account visit <a href="https://github.com/hyperchessbot/hyperbot" rel="noopener noreferrer" target="_blank">hyperchessbot repo</a>, then click on Fork.
             <p><a href="https://signup.heroku.com/" rel="noopener noreferrer" target="_blank">Sign up to Heroku</a>
