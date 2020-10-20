@@ -156,7 +156,9 @@ function playGame(gameId){
             console.log(`bot turn: ${botTurn}`)
 
             if(botTurn){
-                makeMove(gameId, state, moves)
+                try{
+                    makeMove(gameId, state, moves)
+                }catch(err){console.log(err)}
             }
         }     
     }})
