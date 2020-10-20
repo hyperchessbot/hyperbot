@@ -126,7 +126,7 @@ app.get('/', (req, res) => {
 })
 
 function playGame(gameId){    
-    console.log(`playing game : ${gameId}`)
+    console.log(`playing game: ${gameId}`)
 
     playingGameId = gameId
 
@@ -152,6 +152,8 @@ function playGame(gameId){
 
             let whiteMoves = (moves.length % 2) == 0
             let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
+
+            console.log(`bot turn: ${botTurn}`)
 
             if(botTurn){
                 makeMove(gameId, state, moves)
