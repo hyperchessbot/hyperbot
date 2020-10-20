@@ -29,7 +29,7 @@ const possibleOpeningResponses = {
     "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
 }
 
-function makeMove(gamedId, state, moves){
+function makeMove(gameId, state, moves){
     console.log(`engine thinking on ${gameId}, ${moves}`)
 
     let enginePromise = engine
