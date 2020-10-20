@@ -136,11 +136,11 @@ app.get('/', (req, res) => {
     `)  
 })
 
-function playGame(gameId){    
+function playGame(gameId){
     console.log(`playing game: ${gameId}`)
 
-    gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`)
-    gameChat(gameId, "all", `Good luck !`)
+    setTimeout(_=>gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`), 2000)
+    setTimeout(_=>gameChat(gameId, "all", `Good luck !`), 4000)
 
     playingGameId = gameId
 
@@ -220,7 +220,7 @@ function streamEvents(){
 
                 console.log(`game ${gameId} terminated ( playing : ${playingGameId} )`)
 
-                gameChat(gameId, "all", `Good game !`)
+                setTimeout(_=>gameChat(gameId, "all", `Good game !`), 2000)
             }
         }         
     }})
