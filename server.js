@@ -1,6 +1,7 @@
 const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
 const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
+const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 
 const path = require('path')
 const express = require('express')
@@ -139,7 +140,7 @@ function playGame(gameId){
 
     let botWhite
 
-    streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
+    streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, timeoutCallback: _=>{
         console.log(`game ${gameId} timed out ( playing : ${playingGameId} )`)
         
         if(playingGameId == gameId) playGame(gameId)
@@ -172,7 +173,7 @@ function playGame(gameId){
 }
 
 function streamEvents(){
-    streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
+    streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: generalTimeout, timeoutCallback: _=>{
         console.log(`event stream timed out`)
 
         streamEvents()
