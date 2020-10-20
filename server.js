@@ -21,6 +21,23 @@ const KEEP_ALIVE_INTERVAL = parseInt(process.env.KEEP_ALIVE_INTERVAL || "5")
 
 let playingGameId = null
 
+function postApi(props){    
+    if(props.log) console.log("postApi", props)
+
+    let headers = {}
+
+    if(props.token) headers.Authorization = `Bearer ${process.env.TOKEN}`                        
+
+    fetch(props.url, {
+        method: "POST",
+        body: "",
+        headers: headers
+    })
+    .then(response=>response.text().then(content =>{
+        if(props.callback) props.callback(content)
+    }))
+}
+
 app.use('/', express.static(__dirname))
 
 app.get('/', (req, res) => {
@@ -108,15 +125,10 @@ function playGame(gameId){
 
                     console.log("bestmove:", bestmove)
 
-                    fetch(lichessUtils.makeBotMoveUrl(gameId, bestmove), {
-                        method:"POST",
-                        body:"",
-                        headers:{
-                            Authorization: `Bearer ${process.env.TOKEN}`
-                        }
+                    postApi({
+                        url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
+                        callback: content => console.log("move ack:", content)
                     })
-                    .then(response=>response.text().then(content=>
-                        console.log("move ack:", content)))
                 })
             }
         }     
@@ -136,15 +148,10 @@ function streamEvents(){
             if(playingGameId){
                 console.log("can't accept challenge, already playing")
             }else{
-                fetch(lichessUtils.acceptChallengeUrl(challengeId), {
-                    method: "POST",
-                    body: "",
-                    headers: {
-                        Authorization: `Bearer ${process.env.TOKEN}`                        
-                    }
+                postApi({
+                    url: lichessUtils.acceptChallengeUrl(challengeId), log: true, token: process.env.TOKEN,
+                    callback: content => console.log("accept response:", content)
                 })
-                .then(response=>response.text().then(content =>
-                    console.log("accept response :", content)))
             }
         }
 
