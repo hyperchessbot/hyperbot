@@ -225,6 +225,23 @@ function streamEvents(){
     }})
 }
 
+function getOnlineBots(){
+    return new Promise(resolve=>{
+        fetch(`https://lichess.org/player/bots`).then(response=>response.text().then(content=>{
+            resolve(content.match(/\/@\/[^"]+/g).map(m=>m.split("/")[2]))
+        }))
+    })
+}
+
+function challengeBot(bot){
+    lichessUtils.postApi({
+        url: `https://lichess.org/api/challenge/${bot}`, log: true, token: process.env.TOKEN,
+        body: `rated=true&clock.limit=60&clock.increment=0`,
+        contentType: "application/x-www-form-urlencoded",
+        callback: content => console.log(`challenge response: ${content}`)
+    })
+}
+
 app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
 
@@ -261,4 +278,24 @@ app.listen(port, _ => {
             }catch(err){console.log(err)}
         }))
     }, queryPlayingInterval * 1000)
+
+    let lastPlayedAt = 0
+    setInterval(_=>{
+        if(playingGameId){
+            lastPlayedAt = new Date().getTime()
+        }else{
+            if((new Date().getTime() - lastPlayedAt) > 3 * 60 * 1000){
+                console.log(`idle timed out`)
+                getOnlineBots().then(bots=>{
+                    if(bots.length > 0){
+                        let bot = bots[Math.floor(Math.random()*bots.length)]
+
+                        console.log(`challenging ${bot}`)
+
+                        challengeBot(bot)
+                    }
+                })
+            }
+        }
+    }, 60 * 1000)
 })
