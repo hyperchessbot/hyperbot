@@ -16,6 +16,10 @@
             <p>export TOKEN={BOT API token}</p>
             <p>export BOT_NAME={BOT username}</p>
             <p>node server.js</p>        
+            <h2>Other config env vars:</h2>
+            <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
+            <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
+            <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
         </body>
     </html>
     
