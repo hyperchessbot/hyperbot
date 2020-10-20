@@ -67,7 +67,7 @@ function makeMove(gameId, state, moves){
             callback: content => {
                 console.log(`move ack: ${content}`)
                 if(content.match(/error/)){
-                    console.log(`retry move for ${gamedId} ${moves}`)
+                    console.log(`retry move for ${gameId} ${moves}`)
 
                     makeMove(gameId, state, moves)
                 }
