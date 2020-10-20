@@ -76,6 +76,16 @@ function makeMove(gameId, state, moves){
     })
 }
 
+function gameChat(gameId, room, text){
+    let rooms = [room]
+    if(room == "all") rooms = ["player", "spectator"]
+    for(currentRoom of rooms) lichessUtils.postApi({
+        url: lichessUtils.postChatUrl(gameId), log: true, token: process.env.TOKEN,
+        body: `room=${currentRoom}&text=${text}`,
+        callback: content => console.log(`chat response: ${content}`)
+    })
+}
+
 let playingGameId = null
 
 app.use('/', express.static(__dirname))
@@ -127,6 +137,9 @@ app.get('/', (req, res) => {
 
 function playGame(gameId){    
     console.log(`playing game: ${gameId}`)
+
+    gameChat(gameId, "all", `${process.env.BOT_NAME} running on code https://github.com/hyperchessbot/hyperbot`)
+    gameChat(gameId, "all", `Good luck !`)
 
     playingGameId = gameId
 
@@ -205,6 +218,8 @@ function streamEvents(){
                 playingGameId = null
 
                 console.log(`game ${gameId} terminated ( playing : ${playingGameId} )`)
+
+                gameChat(gameId, "all", `Good game !`)
             }
         }         
     }})
