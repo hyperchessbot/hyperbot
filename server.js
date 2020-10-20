@@ -142,6 +142,8 @@ function streamEvents(){
                 console.log(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
                 console.log(`can't accept challenge ${challengeId}, no correspondence`)
+            }else if(challenge.variant.key != "standard"){
+                console.log(`can't accept challenge ${challengeId}, non standard`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: true, token: process.env.TOKEN,
