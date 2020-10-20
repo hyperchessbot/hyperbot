@@ -284,7 +284,7 @@ app.listen(port, _ => {
         if(playingGameId){
             lastPlayedAt = new Date().getTime()
         }else{
-            if((new Date().getTime() - lastPlayedAt) > 3 * 60 * 1000){
+            if((new Date().getTime() - lastPlayedAt) > 60 * 1000){
                 console.log(`idle timed out`)
                 getOnlineBots().then(bots=>{
                     if(bots.length > 0){
@@ -297,5 +297,5 @@ app.listen(port, _ => {
                 })
             }
         }
-    }, 60 * 1000)
+    }, 30 * 1000)
 })
