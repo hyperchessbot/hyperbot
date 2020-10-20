@@ -31,7 +31,7 @@ const possibleOpeningResponses = {
 }
 
 function makeMove(gameId, state, moves){
-    console.log(`engine thinking on ${gameId}, ${moves}`)
+    console.log(`engine thinking with ${engineThreads} thread(s) on ${gameId}, ${moves}`)
 
     let enginePromise = engine
         .chain()                    
