@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000
 const fetch = require('node-fetch')
 
 const { streamNdjson } = require('@easychessanimations/fetchutils')
-const lichess = require("./lichess.js")
+const lichessUtils = require("@easychessanimations/lichessutils")
 
 const Engine = require('node-uci').Engine
 
@@ -75,7 +75,7 @@ function playGame(gameId){
 
     let botWhite
 
-    streamNdjson({url: lichess.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
+    streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
         console.log(`game ${gameId} timed out ( playing : ${playingGameId} )`)
         
         if(playingGameId == gameId) playGame(gameId)
@@ -108,7 +108,7 @@ function playGame(gameId){
 
                     console.log("bestmove:", bestmove)
 
-                    fetch(lichess.makeBotMoveUrl(gameId, bestmove), {
+                    fetch(lichessUtils.makeBotMoveUrl(gameId, bestmove), {
                         method:"POST",
                         body:"",
                         headers:{
@@ -124,7 +124,7 @@ function playGame(gameId){
 }
 
 function streamEvents(){
-    streamNdjson({url: lichess.streamEventsUrl, token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
+    streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: 30, timeoutCallback: _=>{
         console.log(`event stream timed out`)
 
         streamEvents()
@@ -136,7 +136,7 @@ function streamEvents(){
             if(playingGameId){
                 console.log("can't accept challenge, already playing")
             }else{
-                fetch(lichess.acceptChallengeUrl(challengeId), {
+                fetch(lichessUtils.acceptChallengeUrl(challengeId), {
                     method: "POST",
                     body: "",
                     headers: {
