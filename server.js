@@ -21,6 +21,14 @@ const KEEP_ALIVE_INTERVAL = parseInt(process.env.KEEP_ALIVE_INTERVAL || "5")
 
 const possibleOpeningMoves = ["e2e4", "d2d4", "c2c4", "g1f3", "e2e3"]
 
+const possibleOpeningResponses = {
+    "e2e4": ["e7e6", "e7e5", "c7c5", "c7c6", "g8f6", "g7g6", "b7b6", "d7d5"],
+    "d2d4": ["e7e6", "e7e5", "c7c5", "c7c6", "g8f6", "d7d5"],
+    "c2c4": ["e7e6", "e7e5", "c7c5", "c7c6", "g8f6"],
+    "g1f3": ["d7d5", "d7d6", "c7c5", "g8f6"],
+    "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
+}
+
 let playingGameId = null
 
 app.use('/', express.static(__dirname))
@@ -111,6 +119,17 @@ function playGame(gameId){
                     enginePromise = Promise.resolve({
                         bestmove: randomOpeningMove
                     })
+                }
+
+                if(moves.length == 1){                    
+                    let responses = possibleOpeningResponses[moves[0]]
+                    
+                    if(responses){
+                        let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
+                        enginePromise = Promise.resolve({
+                            bestmove: randomOpeningResponse
+                        })
+                    }                    
                 }
                 
                 enginePromise.then(result => {
