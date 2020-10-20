@@ -2,6 +2,7 @@ const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
 const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
+const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
 
 const path = require('path')
 const express = require('express')
@@ -240,4 +241,24 @@ app.listen(port, _ => {
     }
 
     streamEvents()
+
+    setInterval(_=>{
+        fetch(`https://lichess.org/api/user/${lichessBotName}`).then(response=>response.text().then(content=>{
+            try{
+                let blob = JSON.parse(content)
+
+                let playing = blob.playing
+
+                console.log(`playing: ${playing}`)
+
+                if(!playing){
+                    if(playingGameId){
+                        console.log(`inconsistent playing information, resetting playing game id`)
+
+                        playingGameId = null
+                    }
+                }
+            }catch(err){console.log(err)}
+        }))
+    }, queryPlayingInterval * 1000)
 })
