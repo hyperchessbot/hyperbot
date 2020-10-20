@@ -117,17 +117,19 @@ function playGame(gameId){
                 if(moves.length == 0){                    
                     let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
                     enginePromise = Promise.resolve({
-                        bestmove: randomOpeningMove
+                        bestmove: randomOpeningMove,
+                        random: true
                     })
                 }
 
                 if(moves.length == 1){                    
                     let responses = possibleOpeningResponses[moves[0]]
-                    
+
                     if(responses){
                         let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
                         enginePromise = Promise.resolve({
-                            bestmove: randomOpeningResponse
+                            bestmove: randomOpeningResponse,
+                            random: true
                         })
                     }                    
                 }
@@ -135,7 +137,7 @@ function playGame(gameId){
                 enginePromise.then(result => {
                     let bestmove = result.bestmove
 
-                    console.log(`bestmove: ${bestmove}`)
+                    console.log(`bestmove: ${bestmove}, ${result.random ? "random":"engine"}`)
 
                     lichessUtils.postApi({
                         url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
