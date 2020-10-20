@@ -130,6 +130,8 @@ function streamEvents(){
 
             if(playingGameId){
                 console.log(`can't accept challenge ${challengeId}, already playing`)
+            }else if(challenge.speed == "correspondence"){
+                console.log(`can't accept challenge ${challengeId}, no correspondence`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: true, token: process.env.TOKEN,
