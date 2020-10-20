@@ -247,7 +247,7 @@ app.listen(port, _ => {
             try{
                 let blob = JSON.parse(content)
 
-                let playing = blob.playing
+                let playing = blob.count.playing
 
                 console.log(`playing: ${playing}`)
 
