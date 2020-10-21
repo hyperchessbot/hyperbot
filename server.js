@@ -22,6 +22,11 @@ const engine = new Engine(path.join(__dirname, 'stockfish12'))
 
 engine.init()
 
+/*engine.chain().position("startpos").go({depth: 5}).then(result=>{
+    let lastInfo = result.info.pop()
+    console.log(lastInfo)
+})*/
+
 const sse = require('@easychessanimations/sse')
 
 const MAX_SSE_CONNECTIONS = parseInt(process.env.MAX_SSE_CONNECTIONS || "100")
@@ -109,7 +114,9 @@ function makeMove(gameId, state, moves){
     enginePromise.then(result => {
         let bestmove = result.bestmove
 
-        logPage(`bestmove: ${bestmove}, ${result.random ? "random":"engine"}`)
+        let score = result.info ? result.info[result.info.length - 1].score : {unit: "none", value: "none"}
+
+        logPage(`bestmove: ${bestmove}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`)
 
         lichessUtils.postApi({
             url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
