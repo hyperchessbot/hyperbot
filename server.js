@@ -260,7 +260,7 @@ function challengeRandomBot(){
                 console.log(`challenging ${bot}`)
 
                 challengeBot(bot).then(content=>{
-                    resolve(`Challenged <b>${bot}</b> with response <i>${content || "none"}</i> .`)
+                    resolve(`Challenged <b style="color:#070">${bot}</b> with response <i style="color:#007">${content || "none"}</i> .`)
                 })
             }
         })
