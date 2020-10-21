@@ -236,28 +236,37 @@ function getOnlineBots(){
 }
 
 function challengeBot(bot){
-    lichessUtils.postApi({
-        url: `https://lichess.org/api/challenge/${bot}`, log: true, token: process.env.TOKEN,
-        body: `rated=true&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
-        contentType: "application/x-www-form-urlencoded",
-        callback: content => console.log(`challenge response: ${content}`)
-    })
+    return new Promise(resolve=>{
+        lichessUtils.postApi({
+            url: `https://lichess.org/api/challenge/${bot}`, log: true, token: process.env.TOKEN,
+            body: `rated=true&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
+            contentType: "application/x-www-form-urlencoded",
+            callback: content => {
+                console.log(`challenge response: ${content}`)
+                resolve(content)
+            }
+        })
+    })    
 }
 
 function challengeRandomBot(){
-    getOnlineBots().then(bots=>{
-        if(bots.length > 0){
-            let bot = bots[Math.floor(Math.random()*bots.length)]
+    return new Promise(resolve=>{
+        getOnlineBots().then(bots=>{
+            if(bots.length > 0){
+                let bot = bots[Math.floor(Math.random()*bots.length)]
 
-            console.log(`challenging ${bot}`)
+                console.log(`challenging ${bot}`)
 
-            challengeBot(bot)
-        }
-    })
+                challengeBot(bot).then(result=>{
+                    resolve(`challenged ${bot} with response ${content}`)
+                })
+            }
+        })
+    })    
 }
 
 app.get('/chr', (req, res) => {
-    challengeRandomBot()
+    challengeRandomBot().then(result=>res.send(result))
 })
 
 app.listen(port, _ => {
