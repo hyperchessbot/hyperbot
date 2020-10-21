@@ -3,6 +3,8 @@ const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
+const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "10")
+const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "20")
 
 const path = require('path')
 const express = require('express')
@@ -236,7 +238,7 @@ function getOnlineBots(){
 function challengeBot(bot){
     lichessUtils.postApi({
         url: `https://lichess.org/api/challenge/${bot}`, log: true, token: process.env.TOKEN,
-        body: `rated=true&clock.limit=60&clock.increment=0`,
+        body: `rated=true&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
         contentType: "application/x-www-form-urlencoded",
         callback: content => console.log(`challenge response: ${content}`)
     })
@@ -284,7 +286,7 @@ app.listen(port, _ => {
         if(playingGameId){
             lastPlayedAt = new Date().getTime()
         }else{
-            if((new Date().getTime() - lastPlayedAt) > 60 * 1000){
+            if((new Date().getTime() - lastPlayedAt) > challengeTimeout * 60 * 1000){
                 console.log(`idle timed out`)
                 getOnlineBots().then(bots=>{
                     if(bots.length > 0){
@@ -297,5 +299,5 @@ app.listen(port, _ => {
                 })
             }
         }
-    }, 30 * 1000)
+    }, challengeInterval * 60 * 1000)
 })
