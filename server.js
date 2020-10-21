@@ -116,7 +116,11 @@ function makeMove(gameId, state, moves){
 
         let score = result.info ? result.info[result.info.length - 1].score : {unit: "none", value: "none"}
 
-        logPage(`bestmove: ${bestmove}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`)
+        let logMsg = `bestmove: ${bestmove}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
+
+        logPage(logMsg)
+
+        document.getElementById("logBestmove").innerHTML = logMsg
 
         lichessUtils.postApi({
             url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
@@ -163,6 +167,7 @@ app.get('/', (req, res) => {
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
             ( <a href="/chr" rel="noopener noreferrer" target="_blank">challenge random bot by ${lichessBotName}</a> )
             </p>
+            <p id="logBestmove"></p>
             <h2>If you want to create your own permanent bot, do the following:</h2>
             <p><a href="https://github.com/join" rel="noopener noreferrer" target="_blank">Sign up to GitHub</a>
             <p>With your GitHub account visit <a href="https://github.com/hyperchessbot/hyperbot" rel="noopener noreferrer" target="_blank">hyperchessbot repo</a>, then click on Fork.
