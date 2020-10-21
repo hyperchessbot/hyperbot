@@ -120,8 +120,6 @@ function makeMove(gameId, state, moves){
 
         logPage(logMsg)
 
-        document.getElementById("logBestmove").innerHTML = logMsg
-
         lichessUtils.postApi({
             url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
             callback: content => {
@@ -197,7 +195,11 @@ app.get('/', (req, res) => {
                     }
 
                     if(blob.kind == "logPage"){
-                        console.log(blob.content)
+                        let content = blob.content
+
+                        console.log(content)
+
+                        if(content.match(/^bestmove/) document.getElementById("logBestmove").innerHTML = content
                     }
                 }
 
