@@ -27,32 +27,11 @@ engine.init()
     console.log(lastInfo)
 })*/
 
-const sse = require('@easychessanimations/sse')
+const { sseMiddleware, setupStream, ssesend, TICK_INTERVAL } = require('@easychessanimations/sse')
 
-const MAX_SSE_CONNECTIONS = parseInt(process.env.MAX_SSE_CONNECTIONS || "100")
-const TICK_INTERVAL = parseInt(process.env.TICK_INTERVAL || "10000")
+app.use(sseMiddleware)
 
-let sseconnections = []
-app.use(sse)
-
-app.get('/stream', function(req, res) {  
-    res.sseSetup()  
-    sseconnections.push(res)    
-    while(sseconnections.length > MAX_SSE_CONNECTIONS) sseconnections.shift()
-    console.log(`new stream ${req.hostname} conns ${sseconnections.length}`)
-})
-
-function ssesend(obj){    
-    for(let i = 0; i < sseconnections.length; i++){
-        sseconnections[i].sseSend(obj)
-    }
-}
-
-setInterval(function(){
-    ssesend({
-        kind: "tick"
-    })
-}, TICK_INTERVAL)
+setupStream(app)
 
 function logPage(content){
     console.log(content)
