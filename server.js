@@ -138,6 +138,7 @@ app.get('/', (req, res) => {
                 padding-left: 20px;
             }
             </style>
+            <script src="https://unpkg.com/@easychessanimations/sse/lib/sseclient.js"></script>
         </head>
         <body>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -164,13 +165,12 @@ app.get('/', (req, res) => {
             <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
             <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
             <script>
-                let source
-                let lastSourceTick = 0
-
-                function processSource(blob){
+            let firstTick = true
+            function processSource(blob){
                     if(blob.kind == "tick"){
                         lastSourceTick = performance.now()
-                        //console.log("tick")
+                        if(firstTick) console.log("stream started ticking")
+                        firstTick = false
                     }
 
                     if(blob.kind == "logPage"){
@@ -182,45 +182,7 @@ app.get('/', (req, res) => {
                     }
                 }
 
-                function setupSource(){
-                    lastSourceTick = performance.now()
-
-                    source = new EventSource('/stream')
-
-                    source.addEventListener('message', e => {                        
-                        try{
-                            let blob = JSON.parse(e.data)               
-
-                            processSource(blob)
-                        }catch(err){console.log(err)}        
-                    }, false)
-
-                    source.addEventListener('open', _ => {            
-                        
-                    }, false)
-
-                    source.addEventListener('error', e => {
-                        if (e.readyState == EventSource.CLOSED) {                
-                            
-                        }else{            
-                            source.close()
-                        }
-                    }, false)
-                }
-
-                function checkSource(){
-                    let elapsed = performance.now() - lastSourceTick
-
-                    if(elapsed > 2 * ${TICK_INTERVAL}){
-                        console.log("stream timed out")
-
-                        setupSource()
-                    }
-                }
-
-                setupSource()
-
-                setInterval(_=>checkSource, ${TICK_INTERVAL})
+            setupSource(processSource, ${TICK_INTERVAL})    
             </script>
         </body>
     </html>
