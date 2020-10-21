@@ -138,7 +138,7 @@ app.get('/', (req, res) => {
                 padding-left: 20px;
             }
             </style>
-            <script src="https://unpkg.com/@easychessanimations/sse/lib/sseclient.js"></script>
+            <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
         </head>
         <body>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -164,23 +164,20 @@ app.get('/', (req, res) => {
             <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
             <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
             <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
-            <script>
-            let firstTick = true
+            <script>            
             function processSource(blob){
-                    if(blob.kind == "tick"){
-                        lastSourceTick = performance.now()
-                        if(firstTick) console.log("stream started ticking")
-                        firstTick = false
-                    }
-
-                    if(blob.kind == "logPage"){
-                        let content = blob.content
-
-                        console.log(content)
-
-                        if(content.match(/^bestmove/)) document.getElementById("logBestmove").innerHTML = content
-                    }
+                if(blob.kind == "tick"){                    
+                    if(isFirstSourceTick) console.log("stream started ticking")
                 }
+
+                if(blob.kind == "logPage"){
+                    let content = blob.content
+
+                    console.log(content)
+
+                    if(content.match(/^bestmove/)) document.getElementById("logBestmove").innerHTML = content
+                }
+            }
 
             setupSource(processSource, ${TICK_INTERVAL})    
             </script>
