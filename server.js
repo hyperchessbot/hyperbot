@@ -22,6 +22,42 @@ const engine = new Engine(path.join(__dirname, 'stockfish12'))
 
 engine.init()
 
+const sse = require('@easychessanimations/sse')
+
+const MAX_SSE_CONNECTIONS = parseInt(process.env.MAX_SSE_CONNECTIONS || "100")
+const TICK_INTERVAL = parseInt(process.env.TICK_INTERVAL || "10000")
+
+let sseconnections = []
+app.use(sse)
+
+app.get('/stream', function(req, res) {  
+    res.sseSetup()  
+    sseconnections.push(res)    
+    while(sseconnections.length > MAX_SSE_CONNECTIONS) sseconnections.shift()
+    console.log(`new stream ${req.hostname} conns ${sseconnections.length}`)
+})
+
+function ssesend(obj){    
+    for(let i = 0; i < sseconnections.length; i++){
+        sseconnections[i].sseSend(obj)
+    }
+}
+
+setInterval(function(){
+    ssesend({
+        kind: "tick"
+    })
+}, TICK_INTERVAL)
+
+function logPage(content){
+    console.log(content)
+
+    ssesend({
+        kind: "logPage",
+        content: content
+    })
+}
+
 const KEEP_ALIVE_URL = process.env.KEEP_ALIVE_URL
 const KEEP_ALIVE_INTERVAL = parseInt(process.env.KEEP_ALIVE_INTERVAL || "5")
 
@@ -37,11 +73,11 @@ const possibleOpeningResponses = {
 
 function makeMove(gameId, state, moves){
     if(gameId != playingGameId){
-        console.log(`refused to make move for invalid game ${gameId} ( playing : ${playingGameId} )`)
+        logPage(`refused to make move for invalid game ${gameId} ( playing : ${playingGameId} )`)
         return
     }
 
-    console.log(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
+    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
     let enginePromise = engine
         .chain()                    
@@ -73,14 +109,14 @@ function makeMove(gameId, state, moves){
     enginePromise.then(result => {
         let bestmove = result.bestmove
 
-        console.log(`bestmove: ${bestmove}, ${result.random ? "random":"engine"}`)
+        logPage(`bestmove: ${bestmove}, ${result.random ? "random":"engine"}`)
 
         lichessUtils.postApi({
             url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
             callback: content => {
-                console.log(`move ack: ${content}`)
+                logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
-                    console.log(`retry move for ${gameId} ${moves}`)
+                    logPage(`retry move for ${gameId} ${moves}`)
 
                     makeMove(gameId, state, moves)
                 }
@@ -138,14 +174,68 @@ app.get('/', (req, res) => {
             <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
             <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
             <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
-            <script></script>
+            <script>
+                let source
+                let lastSourceTick = 0
+
+                function processSource(blob){
+                    if(blob.kind == "tick"){
+                        lastSourceTick = performance.now()
+                        //console.log("tick")
+                    }
+
+                    if(blob.kind == "logPage"){
+                        console.log(blob.content)
+                    }
+                }
+
+                function setupSource(){
+                    lastSourceTick = performance.now()
+
+                    source = new EventSource('/stream')
+
+                    source.addEventListener('message', e => {                        
+                        try{
+                            let blob = JSON.parse(e.data)               
+
+                            processSource(blob)
+                        }catch(err){console.log(err)}        
+                    }, false)
+
+                    source.addEventListener('open', _ => {            
+                        
+                    }, false)
+
+                    source.addEventListener('error', e => {
+                        if (e.readyState == EventSource.CLOSED) {                
+                            
+                        }else{            
+                            source.close()
+                        }
+                    }, false)
+                }
+
+                function checkSource(){
+                    let elapsed = performance.now() - lastSourceTick
+
+                    if(elapsed > 2 * ${TICK_INTERVAL}){
+                        console.log("stream timed out")
+
+                        setupSource()
+                    }
+                }
+
+                setupSource()
+
+                setInterval(_=>checkSource, ${TICK_INTERVAL})
+            </script>
         </body>
     </html>
     `)  
 })
 
 function playGame(gameId){
-    console.log(`playing game: ${gameId}`)
+    logPage(`playing game: ${gameId}`)
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
@@ -155,7 +245,7 @@ function playGame(gameId){
     let botWhite
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, timeoutCallback: _=>{
-        console.log(`game ${gameId} timed out ( playing : ${playingGameId} )`)
+        logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
         
         if(playingGameId == gameId) playGame(gameId)
     }, callback: blob => {        
@@ -175,7 +265,7 @@ function playGame(gameId){
             let whiteMoves = (moves.length % 2) == 0
             let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
 
-            console.log(`bot turn: ${botTurn}`)
+            logPage(`bot turn: ${botTurn}`)
 
             if(botTurn){
                 try{
@@ -188,7 +278,7 @@ function playGame(gameId){
 
 function streamEvents(){
     streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: generalTimeout, timeoutCallback: _=>{
-        console.log(`event stream timed out`)
+        logPage(`event stream timed out`)
 
         streamEvents()
     }, callback: blob => {        
@@ -197,15 +287,15 @@ function streamEvents(){
             let challengeId = challenge.id
 
             if(playingGameId){
-                console.log(`can't accept challenge ${challengeId}, already playing`)
+                logPage(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
-                console.log(`can't accept challenge ${challengeId}, no correspondence`)
+                logPage(`can't accept challenge ${challengeId}, no correspondence`)
             }else if(challenge.variant.key != "standard"){
-                console.log(`can't accept challenge ${challengeId}, non standard`)
+                logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: true, token: process.env.TOKEN,
-                    callback: content => console.log(`accept response: ${content}`)
+                    callback: content => logPage(`accept response: ${content}`)
                 })
             }
         }
@@ -214,7 +304,7 @@ function streamEvents(){
             let gameId = blob.game.id
 
             if(playingGameId){
-                console.log(`can't start new game ${gameId}, already playing`)
+                logPage(`can't start new game ${gameId}, already playing`)
             }else{
                 playGame(gameId)
             }                    
@@ -226,7 +316,7 @@ function streamEvents(){
             if(gameId == playingGameId){
                 playingGameId = null
 
-                console.log(`game ${gameId} terminated ( playing : ${playingGameId} )`)
+                logPage(`game ${gameId} terminated ( playing : ${playingGameId} )`)
 
                 setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good game !`), 2000)
             }
@@ -249,7 +339,7 @@ function challengeBot(bot){
             body: `rated=true&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
             contentType: "application/x-www-form-urlencoded",
             callback: content => {
-                console.log(`challenge response: ${content}`)
+                logPage(`challenge response: ${content}`)
                 resolve(content)
             }
         })
@@ -262,7 +352,7 @@ function challengeRandomBot(){
             if(bots.length > 0){
                 let bot = bots[Math.floor(Math.random()*bots.length)]
 
-                console.log(`challenging ${bot}`)
+                logPage(`challenging ${bot}`)
 
                 challengeBot(bot).then(content=>{
                     resolve(`Challenged <b style="color:#070">${bot}</b> with response <i style="color:#007">${content || "none"}</i> .`)
@@ -300,11 +390,11 @@ app.listen(port, _ => {
 
                 let playing = blob.count.playing
 
-                console.log(`playing: ${playing}`)
+                logPage(`playing: ${playing}`)
 
                 if(!playing){
                     if(playingGameId){
-                        console.log(`inconsistent playing information, resetting playing game id`)
+                        logPage(`inconsistent playing information, resetting playing game id`)
 
                         playingGameId = null
                     }
