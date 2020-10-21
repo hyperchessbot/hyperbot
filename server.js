@@ -199,7 +199,7 @@ app.get('/', (req, res) => {
 
                         console.log(content)
 
-                        if(content.match(/^bestmove/) document.getElementById("logBestmove").innerHTML = content
+                        if(content.match(/^bestmove/)) document.getElementById("logBestmove").innerHTML = content
                     }
                 }
 
