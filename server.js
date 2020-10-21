@@ -36,6 +36,11 @@ const possibleOpeningResponses = {
 }
 
 function makeMove(gameId, state, moves){
+    if(gameId != playingGameId){
+        console.log(`refused to make move for invalid game id ${gameId} ( playing : ${playingGameId} )`)
+        return
+    }
+
     console.log(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
     let enginePromise = engine
