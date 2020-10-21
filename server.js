@@ -244,6 +244,22 @@ function challengeBot(bot){
     })
 }
 
+function challengeRandomBot(){
+    getOnlineBots().then(bots=>{
+        if(bots.length > 0){
+            let bot = bots[Math.floor(Math.random()*bots.length)]
+
+            console.log(`challenging ${bot}`)
+
+            challengeBot(bot)
+        }
+    })
+}
+
+app.get('/chr', (req, res) => {
+    challengeRandomBot()
+})
+
 app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
 
@@ -288,15 +304,7 @@ app.listen(port, _ => {
         }else{
             if((new Date().getTime() - lastPlayedAt) > challengeTimeout * 60 * 1000){
                 console.log(`idle timed out`)
-                getOnlineBots().then(bots=>{
-                    if(bots.length > 0){
-                        let bot = bots[Math.floor(Math.random()*bots.length)]
-
-                        console.log(`challenging ${bot}`)
-
-                        challengeBot(bot)
-                    }
-                })
+                challengeRandomBot()
             }
         }
     }, challengeInterval * 60 * 1000)
