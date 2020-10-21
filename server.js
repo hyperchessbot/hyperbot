@@ -37,7 +37,7 @@ const possibleOpeningResponses = {
 
 function makeMove(gameId, state, moves){
     if(gameId != playingGameId){
-        console.log(`refused to make move for invalid game id ${gameId} ( playing : ${playingGameId} )`)
+        console.log(`refused to make move for invalid game ${gameId} ( playing : ${playingGameId} )`)
         return
     }
 
