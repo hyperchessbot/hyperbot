@@ -58,7 +58,7 @@ function makeMove(gameId, state, moves){
 
     logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
-    engine.logProcessLine = true
+    engine.logProcessLine = false
 
     let enginePromise = engine
         .setoption("Threads", engineThreads)
@@ -112,9 +112,9 @@ function makeMove(gameId, state, moves){
             }
         })
 
-        if(result.ponder){
+        if(result.ponder && false){
             console.log(`start pondering on ${result.ponder}`)
-            engine.logProcessLine = true
+            engine.logProcessLine = false
 
             engine            
             .position('startpos', moves.concat([bestmove, result.ponder]))
