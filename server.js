@@ -1,4 +1,5 @@
-const lichessBotName = process.env.BOT_NAME || "blazikenbot2000"
+const lichessBotName = process.env.BOT_NAME || "RobotPatzer"
+const lichessBotName2 = process.env.BOT_NAME_2 || "BlazikenBot2000"
 const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "100"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "5")
@@ -181,7 +182,7 @@ app.get('/', (req, res) => {
     <!doctype html>
     <html>
         <head>
-            <title>Hyper Bot</title>
+            <title>RobotPatzer Online</title>
             <style>
             p {
                 max-width: 700px;
@@ -200,8 +201,11 @@ app.get('/', (req, res) => {
             <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
         </head>
         <body>
-            <h1>Robot-Patzer Online Bot!</h1>            
+            <h1>Welcome to RobotPatzer Online Bot Explorer</h1> 
+            <h1>Challenge:</h1>
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">
+            <p><a href="https://lichess.org/@/${lichessBotName2}" rel="noopener noreferrer" target="_blank">
+            
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
