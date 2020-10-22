@@ -203,8 +203,9 @@ app.get('/', (req, res) => {
         <body>
             <h1>Welcome to RobotPatzer Online Bot Explorer</h1> 
             <h1>Challenge:</h1>
-            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">
-            <p><a href="https://lichess.org/@/${lichessBotName2}" rel="noopener noreferrer" target="_blank">
+            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
+            <p><a href="https://lichess.org/@/${lichessBotName2}" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
+            
             
             <script>            
             function processSource(blob){
