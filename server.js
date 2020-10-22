@@ -58,6 +58,8 @@ function makeMove(gameId, state, moves){
 
     logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
+    engine.logProcessLine = false
+
     let enginePromise = engine
         .setoption("Threads", engineThreads)
         .setoption("Move Overhead", engineMoveOverhead)
@@ -112,6 +114,8 @@ function makeMove(gameId, state, moves){
 
         if(result.ponder){
             console.log(`start pondering on ${result.ponder}`)
+            engine.logProcessLine = false
+            
             engine            
             .position('startpos', moves.concat([bestmove, result.ponder]))
             .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponder: true })
