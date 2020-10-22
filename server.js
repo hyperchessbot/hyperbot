@@ -57,7 +57,9 @@ const possibleOpeningResponses = {
 
 function requestBook(fen){
     return new Promise(resolve=>{
-        fetch(`https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&variant=standard`).then(response=>response.text().then(content=>{
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=10&variant=standard`
+        console.log(reqUrl)
+        fetch(reqUrl).then(response=>response.text().then(content=>{
             try{
                 let blob = JSON.parse(content)
 
