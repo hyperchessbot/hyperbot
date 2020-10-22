@@ -57,7 +57,7 @@ const possibleOpeningResponses = {
 
 function requestBook(fen){
     return new Promise(resolve=>{
-        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=10&variant=standard`
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=4&variant=standard`
         console.log(reqUrl)
         fetch(reqUrl).then(response=>response.text().then(content=>{
             try{
@@ -105,7 +105,7 @@ async function makeMove(gameId, state, moves){
 
     let bookalgeb = null
 
-    if(useBook){
+    if(useBook && (moves.length < 20)){
         let blob = await requestBook(state.fen)
 
         let bmoves = blob.moves
