@@ -87,6 +87,7 @@ function makeMove(gameId, state, moves){
     
     enginePromise.then(result => {
         let bestmove = result.bestmove
+        let ponder = result.ponder
 
         let score = {unit: "none", value: "none"}
 
@@ -95,7 +96,7 @@ function makeMove(gameId, state, moves){
             if(scoreTemp) score = scoreTemp
         }catch(err){console.log(err)}
 
-        let logMsg = `bestmove: ${bestmove}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
+        let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
         logPage(logMsg)
 
