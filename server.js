@@ -273,6 +273,8 @@ function streamEvents(){
 
                 logPage(`game ${gameId} terminated ( playing : ${playingGameId} )`)
 
+                engine.stop()
+
                 setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good game !`), 2000)
             }
         }         
