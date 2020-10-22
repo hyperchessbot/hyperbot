@@ -110,7 +110,7 @@ function makeMove(gameId, state, moves){
             }
         })
 
-        if(result.ponder){
+        if(result.ponder && false){
             engine            
             .position('startpos', moves.concat([bestmove, result.ponder]))
             .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponder: true })
