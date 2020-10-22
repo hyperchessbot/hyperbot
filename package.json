@@ -21,7 +21,7 @@
     "@easychessanimations/fetchutils": "^1.0.2",
     "@easychessanimations/lichessutils": "^1.0.12",
     "@easychessanimations/sse": "^1.0.6",
-    "@easychessanimations/uci": "^1.0.1",
+    "@easychessanimations/uci": "^1.0.3",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
   }
