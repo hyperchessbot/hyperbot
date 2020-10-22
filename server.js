@@ -67,7 +67,7 @@ function requestBook(fen){
     })    
 }
 
-function makeMove(gameId, state, moves){
+async function makeMove(gameId, state, moves){
     if(gameId != playingGameId){
         logPage(`refused to make move for invalid game ${gameId} ( playing : ${playingGameId} )`)
         return
