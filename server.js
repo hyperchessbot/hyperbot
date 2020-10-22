@@ -22,10 +22,7 @@ const engine = new Engine(path.join(__dirname, 'stockfish12'))
 
 engine.init()
 
-/*engine.chain().position("startpos").go({depth: 5}).then(result=>{
-    let lastInfo = result.info.pop()
-    console.log(lastInfo)
-})*/
+let playingGameId = null
 
 const { sseMiddleware, setupStream, ssesend, TICK_INTERVAL } = require('@easychessanimations/sse')
 
@@ -112,8 +109,6 @@ function makeMove(gameId, state, moves){
         })
     })
 }
-
-let playingGameId = null
 
 app.use('/', express.static(__dirname))
 
@@ -293,8 +288,9 @@ function challengeBot(bot){
 function challengeRandomBot(){
     return new Promise(resolve=>{
         lichessUtils.getOnlineBots().then(bots=>{
+            bots = bots.filter(bot=>bot!=lichessBotName)
             if(bots.length > 0){
-                let bot = bots.filter(bot=>bot!=lichessBotName)[Math.floor(Math.random()*bots.length)]
+                let bot = bots[Math.floor(Math.random()*bots.length)]
 
                 logPage(`challenging ${bot}`)
 
