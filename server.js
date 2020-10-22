@@ -8,6 +8,8 @@ const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 const allowPonder = process.env.ALLOW_PONDER == "true"
 const logApi = process.env.LOG_API == "true"
 const useBook = process.env.USE_BOOK == "true"
+const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
+const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
 
 const path = require('path')
 const express = require('express')
@@ -57,7 +59,7 @@ const possibleOpeningResponses = {
 
 function requestBook(fen){
     return new Promise(resolve=>{
-        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=4&variant=standard`
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=${bookSpread}&variant=standard`
         
         if(logApi) console.log(reqUrl)
 
@@ -107,7 +109,7 @@ async function makeMove(gameId, state, moves){
 
     let bookalgeb = null
 
-    if(useBook && (moves.length < 20)){
+    if(useBook && (moves.length < bookDepth)){
         let blob = await requestBook(state.fen)
 
         if(blob){
