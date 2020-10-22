@@ -97,7 +97,7 @@ function makeMove(gameId, state, moves){
         try{
             scoreTemp = result.depthInfos[result.depthInfos.length - 1].score
             if(scoreTemp) score = scoreTemp
-        }catch(err){console.log(err)}
+        }catch(err){/*console.log(err)*/}
 
         let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
@@ -220,6 +220,7 @@ function playGame(gameId){
                 moves = state.moves.split(" ")
 
                 const chess = new Chess()
+                console.log("chess", chess)
                 moves.forEach(move => chess.move(move, {sloppy: true}))
 
                 state.fen = chess.fen
