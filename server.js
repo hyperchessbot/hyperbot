@@ -62,8 +62,6 @@ function makeMove(gameId, state, moves){
     engine.logProcessLine = false
 
     let enginePromise = engine
-        .setoption("Threads", engineThreads)
-        .setoption("Move Overhead", engineMoveOverhead)
         .position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
 
@@ -188,6 +186,10 @@ app.get('/', (req, res) => {
 
 function playGame(gameId){
     logPage(`playing game: ${gameId}`)
+
+    engine
+    .setoption("Threads", engineThreads)
+    .setoption("Move Overhead", engineMoveOverhead)
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
