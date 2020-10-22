@@ -22,7 +22,6 @@
     "@easychessanimations/lichessutils": "^1.0.15",
     "@easychessanimations/sse": "^1.0.6",
     "@easychessanimations/uci": "^1.0.14",
-    "chess": "^0.4.4",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
   }

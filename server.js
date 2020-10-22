@@ -22,8 +22,6 @@ const UciEngine = require('@easychessanimations/uci')
 
 const engine = new UciEngine(path.join(__dirname, 'stockfish12'))
 
-const { Chess } = require('chess')
-
 let playingGameId = null
 
 const { sseMiddleware, setupStream, ssesend, TICK_INTERVAL } = require('@easychessanimations/sse')
@@ -60,7 +58,7 @@ function makeMove(gameId, state, moves){
         return
     }
 
-    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, fen ${state.fen}, moves ${moves}`)
+    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
     engine.logProcessLine = false
 
@@ -218,11 +216,6 @@ function playGame(gameId){
 
             if(state.moves){
                 moves = state.moves.split(" ")
-
-                const chess = new Chess()
-                moves.forEach(move => chess.move(move))
-
-                state.fen = chess.fen
             }
 
             let whiteMoves = (moves.length % 2) == 0
