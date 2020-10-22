@@ -16,13 +16,7 @@ const fetch = require('node-fetch')
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 const lichessUtils = require("@easychessanimations/lichessutils")
 
-/*const Engine = require('node-uci').Engine
-
-const engine = new Engine(path.join(__dirname, 'stockfish12'))
-
-engine.init()*/
-
-const UciEngine = require('./uci')
+const UciEngine = require('@easychessanimations/uci')
 
 const engine = new UciEngine(path.join(__dirname, 'stockfish12'))
 
@@ -63,13 +57,6 @@ function makeMove(gameId, state, moves){
     }
 
     logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
-
-    /*let enginePromise = engine
-        .chain()                    
-        .setoption("Threads", engineThreads)
-        .setoption("Move Overhead", engineMoveOverhead)
-        .position('startpos', moves)
-        .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })*/
 
     let enginePromise = engine
         .setoption("Threads", engineThreads)
