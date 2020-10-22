@@ -109,6 +109,14 @@ function makeMove(gameId, state, moves){
                 }
             }
         })
+
+        if(result.ponder){
+            engine
+            .setoption("Threads", engineThreads)
+            .setoption("Move Overhead", engineMoveOverhead)
+            .position('startpos', moves.concat([result.ponder]))
+            .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponder: true })
+        }
     })
 }
 
