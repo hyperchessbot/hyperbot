@@ -16,11 +16,15 @@ const fetch = require('node-fetch')
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 const lichessUtils = require("@easychessanimations/lichessutils")
 
-const Engine = require('node-uci').Engine
+/*const Engine = require('node-uci').Engine
 
 const engine = new Engine(path.join(__dirname, 'stockfish12'))
 
-engine.init()
+engine.init()*/
+
+const UciEngine = require('./uci')
+
+const engine = new UciEngine(path.join(__dirname, 'stockfish12'))
 
 let playingGameId = null
 
@@ -60,12 +64,18 @@ function makeMove(gameId, state, moves){
 
     logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
-    let enginePromise = engine
+    /*let enginePromise = engine
         .chain()                    
         .setoption("Threads", engineThreads)
         .setoption("Move Overhead", engineMoveOverhead)
         .position('startpos', moves)
-        .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
+        .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })*/
+
+    let enginePromise = engine
+        .setoption("Threads", engineThreads)
+        .setoption("Move Overhead", engineMoveOverhead)
+        .position('startpos', moves)
+        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
 
     if(moves.length == 0){                    
         let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
