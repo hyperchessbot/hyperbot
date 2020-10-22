@@ -9,7 +9,7 @@ class UciEngine{
         this.process.stdout.on('data', data =>{
             let content = data.toString()
 
-            console.log(`out: ${content}`)
+            //console.log(`out: ${content}`)
 
             this.buffer += content
 
