@@ -8,6 +8,8 @@ const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 const allowPonder = process.env.ALLOW_PONDER == "true"
 const logApi = process.env.LOG_API == "true"
 const useBook = process.env.USE_BOOK == "true"
+const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
+const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
 
 const path = require('path')
 const express = require('express')
@@ -57,8 +59,10 @@ const possibleOpeningResponses = {
 
 function requestBook(fen){
     return new Promise(resolve=>{
-        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=10&variant=standard`
-        console.log(reqUrl)
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=${bookSpread}&variant=standard`
+        
+        if(logApi) console.log(reqUrl)
+
         fetch(reqUrl).then(response=>response.text().then(content=>{
             try{
                 let blob = JSON.parse(content)
@@ -103,10 +107,42 @@ async function makeMove(gameId, state, moves){
         }                    
     }
 
-    if(useBook){
+    let bookalgeb = null
+
+    if(useBook && (moves.length < bookDepth)){
         let blob = await requestBook(state.fen)
 
-        console.log(blob)
+        if(blob){
+            let bmoves = blob.moves
+
+            if(bmoves && bmoves.length){
+                let grandTotal = 0
+
+                for(let bmove of bmoves){
+                    bmove.total = bmove.white + bmove.draws + bmove.black
+                    grandTotal += bmove.total
+                }
+
+                let rand = Math.round(Math.random() * grandTotal)
+
+                let currentTotal = 0
+
+                for(let bmove of bmoves){
+                    currentTotal += bmove.total                                            
+                    if(currentTotal >= rand){
+                        bookalgeb = bmove.uci
+                        break
+                    }                                            
+                }
+            }
+        }
+    }
+
+    if(bookalgeb){
+        enginePromise = Promise.resolve({
+            bestmove: bookalgeb,
+            random: true
+        })
     }
     
     enginePromise.then(result => {
@@ -118,7 +154,7 @@ async function makeMove(gameId, state, moves){
         try{
             scoreTemp = result.depthInfos[result.depthInfos.length - 1].score
             if(scoreTemp) score = scoreTemp
-        }catch(err){console.log(err)}
+        }catch(err){/*console.log(err)*/}
 
         let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
