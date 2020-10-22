@@ -110,7 +110,8 @@ function makeMove(gameId, state, moves){
             }
         })
 
-        if(result.ponder && false){
+        if(result.ponder){
+            console.log(`start pondering on ${result.ponder}`)
             engine            
             .position('startpos', moves.concat([bestmove, result.ponder]))
             .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponder: true })
