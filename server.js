@@ -110,7 +110,7 @@ function makeMove(gameId, state, moves){
             }
         })
 
-        if(result.ponder){
+        if(result.ponder && false){
             engine
             .setoption("Threads", engineThreads)
             .setoption("Move Overhead", engineMoveOverhead)
