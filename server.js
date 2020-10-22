@@ -108,26 +108,28 @@ async function makeMove(gameId, state, moves){
     if(useBook && (moves.length < 20)){
         let blob = await requestBook(state.fen)
 
-        let bmoves = blob.moves
+        if(blob){
+            let bmoves = blob.moves
 
-        if(bmoves && bmoves.length){
-            let grandTotal = 0
+            if(bmoves && bmoves.length){
+                let grandTotal = 0
 
-            for(let bmove of bmoves){
-                bmove.total = bmove.white + bmove.draws + bmove.black
-                grandTotal += bmove.total
-            }
+                for(let bmove of bmoves){
+                    bmove.total = bmove.white + bmove.draws + bmove.black
+                    grandTotal += bmove.total
+                }
 
-            let rand = Math.round(Math.random() * grandTotal)
+                let rand = Math.round(Math.random() * grandTotal)
 
-            let currentTotal = 0
+                let currentTotal = 0
 
-            for(let bmove of bmoves){
-                currentTotal += bmove.total                                            
-                if(currentTotal >= rand){
-                    bookalgeb = bmove.uci
-                    break
-                }                                            
+                for(let bmove of bmoves){
+                    currentTotal += bmove.total                                            
+                    if(currentTotal >= rand){
+                        bookalgeb = bmove.uci
+                        break
+                    }                                            
+                }
             }
         }
     }
@@ -148,7 +150,7 @@ async function makeMove(gameId, state, moves){
         try{
             scoreTemp = result.depthInfos[result.depthInfos.length - 1].score
             if(scoreTemp) score = scoreTemp
-        }catch(err){console.log(err)}
+        }catch(err){/*console.log(err)*/}
 
         let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
