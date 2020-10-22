@@ -7,6 +7,7 @@ const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
 const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 const allowPonder = process.env.ALLOW_PONDER == "true"
 const logApi = process.env.LOG_API == "true"
+const useBook = process.env.USE_BOOK == "true"
 
 const path = require('path')
 const express = require('express')
@@ -54,13 +55,25 @@ const possibleOpeningResponses = {
     "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
 }
 
+function requestBook(fen){
+    return new Promise(resolve=>{
+        fetch(`https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500`).then(response=>response.text().then(content=>{
+            try{
+                let blob = JSON.parse(content)
+
+                resolve(blob)
+            }catch(err){resolve(null)}
+        }))
+    })    
+}
+
 function makeMove(gameId, state, moves){
     if(gameId != playingGameId){
         logPage(`refused to make move for invalid game ${gameId} ( playing : ${playingGameId} )`)
         return
     }
 
-    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, fen ${state.fen}, moves ${moves}`)
+    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on game ${gameId}, fen ${state.fen}, moves ${moves}`)
 
     engine.logProcessLine = false
 
@@ -86,6 +99,12 @@ function makeMove(gameId, state, moves){
                 random: true
             })
         }                    
+    }
+
+    if(useBook){
+        let blob = await requestBook(state.fen)
+
+        console.log(blob)
     }
     
     enginePromise.then(result => {
