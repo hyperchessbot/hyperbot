@@ -87,7 +87,12 @@ function makeMove(gameId, state, moves){
     enginePromise.then(result => {
         let bestmove = result.bestmove
 
-        let score = result.info ? result.info[result.info.length - 1].score : {unit: "none", value: "none"}
+        let score = {unit: "none", value: "none"}
+
+        try{
+            scoreTemp = result.depthInfos[result.depthInfos.length - 1].score
+            if(scoreTemp) score = scoreTemp
+        }catch(err){console.log(err)}
 
         let logMsg = `bestmove: ${bestmove}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
