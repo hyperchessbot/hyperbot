@@ -3,8 +3,8 @@ const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
-const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "10")
-const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "20")
+const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
+const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 
 const path = require('path')
 const express = require('express')
@@ -276,19 +276,11 @@ function streamEvents(){
     }})
 }
 
-function getOnlineBots(){
-    return new Promise(resolve=>{
-        fetch(`https://lichess.org/player/bots`).then(response=>response.text().then(content=>{
-            resolve(content.match(/\/@\/[^"]+/g).map(m=>m.split("/")[2]).filter(bot=>bot!=lichessBotName))
-        }))
-    })
-}
-
 function challengeBot(bot){
     return new Promise(resolve=>{
         lichessUtils.postApi({
             url: `https://lichess.org/api/challenge/${bot}`, log: true, token: process.env.TOKEN,
-            body: `rated=true&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
+            body: `rated=${Math.random()>0.5?"true":"false"}&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
             contentType: "application/x-www-form-urlencoded",
             callback: content => {
                 logPage(`challenge response: ${content}`)
@@ -300,9 +292,9 @@ function challengeBot(bot){
 
 function challengeRandomBot(){
     return new Promise(resolve=>{
-        getOnlineBots().then(bots=>{
+        lichessUtils.getOnlineBots().then(bots=>{
             if(bots.length > 0){
-                let bot = bots[Math.floor(Math.random()*bots.length)]
+                let bot = bots.filter(bot=>bot!=lichessBotName)[Math.floor(Math.random()*bots.length)]
 
                 logPage(`challenging ${bot}`)
 
