@@ -104,7 +104,7 @@ function makeMove(gameId, state, moves){
         lichessUtils.postApi({
             url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: logApi, token: process.env.TOKEN,
             callback: content => {
-                logPage(`move ack: ${content}`)
+                if(logApi) logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
                     logPage(`retry move for ${gameId} ${moves}`)
 
@@ -221,7 +221,7 @@ function playGame(gameId){
             let whiteMoves = (moves.length % 2) == 0
             let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
 
-            logPage(`bot turn: ${botTurn}`)
+            if(logApi) logPage(`bot turn: ${botTurn}`)
 
             if(botTurn){
                 try{
