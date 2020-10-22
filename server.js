@@ -6,6 +6,7 @@ const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60"
 const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
 const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 const allowPonder = process.env.ALLOW_PONDER == "true"
+const logApi = process.env.LOG_API == "true"
 
 const path = require('path')
 const express = require('express')
@@ -101,7 +102,7 @@ function makeMove(gameId, state, moves){
         logPage(logMsg)
 
         lichessUtils.postApi({
-            url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: true, token: process.env.TOKEN,
+            url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: logApi, token: process.env.TOKEN,
             callback: content => {
                 logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
@@ -249,7 +250,7 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
                 lichessUtils.postApi({
-                    url: lichessUtils.acceptChallengeUrl(challengeId), log: true, token: process.env.TOKEN,
+                    url: lichessUtils.acceptChallengeUrl(challengeId), log: logApi, token: process.env.TOKEN,
                     callback: content => logPage(`accept response: ${content}`)
                 })
             }
@@ -284,7 +285,7 @@ function streamEvents(){
 function challengeBot(bot){
     return new Promise(resolve=>{
         lichessUtils.postApi({
-            url: lichessUtils.challengeUrl(bot), log: true, token: process.env.TOKEN,
+            url: lichessUtils.challengeUrl(bot), log: logApi, token: process.env.TOKEN,
             body: `rated=${Math.random()>0.5?"true":"false"}&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
             contentType: "application/x-www-form-urlencoded",
             callback: content => {
