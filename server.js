@@ -1,7 +1,7 @@
-const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
+const lichessBotName = process.env.BOT_NAME || "blazikenbot2000"
 const engineThreads = process.env.ENGINE_THREADS || "1"
-const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
-const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
+const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "100"
+const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "5")
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
 const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
 const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
@@ -164,29 +164,8 @@ app.get('/', (req, res) => {
             <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
         </head>
         <body>
-            <h1>Welcome to Hyper Bot !</h1>            
-            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
-            ( <a href="/chr" rel="noopener noreferrer" target="_blank">challenge random bot by ${lichessBotName}</a> )
-            </p>
-            <p id="logBestmove"></p>
-            <h2>If you want to create your own permanent bot, do the following:</h2>
-            <p><a href="https://github.com/join" rel="noopener noreferrer" target="_blank">Sign up to GitHub</a>
-            <p>With your GitHub account visit <a href="https://github.com/hyperchessbot/hyperbot" rel="noopener noreferrer" target="_blank">hyperchessbot repo</a>, then click on Fork.
-            <p><a href="https://signup.heroku.com/" rel="noopener noreferrer" target="_blank">Sign up to Heroku</a>
-            <p>At Heroku create a new app using New / Create new app.</p>
-            <p>In the app's dashboard go to the Deploy tab. Use the GitHub button to connect the app to your forked repo. You need to deploy the master branch. Enable Automatic Deploys and press Deploy Branch, for the initial deploy.</p>
-            <p>Create an API access token with your BOT account ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API ) and in Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token and also create a variable BOT_NAME and set its value to your bot's username.
-            <p>Congratulations, you have an up and running lichess bot.</p>
-            <h2>Install the bot locally:</h2>
-            <p><a href="https://gitpod.io#https://github.com/hyperchessbot/hyperbot" rel="noopener noreferrer" target="_blank">Open the project's gitpod terminal</a></p>
-            <p>npm install</p>
-            <p>export TOKEN={BOT API token}</p>
-            <p>export BOT_NAME={BOT username}</p>
-            <p>node server.js</p>
-            <h2>Other config env vars:</h2>
-            <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
-            <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
-            <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
+            <h1>Robot-Patzer Online Bot!</h1>            
+            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
@@ -216,8 +195,8 @@ function playGame(gameId){
     .setoption("Threads", engineThreads)
     .setoption("Move Overhead", engineMoveOverhead)
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`), 2000)
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `https://robot-patzer.herokuapp.com/`), 2000)
+    //setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck!`), 4000)
 
     playingGameId = gameId
 
@@ -273,6 +252,8 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
                 logPage(`can't accept challenge ${challengeId}, no correspondence`)
+            }else if(challenge.speed == "classical"){
+                logPage(`can't accept challenge ${challengeId}, no classical`)
             }else if(challenge.variant.key != "standard"){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
@@ -318,23 +299,6 @@ function challengeBot(bot){
             callback: content => {
                 logPage(`challenge response: ${content}`)
                 resolve(content)
-            }
-        })
-    })    
-}
-
-function challengeRandomBot(){
-    return new Promise(resolve=>{
-        lichessUtils.getOnlineBots().then(bots=>{
-            bots = bots.filter(bot=>bot!=lichessBotName)
-            if(bots.length > 0){
-                let bot = bots[Math.floor(Math.random()*bots.length)]
-
-                logPage(`challenging ${bot}`)
-
-                challengeBot(bot).then(content=>{
-                    resolve(`Challenged <b style="color:#070">${bot}</b> with response <i style="color:#007">${content || "none"}</i> .`)
-                })
             }
         })
     })    
