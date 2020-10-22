@@ -220,7 +220,7 @@ function playGame(gameId){
                 moves = state.moves.split(" ")
 
                 const chess = new Chess()
-                moves.forEach(move => chess.move(move, {sloppy: true}))
+                moves.forEach(move => chess.move(move))
 
                 state.fen = chess.fen
             }
