@@ -58,7 +58,7 @@ function makeMove(gameId, state, moves){
 
     logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on ${gameId}, ${moves}`)
 
-    engine.logProcessLine = false
+    engine.logProcessLine = true
 
     let enginePromise = engine
         .setoption("Threads", engineThreads)
