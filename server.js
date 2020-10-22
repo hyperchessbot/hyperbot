@@ -341,7 +341,7 @@ app.listen(port, _ => {
 
                 let playing = blob.count.playing
 
-                logPage(`playing: ${playing}`)
+                if(logApi) logPage(`playing: ${playing}`)
 
                 if(!playing){
                     if(playingGameId){
