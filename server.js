@@ -5,7 +5,7 @@ const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
 const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
 const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
-const allowPonder = process.env.ALLOW_PONDER == "true"
+const allowPonder = process.env.ALLOW_PONDER != "false"
 
 const path = require('path')
 const express = require('express')
