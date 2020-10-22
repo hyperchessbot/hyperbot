@@ -65,7 +65,7 @@ function makeMove(gameId, state, moves){
         .setoption("Threads", engineThreads)
         .setoption("Move Overhead", engineMoveOverhead)
         .position('startpos', moves)
-        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc })
+        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
 
     if(moves.length == 0){                    
         let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
@@ -112,16 +112,6 @@ function makeMove(gameId, state, moves){
                 }
             }
         })
-
-        if(result.ponder && allowPonder){
-            console.log(`start pondering on ${result.ponder}`)
-
-            engine.logProcessLine = false
-
-            engine            
-            .position('startpos', moves.concat([bestmove, result.ponder]))
-            .go({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponder: true })
-        }
     })
 }
 
