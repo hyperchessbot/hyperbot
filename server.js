@@ -200,7 +200,7 @@ function playGame(gameId){
 
     let botWhite
 
-    streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, timeoutCallback: _=>{
+    streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
         
         if(playingGameId == gameId) playGame(gameId)
@@ -233,7 +233,7 @@ function playGame(gameId){
 }
 
 function streamEvents(){
-    streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: generalTimeout, timeoutCallback: _=>{
+    streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`event stream timed out`)
 
         streamEvents()
