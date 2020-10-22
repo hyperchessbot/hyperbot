@@ -103,10 +103,40 @@ async function makeMove(gameId, state, moves){
         }                    
     }
 
+    let bookalgeb = null
+
     if(useBook){
         let blob = await requestBook(state.fen)
 
-        console.log(blob)
+        let bmoves = blob.moves
+
+        if(bmoves && bmoves.length){
+            let grandTotal = 0
+
+            for(let bmove of bmoves){
+                bmove.total = bmove.white + bmove.draws + bmove.black
+                grandTotal += bmove.total
+            }
+
+            let rand = Math.round(Math.random() * grandTotal)
+
+            let currentTotal = 0
+
+            for(let bmove of bmoves){
+                currentTotal += bmove.total                                            
+                if(currentTotal >= rand){
+                    bookalgeb = bmove.uci
+                    break
+                }                                            
+            }
+        }
+    }
+
+    if(bookalgeb){
+        enginePromise = Promise.resolve({
+            bestmove: bookalgeb,
+            random: true
+        })
     }
     
     enginePromise.then(result => {
