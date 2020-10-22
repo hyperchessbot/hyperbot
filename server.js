@@ -279,7 +279,7 @@ function streamEvents(){
 function challengeBot(bot){
     return new Promise(resolve=>{
         lichessUtils.postApi({
-            url: `https://lichess.org/api/challenge/${bot}`, log: true, token: process.env.TOKEN,
+            url: lichessUtils.challengeUrl(bot), log: true, token: process.env.TOKEN,
             body: `rated=${Math.random()>0.5?"true":"false"}&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
             contentType: "application/x-www-form-urlencoded",
             callback: content => {
