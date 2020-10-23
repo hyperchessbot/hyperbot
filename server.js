@@ -10,6 +10,9 @@ const logApi = process.env.LOG_API == "true"
 const useBook = process.env.USE_BOOK == "true"
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
 const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
+const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
+const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
+const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 
 const path = require('path')
 const express = require('express')
@@ -59,7 +62,7 @@ const possibleOpeningResponses = {
 
 function requestBook(fen){
     return new Promise(resolve=>{
-        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=${bookSpread}&variant=standard`
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&${urlArray("ratings", bookRatings)}&${urlArray("speeds", bookSpeeds)}&moves=${bookSpread}&variant=standard`
         
         if(logApi) console.log(reqUrl)
 
