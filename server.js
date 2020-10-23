@@ -1,8 +1,10 @@
-const lichessBotName = process.env.BOT_NAME || "RobotPatzer"
-const lichessBotName2 = process.env.BOT_NAME_2 || "BlazikenBot2000"
-// const lichessBotName2 = process.env.BOT_NAME_3 || "RobotPatzerOnline" - "HyperBotPatzer" !?
+// const lichessBotName = process.env.BOT_NAME || "RobotPatzer"
+// const lichessBotName2 = process.env.BOT_NAME_2 || "BlazikenBot2000"
+const lichessBotName = process.env.BOT_NAME || "HyperBotPatzer"
 const engineThreads = process.env.ENGINE_THREADS || "1"
-const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "100"
+const engineHash = process.env.ENGINE_Hash || "64"
+const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "1000"
+const engineContempt = process.env.ENGINE_CONTEMPT || "24" // 100
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "5")
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
 const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
@@ -10,10 +12,10 @@ const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 const allowPonder = process.env.ALLOW_PONDER == "true"
 const logApi = process.env.LOG_API == "true"
 const useBook = process.env.USE_BOOK == "true"
-const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
+const bookDepth = parseInt(process.env.BOOK_DEPTH || "100")
 const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
-const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
-const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
+const bookRatings = (process.env.BOOK_RATINGS || "2200,3000").split(",")
+const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid,classical").split(",")
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 
 const path = require('path')
@@ -142,7 +144,7 @@ async function makeMove(gameId, state, moves){
     }
 
     if(bookalgeb){
-        logPage(`lichess book move founnd ${bookalgeb}`)
+        logPage(`lichess book move: ${bookalgeb}`)
         enginePromise = Promise.resolve({
             bestmove: bookalgeb,
             source: "lichess book"
@@ -150,7 +152,7 @@ async function makeMove(gameId, state, moves){
     }
 
     if(!enginePromise){
-        logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
+        logPage(`Threads: ${engineThreads} Hash: ${engineHash} Move Overhead: ${engineMoveOverhead} Contempt: ${engineContempt}`)
          enginePromise = engine
         .position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
@@ -213,12 +215,12 @@ app.get('/', (req, res) => {
         <body>
             <h1>Welcome to the RobotPatzer Online Bot Explorer</h1> 
             <h1>Challenge:</h1>
-            <h1>Stockfish 12:</h1>
-            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
-            <h1>Stockfish 12 with Move Overhead 5000:</h1>
-            <p><a href="https://lichess.org/@/${lichessBotName2}" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
-            <h1>HyperChessBot Online:</h1>
-            <p><a href="https://lichess.org/@/${lichessBotName3}" rel="noopener noreferrer" target="_blank">HyperBotPatzer on Lichess.org</a>
+
+            <p><a href="https://lichess.org/@/$RobotPatzer" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
+
+            <p><a href="https://lichess.org/@/$BlazikenBot2000" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
+
+            <p><a href="https://lichess.org/@/$HyperBotPatzer" rel="noopener noreferrer" target="_blank">HyperBotPatzer on Lichess.org</a>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
@@ -242,7 +244,9 @@ function playGame(gameId){
 
     engine
     .setoption("Threads", engineThreads)
+    .setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)
+    .setoption("Contempt", engineContempt) 
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", 'https://robot-patzer.herokuapp.com/'), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck!`), 4000)
