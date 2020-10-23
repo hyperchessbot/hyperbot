@@ -86,9 +86,7 @@ async function makeMove(gameId, state, moves){
 
     engine.logProcessLine = false
 
-    let enginePromise = engine
-        .position('startpos', moves)
-        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
+    let enginePromise
 
     if(moves.length == 0){                    
         let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
@@ -146,6 +144,12 @@ async function makeMove(gameId, state, moves){
             bestmove: bookalgeb,
             random: true
         })
+    }
+
+    if(!enginePromise){
+         enginePromise = engine
+        .position('startpos', moves)
+        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
     }
     
     enginePromise.then(result => {
