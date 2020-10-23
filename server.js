@@ -1,6 +1,6 @@
-// const lichessBotName = process.env.BOT_NAME || "RobotPatzer"
+const lichessBotName = process.env.BOT_NAME || "RobotPatzer"
 // const lichessBotName2 = process.env.BOT_NAME_2 || "BlazikenBot2000"
-const lichessBotName = process.env.BOT_NAME || "HyperBotPatzer"
+// const lichessBotName = process.env.BOT_NAME || "HyperBotPatzer"
 const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineHash = process.env.ENGINE_Hash || "64"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "1000"
@@ -217,6 +217,7 @@ app.get('/', (req, res) => {
             <h1>Challenge:</h1>
 
             <p><a href="https://lichess.org/@/RobotPatzer" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
+            ( <a href="/chr" rel="noopener noreferrer" target="_blank">${lichessBotName} vs Random Lichess Bot</a> )
 
             <p><a href="https://lichess.org/@/BlazikenBot2000" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
 
@@ -252,7 +253,7 @@ function playGame(gameId){
     .setoption("Move Overhead", engineMoveOverhead)
     .setoption("Contempt", engineContempt) 
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", 'https://robot-patzer.herokuapp.com/'), 2000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", 'https://robot-patzer-bot.herokuapp.com/'), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck!`), 4000)
 
     playingGameId = gameId
