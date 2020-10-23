@@ -193,25 +193,6 @@ app.get('/', (req, res) => {
     res.send(`
     <!doctype html>
     <html>
-        <head>
-            <title>Hyper Bot</title>
-            <style>
-            p {
-                max-width: 700px;
-                background-color: #eee;
-                padding: 6px;
-                padding-left: 12px;
-                border-style: solid;
-                border-width: 1px;
-                border-color: #aaa;
-                border-radius: 15px;
-            }
-            body {
-                padding-left: 20px;
-            }
-            </style>
-            <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
-        </head>
         <body>
             <h1>Welcome to the RobotPatzer Online Bot Explorer</h1> 
             <h1>Challenge:</h1>
