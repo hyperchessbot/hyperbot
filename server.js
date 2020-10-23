@@ -1,5 +1,6 @@
 const lichessBotName = process.env.BOT_NAME || "RobotPatzer"
 const lichessBotName2 = process.env.BOT_NAME_2 || "BlazikenBot2000"
+// const lichessBotName2 = process.env.BOT_NAME_3 || "RobotPatzerOnline" - "HyperBotPatzer" !?
 const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "100"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "5")
@@ -11,6 +12,9 @@ const logApi = process.env.LOG_API == "true"
 const useBook = process.env.USE_BOOK == "true"
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
 const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
+const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
+const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
+const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 
 const path = require('path')
 const express = require('express')
@@ -60,7 +64,7 @@ const possibleOpeningResponses = {
 
 function requestBook(fen){
     return new Promise(resolve=>{
-        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&ratings[]=2200&ratings[]=2500&speeds[]=blitz&speeds[]=rapid&moves=${bookSpread}&variant=standard`
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&${urlArray("ratings", bookRatings)}&${urlArray("speeds", bookSpeeds)}&moves=${bookSpread}&variant=standard`
         
         if(logApi) console.log(reqUrl)
 
@@ -80,19 +84,17 @@ async function makeMove(gameId, state, moves){
         return
     }
 
-    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on game ${gameId}, fen ${state.fen}, moves ${moves}`)
+    logPage(`making move for game ${gameId}, fen ${state.fen}, moves ${moves}`)
 
     engine.logProcessLine = false
 
-    let enginePromise = engine
-        .position('startpos', moves)
-        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
+    let enginePromise
 
     if(moves.length == 0){                    
         let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
         enginePromise = Promise.resolve({
             bestmove: randomOpeningMove,
-            random: true
+            source: "own book"
         })
     }
 
@@ -103,7 +105,7 @@ async function makeMove(gameId, state, moves){
             let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
             enginePromise = Promise.resolve({
                 bestmove: randomOpeningResponse,
-                random: true
+                source: "own book"
             })
         }                    
     }
@@ -140,10 +142,18 @@ async function makeMove(gameId, state, moves){
     }
 
     if(bookalgeb){
+        logPage(`lichess book move founnd ${bookalgeb}`)
         enginePromise = Promise.resolve({
             bestmove: bookalgeb,
-            random: true
+            source: "lichess book"
         })
+    }
+
+    if(!enginePromise){
+        logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
+         enginePromise = engine
+        .position('startpos', moves)
+        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
     }
     
     enginePromise.then(result => {
@@ -157,7 +167,7 @@ async function makeMove(gameId, state, moves){
             if(scoreTemp) score = scoreTemp
         }catch(err){/*console.log(err)*/}
 
-        let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
+        let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.source || "engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
         logPage(logMsg)
 
@@ -182,7 +192,7 @@ app.get('/', (req, res) => {
     <!doctype html>
     <html>
         <head>
-            <title>RobotPatzer Online</title>
+            <title>Hyper Bot</title>
             <style>
             p {
                 max-width: 700px;
@@ -201,27 +211,25 @@ app.get('/', (req, res) => {
             <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
         </head>
         <body>
-            <h1>Welcome to RobotPatzer Online Bot Explorer</h1> 
+            <h1>Welcome to the RobotPatzer Online Bot Explorer</h1> 
             <h1>Challenge:</h1>
+            <h1>Stockfish 12:</h1>
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
+            <h1>Stockfish 12 with Move Overhead 5000:</h1>
             <p><a href="https://lichess.org/@/${lichessBotName2}" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
-            
-            
+            <h1>HyperChessBot Online:</h1>
+            <p><a href="https://lichess.org/@/${lichessBotName3}" rel="noopener noreferrer" target="_blank">HyperBotPatzer on Lichess.org</a>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
                     if(isFirstSourceTick) console.log("stream started ticking")
                 }
-
                 if(blob.kind == "logPage"){
                     let content = blob.content
-
                     console.log(content)
-
                     if(content.match(/^bestmove/)) document.getElementById("logBestmove").innerHTML = content
                 }
             }
-
             setupSource(processSource, ${TICK_INTERVAL})    
             </script>
         </body>
@@ -236,8 +244,8 @@ function playGame(gameId){
     .setoption("Threads", engineThreads)
     .setoption("Move Overhead", engineMoveOverhead)
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `https://robot-patzer.herokuapp.com/`), 2000)
-    //setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck!`), 4000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", 'https://robot-patzer.herokuapp.com/'), 2000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck!`), 4000)
 
     playingGameId = gameId
 
@@ -293,8 +301,6 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
                 logPage(`can't accept challenge ${challengeId}, no correspondence`)
-            }else if(challenge.speed == "classical"){
-                logPage(`can't accept challenge ${challengeId}, no classical`)
             }else if(challenge.variant.key != "standard"){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
@@ -325,7 +331,7 @@ function streamEvents(){
 
                 engine.stop()
 
-                setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good game !`), 2000)
+                setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good game!`), 2000)
             }
         }         
     }})
@@ -340,6 +346,23 @@ function challengeBot(bot){
             callback: content => {
                 logPage(`challenge response: ${content}`)
                 resolve(content)
+            }
+        })
+    })    
+}
+
+function challengeRandomBot(){
+    return new Promise(resolve=>{
+        lichessUtils.getOnlineBots().then(bots=>{
+            bots = bots.filter(bot=>bot!=lichessBotName3)
+            if(bots.length > 0){
+                let bot = bots[Math.floor(Math.random()*bots.length)]
+
+                logPage(`challenging ${bot}`)
+
+                challengeBot(bot).then(content=>{
+                    resolve(`Challenged <b style="color:#070">${bot}</b> with response <i style="color:#007">${content || "none"}</i> .`)
+                })
             }
         })
     })    
@@ -367,7 +390,7 @@ app.listen(port, _ => {
     streamEvents()
 
     setInterval(_=>{
-        fetch(`https://lichess.org/api/user/${lichessBotName}`).then(response=>response.text().then(content=>{
+        fetch(`https://lichess.org/api/user/${lichessBotName3}`).then(response=>response.text().then(content=>{
             try{
                 let blob = JSON.parse(content)
 
