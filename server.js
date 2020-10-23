@@ -221,6 +221,10 @@ app.get('/', (req, res) => {
             <p><a href="https://lichess.org/@/BlazikenBot2000" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
 
             <p><a href="https://lichess.org/@/HyperBotPatzer" rel="noopener noreferrer" target="_blank">HyperBotPatzer on Lichess.org</a>
+            ( <a href="/chr" rel="noopener noreferrer" target="_blank">${lichessBotName} vs Random Lichess Bot</a> )
+            </p>
+            <p id="logBestmove" style="font-family: monospace;"></p>
+            
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
