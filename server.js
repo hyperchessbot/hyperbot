@@ -82,7 +82,7 @@ async function makeMove(gameId, state, moves){
         return
     }
 
-    logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead} on game ${gameId}, fen ${state.fen}, moves ${moves}`)
+    logPage(`making move for game ${gameId}, fen ${state.fen}, moves ${moves}`)
 
     engine.logProcessLine = false
 
@@ -92,7 +92,7 @@ async function makeMove(gameId, state, moves){
         let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
         enginePromise = Promise.resolve({
             bestmove: randomOpeningMove,
-            random: true
+            source: "own book"
         })
     }
 
@@ -103,7 +103,7 @@ async function makeMove(gameId, state, moves){
             let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
             enginePromise = Promise.resolve({
                 bestmove: randomOpeningResponse,
-                random: true
+                source: "own book"
             })
         }                    
     }
@@ -140,13 +140,15 @@ async function makeMove(gameId, state, moves){
     }
 
     if(bookalgeb){
+        logPage(`lichess book move founnd ${bookalgeb}`)
         enginePromise = Promise.resolve({
             bestmove: bookalgeb,
-            random: true
+            source: "lichess book"
         })
     }
 
     if(!enginePromise){
+        logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
          enginePromise = engine
         .position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
@@ -163,7 +165,7 @@ async function makeMove(gameId, state, moves){
             if(scoreTemp) score = scoreTemp
         }catch(err){/*console.log(err)*/}
 
-        let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.random ? "random":"engine"}, score unit: ${score.unit}, score value: ${score.value}`
+        let logMsg = `bestmove: ${bestmove}, ponder: ${ponder || "none"}, source: ${result.source || "engine"}, score unit: ${score.unit}, score value: ${score.value}`
 
         logPage(logMsg)
 
