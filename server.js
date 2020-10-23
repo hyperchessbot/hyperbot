@@ -216,11 +216,11 @@ app.get('/', (req, res) => {
             <h1>Welcome to the RobotPatzer Online Bot Explorer</h1> 
             <h1>Challenge:</h1>
 
-            <p><a href="https://lichess.org/@/$RobotPatzer" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
+            <p><a href="https://lichess.org/@/RobotPatzer" rel="noopener noreferrer" target="_blank">RobotPatzer on Lichess.org</a>
 
-            <p><a href="https://lichess.org/@/$BlazikenBot2000" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
+            <p><a href="https://lichess.org/@/BlazikenBot2000" rel="noopener noreferrer" target="_blank">BlazikenBot2000 on Lichess.org</a>
 
-            <p><a href="https://lichess.org/@/$HyperBotPatzer" rel="noopener noreferrer" target="_blank">HyperBotPatzer on Lichess.org</a>
+            <p><a href="https://lichess.org/@/HyperBotPatzer" rel="noopener noreferrer" target="_blank">HyperBotPatzer on Lichess.org</a>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
@@ -358,7 +358,7 @@ function challengeBot(bot){
 function challengeRandomBot(){
     return new Promise(resolve=>{
         lichessUtils.getOnlineBots().then(bots=>{
-            bots = bots.filter(bot=>bot!=lichessBotName3)
+            bots = bots.filter(bot=>bot!=lichessBotName)
             if(bots.length > 0){
                 let bot = bots[Math.floor(Math.random()*bots.length)]
 
@@ -394,7 +394,7 @@ app.listen(port, _ => {
     streamEvents()
 
     setInterval(_=>{
-        fetch(`https://lichess.org/api/user/${lichessBotName3}`).then(response=>response.text().then(content=>{
+        fetch(`https://lichess.org/api/user/${lichessBotName}`).then(response=>response.text().then(content=>{
             try{
                 let blob = JSON.parse(content)
 
@@ -425,3 +425,5 @@ app.listen(port, _ => {
         }
     }, challengeInterval * 60 * 1000)
 })
+
+// end
