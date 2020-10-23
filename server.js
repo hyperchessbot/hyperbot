@@ -253,7 +253,7 @@ function playGame(gameId){
     .setoption("Move Overhead", engineMoveOverhead)
     .setoption("Contempt", engineContempt) 
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", 'https://robot-patzer-bot.herokuapp.com/'), 2000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", 'https://robot-patzer.herokuapp.com/'), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck!`), 4000)
 
     playingGameId = gameId
