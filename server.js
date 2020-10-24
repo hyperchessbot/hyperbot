@@ -17,6 +17,7 @@ const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
 const bookRatings = (process.env.BOOK_RATINGS || "2200,3000").split(",")
 const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid,classical").split(",")
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
+const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
 
 const path = require('path')
 const express = require('express')
@@ -156,6 +157,8 @@ async function makeMove(gameId, state, moves){
          enginePromise = engine
         .position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
+    }else{
+        engine.stop()
     }
     
     enginePromise.then(result => {
@@ -291,7 +294,7 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
                 logPage(`can't accept challenge ${challengeId}, no correspondence`)
-            }else if(challenge.variant.key != "standard"){
+            }else if(!acceptVariants.includes(challenge.variant.key)){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
                 lichessUtils.postApi({
