@@ -15,6 +15,7 @@ const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 const useScalachess = process.env.USE_SCALACHESS == "true"
 const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
+const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "5")
 
 const path = require('path')
 const express = require('express')
@@ -364,7 +365,7 @@ function streamEvents(){
             if(playingGameId){
                 logPage(`can't start new game ${gameId}, already playing`)
             }else{
-                playGame(gameId)
+                setTimeout(_=>playGame(gameId), gameStartDelay * 1000)
             }                    
         }
 
