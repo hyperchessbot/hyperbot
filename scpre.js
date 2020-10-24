@@ -1,4 +1,6 @@
-global.postMessage = function(msg){console.log(msg)}
+const { parentPort } = require('worker_threads')
+
+global.postMessage = function(msg){parentPort.postMessage(msg)}
 
 var chessHandler
 

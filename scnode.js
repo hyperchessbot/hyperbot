@@ -1,4 +1,6 @@
-global.postMessage = function(msg){console.log(msg)}
+const { parentPort } = require('worker_threads')
+
+global.postMessage = function(msg){parentPort.postMessage(msg)}
 
 var chessHandler
 
@@ -1381,15 +1383,6 @@ d.o=function(a){return EM(this,a|0)};d.jq=function(){return this.md};d.I=functio
 d.$classData=v({RF:0},!1,"scala.collection.mutable.IndexedSeqView$$anon$2",{RF:1,TF:1,xj:1,c:1,Xb:1,Ka:1,aa:1,va:1,wa:1,ia:1,ja:1,da:1,T:1,S:1,fa:1,ha:1,ua:1,xa:1,ta:1,ea:1,ga:1,p:1,Hb:1,mb:1,nb:1,zf:1,Re:1,Se:1,Te:1,Ue:1,Ve:1,Bf:1,yj:1,Bi:1,Ci:1,UF:1,ow:1,Ef:1,hf:1,Pd:1,Qd:1,Ld:1,jf:1,Od:1,ud:1,ed:1,xd:1,Nb:1,Tc:1,kd:1,Cc:1,pI:1,HD:1,mv:1,pv:1});ba.scalachessjs=ba.scalachessjs||{};ba.scalachessjs.Main=vr;
 }).call(this);
 scalachessjs.Main().main();
-let e = {
-    data:{
-        topic: 'init',
-        payload: {
-            variant: 'chess960'
-        }
-    }
-}
-
-console.log("event", e)
-
-chessHandler(e)
+parentPort.on('message', msg => {
+    chessHandler(msg)
+})

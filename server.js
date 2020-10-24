@@ -24,6 +24,53 @@ const fetch = require('node-fetch')
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 const lichessUtils = require("@easychessanimations/lichessutils")
 
+const { Worker } = require('worker_threads')
+
+const worker = new Worker(path.join(__dirname, "scnode.js"))
+
+let chessHandlers = []
+
+worker.on('message', msg => {
+    let reqid = msg.reqid    
+
+    chessHandlers[reqid](msg)
+
+    chessHandlers[reqid] = null
+})
+
+function chessHandler(data){    
+    let reqid = chessHandlers.length
+
+    chessHandlers.push(null)
+
+    let pr = new Promise(resolve=>{
+        chessHandlers[reqid] = resolve
+    })
+
+    data.reqid = reqid
+
+    worker.postMessage({
+        data,
+        reqid: reqid
+    })
+
+    return pr
+}
+
+/*chessHandler({
+    topic: 'init',
+    payload: {
+        variant: 'chess960'
+    }
+}).then(result=>console.log(result))
+
+chessHandler({
+    topic: 'init',
+    payload: {
+        variant: 'racingKings'
+    }
+}).then(result=>console.log(result))*/
+
 const UciEngine = require('@easychessanimations/uci')
 
 const engine = new UciEngine(path.join(__dirname, 'stockfish12'))
