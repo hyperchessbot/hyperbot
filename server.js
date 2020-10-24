@@ -195,8 +195,6 @@ async function makeMove(gameId, state, moves){
     })
 }
 
-app.use('/', express.static(__dirname))
-
 app.get('/', (req, res) => {
     res.send(`
     <!doctype html>
@@ -429,6 +427,8 @@ function challengeRandomBot(){
 app.get('/chr', (req, res) => {
     challengeRandomBot().then(result=>res.send(result))
 })
+
+app.use('/', express.static(__dirname))
 
 app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
