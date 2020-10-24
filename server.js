@@ -160,6 +160,8 @@ async function makeMove(gameId, state, moves){
         //.position(`fen ${state.initialFen}`, moves)
         .position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
+    }else{
+        engine.stop()
     }
     
     enginePromise.then(result => {
