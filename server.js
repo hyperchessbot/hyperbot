@@ -32,7 +32,7 @@ let scalachess = new Scalachess();
 
 const UciEngine = require('@easychessanimations/uci')
 
-const engine = new UciEngine(path.join(__dirname, useScalachess ? 'sockfish12m' : 'stockfish12'))
+const engine = new UciEngine(path.join(__dirname, useScalachess ? 'stockfish12m' : 'stockfish12'))
 
 const { Chess } = require('chess.js')
 
