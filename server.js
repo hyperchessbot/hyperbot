@@ -257,7 +257,7 @@ app.get('/', (req, res) => {
             <p>export BOT_NAME={BOT username}</p>
             <p>node server.js</p>
             <h2>Other config env vars:</h2>
-            ${envKeys.filter(key=>process.env[key]||true).map(key => `<b>${key}</b> = <div style="font-weight: bold;height: 20px;display:inline-block;color:#070;">${process.env[key]}</div>`).join(`<br>\n`)}
+            ${envKeys.filter(key=>process.env[key]).map(key => `<b>${key}</b> = <div style="font-weight: bold;height: 20px;display:inline-block;color:#070;">${process.env[key]}</div>`).join(`<br>\n`)}
             <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
             <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
             <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
