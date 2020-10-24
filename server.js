@@ -288,7 +288,9 @@ function playGame(gameId){
     }, callback: async function(blob){        
         if(blob.type == "gameFull"){                
             botWhite = blob.white.name == lichessBotName
+
             variant = blob.variant.key
+            initialFen = blob.initialFen
 
             if(useScalachess){
                 engine
