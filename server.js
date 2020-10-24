@@ -13,6 +13,7 @@ const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
 const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
 const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
+const useScalachess = process.env.USE_SCALACHESS == "true"
 
 const path = require('path')
 const express = require('express')
@@ -24,21 +25,9 @@ const fetch = require('node-fetch')
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 const lichessUtils = require("@easychessanimations/lichessutils")
 
-const { chessHandler } = require("./scalachess.js")
+const { chessHandler, Scalachess } = require("./scalachess.js")
 
-/*chessHandler({
-    topic: 'init',
-    payload: {
-        variant: 'chess960'
-    }
-}).then(result=>console.log(result))
-
-chessHandler({
-    topic: 'init',
-    payload: {
-        variant: 'racingKings'
-    }
-}).then(result=>console.log(result))*/
+let scalachess = new Scalachess();
 
 const UciEngine = require('@easychessanimations/uci')
 
@@ -295,7 +284,7 @@ function playGame(gameId){
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
         
         if(playingGameId == gameId) playGame(gameId)
-    }, callback: blob => {        
+    }, callback: async function(blob){        
         if(blob.type == "gameFull"){                
             botWhite = blob.white.name == lichessBotName
         }
@@ -308,9 +297,14 @@ function playGame(gameId){
             if(state.moves){
                 moves = state.moves.split(" ")
 
-                const chess = new Chess()
-                for(let move of moves) chess.move(move, {sloppy:true})
-                state.fen = chess.fen()
+                if(useScalachess){
+                    await scalachess.init()
+                    state.fen = await scalachess.makeMove(moves)
+                }else{
+                    const chess = new Chess()
+                    for(let move of moves) chess.move(move, {sloppy:true})
+                    state.fen = chess.fen()
+                }
             }
 
             let whiteMoves = (moves.length % 2) == 0
