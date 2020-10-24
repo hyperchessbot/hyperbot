@@ -307,6 +307,7 @@ function playGame(gameId){
 
             state.variant = variant
             state.initialFen = initialFen
+            state.fen = initialFen
 
             if(state.moves){
                 moves = state.moves.split(" ")
