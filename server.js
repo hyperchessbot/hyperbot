@@ -28,8 +28,6 @@ const lichessUtils = require("@easychessanimations/lichessutils")
 
 const { chessHandler, Scalachess } = require("./scalachess.js")
 
-let scalachess = new Scalachess();
-
 const UciEngine = require('@easychessanimations/uci')
 
 const engine = new UciEngine(path.join(__dirname, useScalachess ? 'stockfish12m' : 'stockfish12'))
@@ -309,6 +307,7 @@ function playGame(gameId){
                 moves = state.moves.split(" ")
 
                 if(useScalachess){
+                    const scalachess = new Scalachess(state.variant)
                     await scalachess.init(state.variant)
                     state.fen = await scalachess.makeMoves(moves)
                 }else{
