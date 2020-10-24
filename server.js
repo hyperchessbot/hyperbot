@@ -335,7 +335,7 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
                 logPage(`can't accept challenge ${challengeId}, no correspondence`)
-            }else if(challenge.variant.key != "standard"){
+            }else if((!useScalachess)&&(challenge.variant.key != "standard")){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
                 lichessUtils.postApi({
