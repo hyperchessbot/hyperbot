@@ -1,0 +1,17 @@
+<pre id="data"></pre>
+
+<script>
+//https://github.com/veloce/scalachessjs
+const chessWorker = new Worker("sc.js")
+
+chessWorker.postMessage({
+  topic: 'init',
+  payload: {
+    variant: 'racingKings'
+  }
+})
+
+chessWorker.onmessage = e => {
+    document.getElementById("data").innerHTML = JSON.stringify(e.data, null, 2)
+}
+</script>

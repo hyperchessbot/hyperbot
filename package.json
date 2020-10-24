@@ -4,7 +4,8 @@
   "description": "hyper bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "http-server"
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,8 @@
     "chess.js": "^0.11.0",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "http-server": "^0.12.3"
   }
 }
