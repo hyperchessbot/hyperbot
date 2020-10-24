@@ -294,7 +294,7 @@ function playGame(gameId){
 
             if(useScalachess){
                 engine
-                .setoption("UCI_Variant", variant)
+                .setoption("UCI_Variant", variant.toLowerCase())
             }            
         }
 
