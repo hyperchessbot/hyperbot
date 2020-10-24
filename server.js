@@ -299,7 +299,7 @@ function playGame(gameId){
 
                 if(useScalachess){
                     await scalachess.init()
-                    state.fen = await scalachess.makeMove(moves)
+                    state.fen = await scalachess.makeMoves(moves)
                 }else{
                     const chess = new Chess()
                     for(let move of moves) chess.move(move, {sloppy:true})
