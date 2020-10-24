@@ -1,3 +1,5 @@
+const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
 const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
 const engineThreads = process.env.ENGINE_THREADS || "1"
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
@@ -295,6 +297,8 @@ function playGame(gameId){
 
             variant = blob.variant.key
             initialFen = blob.initialFen
+
+            if(initialFen == 'startpos') initialFen = startFen
 
             if(useScalachess){
                 engine
