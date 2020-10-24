@@ -32,7 +32,7 @@ let scalachess = new Scalachess();
 
 const UciEngine = require('@easychessanimations/uci')
 
-const engine = new UciEngine(path.join(__dirname, 'stockfish12'))
+const engine = new UciEngine(path.join(__dirname, useScalachess ? 'sockfish12m' : 'stockfish12'))
 
 const { Chess } = require('chess.js')
 
@@ -66,9 +66,9 @@ const possibleOpeningResponses = {
     "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
 }
 
-function requestBook(fen){
+function requestBook(state){
     return new Promise(resolve=>{
-        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${fen}&${urlArray("ratings", bookRatings)}&${urlArray("speeds", bookSpeeds)}&moves=${bookSpread}&variant=standard`
+        let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${state.fen}&${urlArray("ratings", bookRatings)}&${urlArray("speeds", bookSpeeds)}&moves=${bookSpread}&variant=${state.variant}`
         
         if(logApi) console.log(reqUrl)
 
@@ -88,36 +88,38 @@ async function makeMove(gameId, state, moves){
         return
     }
 
-    logPage(`making move for game ${gameId}, fen ${state.fen}, moves ${moves}`)
+    logPage(`making move for game ${gameId}, variant ${state.variant}, fen ${state.fen}, moves ${moves}`)
 
     engine.logProcessLine = false
 
     let enginePromise
 
-    if(moves.length == 0){                    
-        let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
-        enginePromise = Promise.resolve({
-            bestmove: randomOpeningMove,
-            source: "own book"
-        })
-    }
-
-    if(moves.length == 1){                    
-        let responses = possibleOpeningResponses[moves[0]]
-
-        if(responses){
-            let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
+    if(state.variant == "standard"){
+        if(moves.length == 0){                    
+            let randomOpeningMove = possibleOpeningMoves[Math.floor(Math.random() * possibleOpeningMoves.length)]
             enginePromise = Promise.resolve({
-                bestmove: randomOpeningResponse,
+                bestmove: randomOpeningMove,
                 source: "own book"
             })
-        }                    
-    }
+        }
+
+        if(moves.length == 1){                    
+            let responses = possibleOpeningResponses[moves[0]]
+
+            if(responses){
+                let randomOpeningResponse = responses[Math.floor(Math.random() * responses.length)]
+                enginePromise = Promise.resolve({
+                    bestmove: randomOpeningResponse,
+                    source: "own book"
+                })
+            }                    
+        }
+    }    
 
     let bookalgeb = null
 
     if(useBook && (moves.length < bookDepth)){
-        let blob = await requestBook(state.fen)
+        let blob = await requestBook(state)
 
         if(blob){
             let bmoves = blob.moves
@@ -279,7 +281,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite
+    let botWhite, variant
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -288,6 +290,12 @@ function playGame(gameId){
     }, callback: async function(blob){        
         if(blob.type == "gameFull"){                
             botWhite = blob.white.name == lichessBotName
+            variant = blob.variant.key
+
+            if(useScalachess){
+                engine
+                .setoption("UCI_Variant", variant)
+            }            
         }
 
         if(blob.type != "chatLine"){                
@@ -295,11 +303,13 @@ function playGame(gameId){
 
             let state = blob.type == "gameFull" ? blob.state : blob
 
+            state.variant = variant
+
             if(state.moves){
                 moves = state.moves.split(" ")
 
                 if(useScalachess){
-                    await scalachess.init()
+                    await scalachess.init(state.variant)
                     state.fen = await scalachess.makeMoves(moves)
                 }else{
                     const chess = new Chess()
