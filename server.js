@@ -29,7 +29,7 @@ const fetch = require('node-fetch')
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 const lichessUtils = require("@easychessanimations/lichessutils")
 
-const { chessHandler, Scalachess } = require("./scalachess.js")
+const { chessHandler, Scalachess } = require("@easychessanimations/scalachess")
 
 const UciEngine = require('@easychessanimations/uci')
 
