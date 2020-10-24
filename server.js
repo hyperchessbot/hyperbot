@@ -302,7 +302,7 @@ function playGame(gameId){
             let state = blob.type == "gameFull" ? blob.state : blob
 
             state.variant = variant
-            state.initialFen = blob.initialFen
+            state.initialFen = initialFen
 
             if(state.moves){
                 moves = state.moves.split(" ")
