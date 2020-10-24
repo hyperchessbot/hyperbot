@@ -28,7 +28,7 @@
             <p>BOOK_SPEEDS : comma separated list of allowed book speeds ( default : "blitz,rapid" )</p>
             <p>LOG_API : set it to "true" to allow more verbose logging</p>
             <p>USE_SCALACHESS : set it to "true" to use scalachess library and multi variant engine</p>
-            <p>ACCEPT_VARIANTS : space separated list of variant keys to accept, for other than standard USE_SCALACHESS has to be true</p>
+            <p>ACCEPT_VARIANTS : space separated list of variant keys to accept, for other than standard USE_SCALACHESS has to be set to "true"</p>
             <p></p>
         </body>
     </html>
