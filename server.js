@@ -203,7 +203,7 @@ app.get('/', (req, res) => {
             <title>Hyper Bot</title>
             <style>
             p {
-                max-width: 700px;
+                max-width: 900px;
                 background-color: #eee;
                 padding: 6px;
                 padding-left: 12px;
