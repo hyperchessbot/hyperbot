@@ -157,7 +157,8 @@ async function makeMove(gameId, state, moves){
     if(!enginePromise){
         logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
          enginePromise = engine
-        .position(`fen ${state.initialFen}`, moves)
+        //.position(`fen ${state.initialFen}`, moves)
+        .position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
     }
     
