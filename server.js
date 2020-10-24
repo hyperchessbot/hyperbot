@@ -1,23 +1,41 @@
 const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
+let envKeys = []
+
 const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
-const engineThreads = process.env.ENGINE_THREADS || "1"
-const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
+envKeys.push('GENERAL_TIMEOUT')
+const engineThreads = process.env.ENGINE_THREADS || "1"
+envKeys.push('ENGINE_THREADS')
+const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
+envKeys.push('ENGINE_MOVE_OVERHEAD')
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
-const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
-const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
+envKeys.push('QUERY_PLAYING_INTERVAL')
 const allowPonder = process.env.ALLOW_PONDER == "true"
-const logApi = process.env.LOG_API == "true"
+envKeys.push('ALLOW_PONDER')
 const useBook = process.env.USE_BOOK == "true"
+envKeys.push('USE_BOOK')
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
+envKeys.push('BOOK_DEPTH')
 const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
+envKeys.push('BOOK_SPREAD')
 const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
+envKeys.push('BOOK_RATINGS')
 const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
+envKeys.push('BOOK_SPEEDS')
+const logApi = process.env.LOG_API == "true"
+envKeys.push('LOG_API')
+const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
+//envKeys.push('CHALLENGE_INTERVAL')
+const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
+envKeys.push('CHALLENGE_TIMEOUT')
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 const useScalachess = process.env.USE_SCALACHESS == "true"
+envKeys.push('USE_SCALACHESS')
 const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
+envKeys.push('ACCEPT_VARIANTS')
 const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "5")
+//envKeys.push('GAME_START_DELAY')
 
 const path = require('path')
 const express = require('express')
@@ -239,6 +257,7 @@ app.get('/', (req, res) => {
             <p>export BOT_NAME={BOT username}</p>
             <p>node server.js</p>
             <h2>Other config env vars:</h2>
+            ${envKeys.filter(key=>process.env[key]||true).map(key => `<b>${key}</b> = <div style="font-weight: bold;height: 20px;display:inline-block;color:#070;">${process.env[key]}</div>`).join(`<br>\n`)}
             <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
             <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
             <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
