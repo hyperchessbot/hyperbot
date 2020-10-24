@@ -14,6 +14,7 @@ const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
 const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 const useScalachess = process.env.USE_SCALACHESS == "true"
+const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
 
 const path = require('path')
 const express = require('express')
@@ -335,7 +336,7 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
             }else if(challenge.speed == "correspondence"){
                 logPage(`can't accept challenge ${challengeId}, no correspondence`)
-            }else if((!useScalachess)&&(challenge.variant.key != "standard")){
+            }else if(!acceptVariants.includes(challenge.variant.key)){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
             }else{
                 lichessUtils.postApi({
