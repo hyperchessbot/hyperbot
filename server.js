@@ -156,7 +156,7 @@ async function makeMove(gameId, state, moves){
     if(!enginePromise){
         logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
          enginePromise = engine
-        .position('startpos', moves)
+        .position(state.initialFen, moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
     }
     
@@ -279,7 +279,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite, variant
+    let botWhite, variant, initialFen
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -302,6 +302,7 @@ function playGame(gameId){
             let state = blob.type == "gameFull" ? blob.state : blob
 
             state.variant = variant
+            state.initialFen = blob.initialFen
 
             if(state.moves){
                 moves = state.moves.split(" ")
