@@ -212,8 +212,10 @@ async function makeMove(gameId, state, moves){
                 if(logApi) logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
                     logPage(`retry move for ${gameId} ${moves}`)
+					
+					engine.spawn() // restart engine for retry move
 
-                    makeMove(gameId, state, moves)
+                    setTimeout(_=>makeMove(gameId, state, moves), gameStartDelay * 1000)
                 }
             }
         })
