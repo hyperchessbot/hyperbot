@@ -400,6 +400,8 @@ function streamEvents(){
             if(playingGameId){
                 logPage(`can't start new game ${gameId}, already playing`)
             }else{
+				engine.spawn() // restart engine for new game
+				
                 setTimeout(_=>playGame(gameId), gameStartDelay * 1000)
             }                    
         }
