@@ -21,7 +21,7 @@
   "dependencies": {
     "@easychessanimations/fetchutils": "^1.0.3",
     "@easychessanimations/lichessutils": "^1.0.15",
-    "@easychessanimations/scalachess": "^1.0.2",
+    "@easychessanimations/scalachess": "^1.0.3",
     "@easychessanimations/sse": "^1.0.6",
     "@easychessanimations/uci": "^1.0.24",
     "chess.js": "^0.11.0",
