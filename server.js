@@ -56,7 +56,7 @@ const lichessUtils = require("@easychessanimations/lichessutils")
 
 const { chessHandler, Scalachess } = require("@easychessanimations/scalachess")
 
-const UciEngine = require('@easychessanimations/uci')
+const { UciEngine, setLogEngine } = require('@easychessanimations/uci')
 
 const engine = new UciEngine(path.join(__dirname, useScalachess ? 'stockfish12m' : 'stockfish12'))
 
@@ -78,6 +78,8 @@ function logPage(content){
         content: content
     })
 }
+
+setLogEngine(logPage)
 
 const KEEP_ALIVE_URL = process.env.KEEP_ALIVE_URL
 const KEEP_ALIVE_INTERVAL = parseInt(process.env.KEEP_ALIVE_INTERVAL || "5")
