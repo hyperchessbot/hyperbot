@@ -261,7 +261,7 @@ app.get('/', (req, res) => {
             <p>GENERAL_TIMEOUT : for event streams in seconds ( default : 15 )</p>
             <p>ENGINE_THREADS : engine Threads option ( default : 1 )</p>
             <p>ENGINE_MOVE_OVERHEAD : engine Move Overhead option in milliseconds ( default : 500 )</p>
-            <p>ALLOW_PONDER : set it to "true" to make the bot think on opponent time ( caution : feature is UNSTABLE ! )</p>
+            <p>ALLOW_PONDER : set it to "true" to make the bot think on opponent time</p>
             <p>USE_BOOK : set it to "true" to use lichess opening explorer book</p>
             <p>BOOK_DEPTH : up to how many plies should the bot use the book ( default : 20 )</p>
             <p>BOOK_SPREAD : select the move from that many of the top book moves ( default : 4 )</p>
