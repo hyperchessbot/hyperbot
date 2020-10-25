@@ -246,7 +246,8 @@ app.get('/', (req, res) => {
         <body>
             <h1>Welcome to Hyper Bot !</h1>            
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
-            ( <a href="/chr" rel="noopener noreferrer" target="_blank">challenge random bot by ${lichessBotName}</a> )
+            ( <a href="/chr" rel="noopener noreferrer" target="_blank">challenge random bot by ${lichessBotName}</a> |
+            <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> )
             </p>
             <p id="logBestmove" style="font-family: monospace;"></p>
             <h2>If you want to create your own permanent bot, do the following:</h2>
