@@ -400,8 +400,10 @@ function streamEvents(){
             let gameId = blob.game.id
 
             if(gameId == playingGameId){
-                playingGameId = null
-
+                if(gameId == playingGameId){
+                    playingGameId = null
+                }
+                
                 logPage(`game ${gameId} terminated ( playing : ${playingGameId} )`)
 
                 engine.stop()
