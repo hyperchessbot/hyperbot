@@ -1,3 +1,17 @@
+class Section_ extends SmartdomElement_{
+	constructor(props){
+		super({...props, ...{tagName: "div"}})
+		
+		this.docs = props.docs || {}
+		
+		this.a(
+			div().pad(10).fs(25).fwb().html(this.docs.title),
+			this.docs.paragraphs.map(paragraph=>div().pad(3).mar(3).bc("#eee").html(paragraph))
+		)
+	}
+}
+function Section(props){return new Section_(props)}
+
 class EnvVars_ extends SmartdomElement_{
 	constructor(props){
 		super({...props, ...{tagName: "div"}})
@@ -5,7 +19,7 @@ class EnvVars_ extends SmartdomElement_{
 		this.docs = props.docs || {}
 		
 		for(let key in this.docs){
-			let item = docs[key]
+			let item = this.docs[key]
 			let parts = item.split("|")
 			this.docs[key] = {
 				item: parts[0],

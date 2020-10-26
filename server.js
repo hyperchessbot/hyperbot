@@ -475,7 +475,10 @@ app.get('/docs', (req, res) => {
 	<script src="/smartdom.js"></script>
     <script>
 		let docs = JSON.parse(\`${JSON.stringify(docs, null, 2)}\`)	
-		let app = EnvVars({docs: docs})
+		let app = div().a(
+			docs.sections.map(section=>Section({docs: section})),
+			EnvVars({docs: docs.envvars}).addStyle("marginTop", "15px")
+		)
 		document.getElementById("root").appendChild(app.e)
     </script>
     `)
