@@ -127,11 +127,6 @@ async function makeMove(gameId, state, moves){
     }
 
     logPage(`making move for game ${gameId}, variant ${state.variant}, fen ${state.fen}, moves ${moves}`)
-	
-	ssesend({
-		kind: "refreshGame",
-		gameId: gameId
-	})
 
     engine.logProcessLine = false
 
@@ -272,12 +267,11 @@ app.get('/', (req, res) => {
 				}
 				function showGame(id){
 					document.getElementById("showGame").innerHTML = \`
-					<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=auto&bg=auto"></iframe>
+					<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=auto&bg=auto&rnd=\${Math.random()}"></iframe>
 					\`
 				}
 				function refreshGame(id){
 					showGame(id)
-					document.getElementById("showGame").contentWindow.location.reload(true)
 				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -356,6 +350,11 @@ function playGame(gameId){
         }
 
         if(blob.type != "chatLine"){                
+			ssesend({
+				kind: "refreshGame",
+				gameId: gameId
+			})
+			
             let moves = []
 
             let state = blob.type == "gameFull" ? blob.state : blob
