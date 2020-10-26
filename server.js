@@ -472,23 +472,11 @@ app.get('/docs', (req, res) => {
     res.send(`
     <div id="root"></div>
     <script src="https://unpkg.com/@easychessanimations/foo@1.0.21/lib/fooweb.js"></script>
+	<script src="/smartdom.js"></script>
     <script>
-    let docs = JSON.parse(\`${JSON.stringify(docs, null, 2)}\`)
-	for(let key in docs){
-		let item = docs[key]
-		let parts = item.split("|")
-		docs[key] = {
-			item: parts[0],
-			example: (parts[1] || "")
-		}
-	}
-    let app = div().w(960).addStyle("boxShadow", "5px 5px #eee").pad(5).addStyle("paddingLeft", "10px").bc("#ccc").a(Object.entries(docs).map(entry=>div().w(950).fl().addStyle("marginTop", "3px").addStyle("marginBottom", "6px").addStyle("boxShadow", "5px 5px #abc").a(
-            div().c("#007").fl().aic().addStyle("minWidth", "300px").pad(3).addStyle("paddingLeft", "10px").mar(1).bc("#eee").fwb().a(div().html(entry[0])),
-            div().addStyle("width", "100%").pad(3).addStyle("paddingLeft", "10px").mar(1).bc("#ffe").c("#070").html(\`\${entry[1].item}<span style="color:#007;">\${entry[1].example?" , example : ":""}</span><span style="color:#700;">\${entry[1].example}</span>\`)
-        )
-    ))
-    console.log(app)
-    document.getElementById("root").appendChild(app.e)
+		let docs = JSON.parse(\`${JSON.stringify(docs, null, 2)}\`)	
+		let app = EnvVars({docs: docs})
+		document.getElementById("root").appendChild(app.e)
     </script>
     `)
 })
