@@ -267,7 +267,7 @@ app.get('/', (req, res) => {
 				}
 				function showGame(id){
 					document.getElementById("showGame").innerHTML = \`
-					<iframe height="400" width="800" src="https://lichess.org/\${id}"></iframe>
+					<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=auto&bg=auto"></iframe>
 					\`
 				}
 			</script>
