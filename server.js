@@ -127,6 +127,11 @@ async function makeMove(gameId, state, moves){
     }
 
     logPage(`making move for game ${gameId}, variant ${state.variant}, fen ${state.fen}, moves ${moves}`)
+	
+	ssesend({
+		kind: "refreshGame",
+		gameId: gameId
+	})
 
     engine.logProcessLine = false
 
@@ -270,6 +275,10 @@ app.get('/', (req, res) => {
 					<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=auto&bg=auto"></iframe>
 					\`
 				}
+				function refreshGame(id){
+					showGame()
+					document.getElementById("showGame").contentWindow.location.reload(true)
+				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
@@ -286,6 +295,10 @@ app.get('/', (req, res) => {
 
 				if(blob.kind == "showGame"){
 					showGame(blob.gameId)
+				}
+
+				if(blob.kind == "refreshGame"){
+					refreshGame(blob.gameId)
 				}
 
                 if(blob.kind == "logPage"){
