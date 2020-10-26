@@ -258,25 +258,35 @@ app.get('/', (req, res) => {
             <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
         </head>
         <body>
-<script>
-function challengeRandom(ev){
-ev.preventDefault()
-document.getElementById("logBestmove").innerHTML = \`
-<iframe height="200" width="800" src="/chr"></iframe>
-\`
-}
-</script>
+			<script>
+				function challengeRandom(ev){
+					ev.preventDefault()
+					document.getElementById("logBestmove").innerHTML = \`
+					<iframe height="200" width="800" src="/chr"></iframe>
+					\`
+				}
+				function showGame(id){
+					document.getElementById("showGame").innerHTML = \`
+					<iframe height="400" width="800" src="https://lichess.org/\${id}"></iframe>
+					\`
+				}
+			</script>
             <h1>Welcome to Hyper Bot !</h1>            
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
             ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
             <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> )
             </p>
             <p id="logBestmove" style="font-family: monospace;"></p>            
+			<p id="showGame"></p>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
                     if(isFirstSourceTick) console.log("stream started ticking")
                 }
+
+				if(blob.kind == "showGame"){
+					showGame(blob.gameId)
+				}
 
                 if(blob.kind == "logPage"){
                     let content = blob.content
@@ -296,6 +306,11 @@ document.getElementById("logBestmove").innerHTML = \`
 
 function playGame(gameId){
     logPage(`playing game: ${gameId}`)
+	
+	ssesend({
+		kind: "showGame",
+		gameId: gameId
+	})
 
     engine
     .setoption("Threads", engineThreads)
