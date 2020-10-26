@@ -1,3 +1,12 @@
+function htmlify(content){
+	for(let prot of ["https://", "http://"]){
+		let m
+		if(m = content.match(new RegExp(prot + `[^\\s]+`))){			
+			content = content.replace(m[0], `<a href="${m[0]}" rel="noopener noreferrer" target="_blank">${m[0]}</a>`)				}
+	}
+	return content
+}
+
 class Section_ extends SmartdomElement_{
 	constructor(props){
 		super({...props, ...{tagName: "div"}})
@@ -6,7 +15,9 @@ class Section_ extends SmartdomElement_{
 		
 		this.a(
 			div().pad(10).fs(25).fwb().html(this.docs.title),
-			this.docs.paragraphs.map(paragraph=>div().pad(3).mar(3).bc("#eee").html(paragraph))
+			this.docs.paragraphs.map(paragraph=>div().w(950)
+					.bdrs("solid").bdrw(1).bdrc("#aaa").bdrr(10)
+					.pad(3).addStyle("paddingLeft", "10px").mar(6).bc("#eee").html(htmlify(paragraph)))
 		)
 	}
 }
