@@ -258,9 +258,17 @@ app.get('/', (req, res) => {
             <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
         </head>
         <body>
+<script>
+function challengeRandom(ev){
+ev.preventDefault()
+document.getElementById("logBestmove").innerHTML = \`
+<iframe height="200" width="800" src="/chr"></iframe>
+\`
+}
+</script>
             <h1>Welcome to Hyper Bot !</h1>            
             <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
-            ( <a href="/chr" rel="noopener noreferrer" target="_blank">challenge random bot by ${lichessBotName}</a> |
+            ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
             <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> )
             </p>
             <p id="logBestmove" style="font-family: monospace;"></p>            

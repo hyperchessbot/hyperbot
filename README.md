@@ -26,9 +26,9 @@ export BOT_NAME={BOT username}
   
 node server.js
 ## Discussion / Feedback
-Discuss Hyper Bot on Discord https://discord.gg/8m3Muay  
+Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .  
   
-Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues
+Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
 ## Config vars
 **GENERAL_TIMEOUT** for event streams in seconds ( default : 15 )  
   
