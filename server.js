@@ -531,7 +531,7 @@ app.listen(port, _ => {
                 if(logApi) logPage(`playing: ${playing}`)
 
                 if(!playing){
-                    if(playingGameId){
+                    if(playingGameId && false){
                         logPage(`inconsistent playing information, resetting playing game id`)
 
                         playingGameId = null
