@@ -276,7 +276,7 @@ app.get('/', (req, res) => {
 					\`
 				}
 				function refreshGame(id){
-					showGame()
+					showGame(id)
 					document.getElementById("showGame").contentWindow.location.reload(true)
 				}
 			</script>
