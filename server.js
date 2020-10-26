@@ -1,3 +1,6 @@
+const fs = require('fs')
+const { Section, EnvVars } = require('./smartmd.js')
+
 const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 let envKeys = []
@@ -48,6 +51,12 @@ let docs = null
 fetch(`https://raw.githubusercontent.com/hyperbotauthor/hyperbot/docs/docs.json`).then(response=>response.text().then(content=>{
     try{
         docs = JSON.parse(content)        
+		
+		fs.writeFileSync("docs.md",
+			docs.sections.map(section=>Section(section)).join("\n") +
+			`\n## Config vars\n` +
+			EnvVars(docs.envvars)
+		)
     }catch(err){console.log(err)}
 }))
 
