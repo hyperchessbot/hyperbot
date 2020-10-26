@@ -14,10 +14,20 @@ In the app's dashboard go to the Deploy tab. Use the GitHub button to connect th
 Create an API access token with your BOT account ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API ) and in Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token and also create a variable BOT_NAME and set its value to your bot's username.  
   
 Congratulations, you have an up and running lichess bot.
-## Discussion / Feedback
-Discuss Hyper Bot on Discord.  
+## Install the bot locally
+Open the project's gitpod terminal https://gitpod.io#https://github.com/hyperchessbot/hyperbot  
   
-Post issues on GitHub.
+npm install  
+  
+export TOKEN={BOT API token}  
+  
+export BOT_NAME={BOT username}  
+  
+node server.js
+## Discussion / Feedback
+Discuss Hyper Bot on Discord https://discord.gg/8m3Muay  
+  
+Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues
 ## Config vars
 **GENERAL_TIMEOUT** for event streams in seconds ( default : 15 )  
   
