@@ -250,7 +250,8 @@ app.get('/', (req, res) => {
         <head>
             <title>Hyper Bot</title>
             <style>
-            p {
+            .p {
+				min-width: 900px;
                 max-width: 900px;
                 background-color: #eee;
                 padding: 6px;
@@ -290,12 +291,12 @@ app.get('/', (req, res) => {
 				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
-            <p><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
+            <p class="p"><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
             ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
             <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> )
             </p>
-            <p id="logBestmove" style="font-family: monospace;"></p>            
-			<p id="showGame"></p>
+            <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
+			<div class="p" id="showGame" style="height:400px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
