@@ -54,4 +54,8 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **DISABLE_RATED** set it to 'true' to reject rated challenges  
   
-**DISABLE_CASUAL** set it to 'true' to reject casual challenges
+**DISABLE_CASUAL** set it to 'true' to reject casual challenges  
+  
+**DISABLE_BOT** set it to 'true' to reject bot challenges  
+  
+**DISABLE_HUMAN** set it to 'true' to reject human challenges
