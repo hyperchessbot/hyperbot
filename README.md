@@ -34,6 +34,8 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **ENGINE_THREADS** engine Threads option ( default : 1 )  
   
+**ENGINE_HASH** engine Hash option ( default : 16 )  
+  
 **ENGINE_MOVE_OVERHEAD** engine Move Overhead option in milliseconds ( default : 500 )  
   
 **ALLOW_PONDER** set it to 'true' to make the bot think on opponent time  
