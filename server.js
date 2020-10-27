@@ -52,6 +52,10 @@ const disableRated = process.env.DISABLE_RATED == "true"
 envKeys.push('DISABLE_RATED')
 const disableCasual = process.env.DISABLE_CASUAL == "true"
 envKeys.push('DISABLE_CASUAL')
+const disableBot = process.env.DISABLE_BOT == "true"
+envKeys.push('DISABLE_BOT')
+const disableHuman = process.env.DISABLE_HUMAN == "true"
+envKeys.push('DISABLE_HUMAN')
 
 let config = {}
 for (let envKey of envKeys){
@@ -357,7 +361,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite, variant, initialFen, whiteName, blackName
+    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, oppTitle
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -366,9 +370,13 @@ function playGame(gameId){
     }, callback: async function(blob){        
         if(blob.type == "gameFull"){                
 			whiteName = blob.white.name
+			whiteTitle = blob.white.title
 			blackName = blob.black.name
+			blackTitle = blob.black.title
 			
             botWhite = whiteName == lichessBotName
+			
+			oppTitle = botWhite ? whiteTitle : blackTitle
 
             variant = blob.variant.key
             initialFen = blob.initialFen
@@ -456,6 +464,10 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, rated`)
             }else if((!rated) && disableCasual){
                 logPage(`can't accept challenge ${challengeId}, casual`)
+            }else if((oppTitle == "BOT") && disableBot){
+                logPage(`can't accept challenge ${challengeId}, bot`)
+            }else if((oppTitle != "BOT") && disableHuman){
+                logPage(`can't accept challenge ${challengeId}, human`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: logApi, token: process.env.TOKEN,
