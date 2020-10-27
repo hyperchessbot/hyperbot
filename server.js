@@ -265,11 +265,16 @@ app.get('/', (req, res) => {
 					<iframe height="200" width="800" src="/chr"></iframe>
 					\`
 				}
-				function showGame(id, fen, orientation, title){
+				function showGameFunc(id, fen, orientation, title){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
 					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}"></iframe>
 					\`
+				}
+				var showGameTimeout = null
+				function showGame(id, fen, orientation, title){
+					if(showGameTimeout) clearTimeout(showGameTimeout)
+					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title), 2000)
 				}
 				function refreshGame(id, fen, orientation, title){
 					showGame(id, fen, orientation, title)
@@ -372,7 +377,7 @@ function playGame(gameId){
             }
 			
 			state.orientation = botWhite ? "w" : "b"
-			state.title = `${whiteName} - ${blackName}`
+			state.title = `${whiteName} ${state.wtime} - ${blackName} ${state.btime}`
 			
 			ssesend({
 				kind: "refreshGame",
