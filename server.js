@@ -268,7 +268,7 @@ app.get('/', (req, res) => {
 				function showGame(id, fen){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe height="400" width="800" src="/board/fen=\${fen}"></iframe>
+					<iframe height="400" width="800" src="/board?fen=\${fen}"></iframe>
 					\`
 				}
 				function refreshGame(id, fen){
@@ -293,7 +293,7 @@ app.get('/', (req, res) => {
 				}
 
 				if(blob.kind == "refreshGame"){
-					refreshGame(blob.gameId)
+					refreshGame(blob.gameId, blob.fen)
 				}
 
                 if(blob.kind == "logPage"){
