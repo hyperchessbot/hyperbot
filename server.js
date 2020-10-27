@@ -271,7 +271,7 @@ app.get('/', (req, res) => {
 					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}"></iframe>
 					\`
 				}
-				function refreshGame(id, fen){
+				function refreshGame(id, fen, orientation){
 					showGame(id, fen, orientation)
 				}
 			</script>
@@ -519,7 +519,7 @@ app.get('/board', (req, res) => {
 			let board = new window.ChessBoard('board', {
 				size: ${parseInt(req.query.size || "45")},
 				fen: "${(req.query.fen || startFen).split(" ")[0]}",
-				orientation: ${req.query.orientation}
+				orientation: "${req.query.orientation || "w"}"
 			})			
 		</script>
 	</body>
