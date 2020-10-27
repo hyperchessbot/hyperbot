@@ -337,7 +337,7 @@ window.ChessBoard = function(boardId, config) {
     }
   }
 
-  this.setPosition = function(fen) {
+  this.setPosition = function(fen) {	
     var fenFields = fen.split(' ');
     var rows = fenFields[0].split('/');
 

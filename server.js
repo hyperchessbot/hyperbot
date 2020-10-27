@@ -265,14 +265,14 @@ app.get('/', (req, res) => {
 					<iframe height="200" width="800" src="/chr"></iframe>
 					\`
 				}
-				function showGame(id, fen){
+				function showGame(id, fen, orientation){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe height="400" width="800" src="/board?fen=\${fen}"></iframe>
+					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}"></iframe>
 					\`
 				}
 				function refreshGame(id, fen){
-					showGame(id, fen)
+					showGame(id, fen, orientation)
 				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -289,11 +289,11 @@ app.get('/', (req, res) => {
                 }
 
 				if(blob.kind == "showGame"){
-					showGame(blob.gameId, blob.fen)
+					showGame(blob.gameId, blob.fen, blob.orientation)
 				}
 
 				if(blob.kind == "refreshGame"){
-					refreshGame(blob.gameId, blob.fen)
+					refreshGame(blob.gameId, blob.fen, blob.orientation)
 				}
 
                 if(blob.kind == "logPage"){
@@ -368,10 +368,13 @@ function playGame(gameId){
                 }
             }
 			
+			state.orientation = botWhite ? "w" : "b"
+			
 			ssesend({
 				kind: "refreshGame",
 				gameId: gameId,
-				fen: state.fen
+				fen: state.fen,
+				orientation: state.orientation
 			})
 
             let whiteMoves = (moves.length % 2) == 0
@@ -513,8 +516,11 @@ app.get('/board', (req, res) => {
 		<div id="board"></div>
 
 		<script>
-			let board = new window.ChessBoard('board', {size: ${parseInt(req.query.size || "45")}})			
-			board.setPosition("${req.query.fen || startFen}")
+			let board = new window.ChessBoard('board', {
+				size: ${parseInt(req.query.size || "45")},
+				fen: "${(req.query.fen || startFen).split(" ")[0]}",
+				orientation: ${req.query.orientation}
+			})			
 		</script>
 	</body>
 	</html>
