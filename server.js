@@ -532,8 +532,8 @@ app.get('/board', (req, res) => {
 		<script src="chessboard.js"></script>
 	</head>
 	<body>
-		<div>${req.query.title || "? - ?"}</div>
-		<div id="board"></div>
+		<div style="width:100%;text-align:center;font-weight:bold;font-family:monospace;">${req.query.title || "? - ?"}</div>
+		<div id="board" style="margin-top: 5px;"></div>
 
 		<script>
 			let board = new window.ChessBoard('board', {
