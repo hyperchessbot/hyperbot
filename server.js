@@ -265,14 +265,14 @@ app.get('/', (req, res) => {
 					<iframe height="200" width="800" src="/chr"></iframe>
 					\`
 				}
-				function showGame(id, fen, orientation){
+				function showGame(id, fen, orientation, title){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}"></iframe>
+					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=${title}"></iframe>
 					\`
 				}
-				function refreshGame(id, fen, orientation){
-					showGame(id, fen, orientation)
+				function refreshGame(id, fen, orientation, title){
+					showGame(id, fen, orientation, title)
 				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -289,11 +289,11 @@ app.get('/', (req, res) => {
                 }
 
 				if(blob.kind == "showGame"){
-					showGame(blob.gameId, blob.fen, blob.orientation)
+					showGame(blob.gameId, blob.fen, blob.orientation, blob.title)
 				}
 
 				if(blob.kind == "refreshGame"){
-					refreshGame(blob.gameId, blob.fen, blob.orientation)
+					refreshGame(blob.gameId, blob.fen, blob.orientation, blob.title)
 				}
 
                 if(blob.kind == "logPage"){
@@ -324,7 +324,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite, variant, initialFen
+    let botWhite, variant, initialFen, whiteName, blackName
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -332,7 +332,10 @@ function playGame(gameId){
         if(playingGameId == gameId) playGame(gameId)
     }, callback: async function(blob){        
         if(blob.type == "gameFull"){                
-            botWhite = blob.white.name == lichessBotName
+			whiteName = blob.white.name
+			blackName = blob.black.name
+			
+            botWhite = whiteName == lichessBotName
 
             variant = blob.variant.key
             initialFen = blob.initialFen
@@ -369,12 +372,14 @@ function playGame(gameId){
             }
 			
 			state.orientation = botWhite ? "w" : "b"
+			state.title = `${whiteName} - ${blackName}`
 			
 			ssesend({
 				kind: "refreshGame",
 				gameId: gameId,
 				fen: state.fen,
-				orientation: state.orientation
+				orientation: state.orientation,
+				title: state.title
 			})
 
             let whiteMoves = (moves.length % 2) == 0
@@ -513,6 +518,7 @@ app.get('/board', (req, res) => {
 		<script src="chessboard.js"></script>
 	</head>
 	<body>
+		<siv>${title}</div>
 		<div id="board"></div>
 
 		<script>
