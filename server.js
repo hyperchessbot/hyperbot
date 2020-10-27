@@ -48,6 +48,10 @@ const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
 envKeys.push('ACCEPT_VARIANTS')
 const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "5")
 //envKeys.push('GAME_START_DELAY')
+const disableRated = process.env.DISABLE_RATED == "true"
+envKeys.push('DISABLE_RATED')
+const disableCasual = process.env.DISABLE_CASUAL == "true"
+envKeys.push('DISABLE_CASUAL')
 
 let config = {}
 for (let envKey of envKeys){
@@ -440,6 +444,7 @@ function streamEvents(){
         if(blob.type == "challenge"){
             let challenge = blob.challenge
             let challengeId = challenge.id
+			let rated = challenge.rated
 
             if(playingGameId){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
@@ -447,6 +452,10 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, no correspondence`)
             }else if(!acceptVariants.includes(challenge.variant.key)){
                 logPage(`can't accept challenge ${challengeId}, non standard`)
+            }else if(rated && disableRated){
+                logPage(`can't accept challenge ${challengeId}, rated`)
+            }else if((!rated) && disableCasual){
+                logPage(`can't accept challenge ${challengeId}, casual`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: logApi, token: process.env.TOKEN,
