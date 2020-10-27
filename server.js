@@ -296,7 +296,7 @@ app.get('/', (req, res) => {
             <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> )
             </p>
             <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
-			<div class="p" id="showGame" style="height:400px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
+			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
