@@ -6,7 +6,8 @@ function formatTime(ms){
 	sec -= min * 60
 	let hour = Math.floor(min / 60)
 	min -= hour * 60
-	return `${hour} : ${min} : ${sec}`
+	if(hour) return `${hour} : ${min} : ${sec}`
+	return `${min} : ${sec}`
 }
 
 function formatName(name, title){
@@ -368,7 +369,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle
+    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -378,8 +379,10 @@ function playGame(gameId){
         if(blob.type == "gameFull"){                
 			whiteName = blob.white.name
 			whiteTitle = blob.white.title
+			whiteRating = blob.white.rating
 			blackName = blob.black.name
 			blackTitle = blob.black.title
+			blackRating = blob.black.rating
 			
             botWhite = whiteName == lichessBotName
 
@@ -423,7 +426,7 @@ function playGame(gameId){
             }
 			
 			state.orientation = botWhite ? "w" : "b"
-			state.title = `${formatName(whiteName, whiteTitle)} ${formatTime(state.wtime)} - ${formatName(blackName, blackTitle)} ${formatTime(state.btime)} ${state.variant}`
+			state.title = `${formatName(whiteName, whiteTitle)} ( ${whiteRating} ) ${formatTime(state.wtime)} - ${formatName(blackName, blackTitle)} ( ${blackRating} ) ${formatTime(state.btime)} ${state.variant}`
 			state.lastmove = null
 			if(state.movesArray.length) state.lastmove = state.movesArray.slice().pop()
 			
