@@ -1,3 +1,5 @@
+const fooVersion = '1.0.22'
+
 function formatTime(ms){
 	let sec = Math.floor(ms / 1000)
 	let min = Math.floor(sec / 60)
@@ -13,7 +15,7 @@ function formatName(name, title){
 }
 
 const fs = require('fs')
-const { Section, EnvVars } = require('./smartmd.js')
+const { Section, EnvVars } = require('@easychessanimations/foo/lib/smartmd.js')
 
 const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
@@ -556,8 +558,7 @@ app.get('/docs', (req, res) => {
     
     res.send(`
     <div id="root"></div>
-    <script src="https://unpkg.com/@easychessanimations/foo@1.0.21/lib/fooweb.js"></script>
-	<script src="/smartdom.js"></script>
+    <script src="https://unpkg.com/@easychessanimations/foo@${fooVersion}/lib/fooweb.js"></script>	
     <script>
 		let docs = JSON.parse(\`${JSON.stringify(docs, null, 2)}\`)	
 		let app = div().a(
@@ -573,8 +574,7 @@ app.get('/docs', (req, res) => {
 app.get('/config', (req, res) => {    
     res.send(`
     <div id="root"></div>
-    <script src="https://unpkg.com/@easychessanimations/foo@1.0.21/lib/fooweb.js"></script>
-	<script src="/smartdom.js"></script>
+    <script src="https://unpkg.com/@easychessanimations/foo@${fooVersion}/lib/fooweb.js"></script>	
     <script>
 		let config = JSON.parse(\`${JSON.stringify(config, null, 2)}\`)			
 		let app = EnvVars({docs:config})
