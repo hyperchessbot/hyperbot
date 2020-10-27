@@ -518,7 +518,7 @@ app.get('/board', (req, res) => {
 		<script src="chessboard.js"></script>
 	</head>
 	<body>
-		<siv>${req.query.title || "? - ?"}</div>
+		<div>${req.query.title || "? - ?"}</div>
 		<div id="board"></div>
 
 		<script>
