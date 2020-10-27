@@ -1,3 +1,12 @@
+function formatTime(ms){
+	let sec = Math.floor(ms / 1000)
+	let min = Math.floor(sec / 60)
+	sec -= min * 60
+	let hour = Math.floor(min / 60)
+	min -= hour * 60
+	return `${hour} : ${min} : ${sec}`
+}
+
 const fs = require('fs')
 const { Section, EnvVars } = require('./smartmd.js')
 
@@ -377,7 +386,7 @@ function playGame(gameId){
             }
 			
 			state.orientation = botWhite ? "w" : "b"
-			state.title = `${whiteName} ${state.wtime} - ${blackName} ${state.btime}`
+			state.title = `${whiteName} ${formatTime(state.wtime)} - ${blackName} ${formatTime(state.btime)} ${state.variant}`
 			
 			ssesend({
 				kind: "refreshGame",
