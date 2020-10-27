@@ -49,6 +49,12 @@ envKeys.push('ACCEPT_VARIANTS')
 const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "5")
 //envKeys.push('GAME_START_DELAY')
 
+let config = {}
+for (let envKey of envKeys){
+	let value = process.env[envKey]
+	if(value) config[envKey] = value
+}
+
 const path = require('path')
 const express = require('express')
 const app = express()
@@ -293,7 +299,8 @@ app.get('/', (req, res) => {
             <h1>Welcome to Hyper Bot !</h1>            
             <p class="p"><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
             ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
-            <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> )
+            <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> | 
+			<a href="/config" rel="noopener noreferrer" target="_blank">view config</a> )
             </p>
             <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
 			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
@@ -530,6 +537,19 @@ app.get('/docs', (req, res) => {
 			Section({docs:{title: "Config vars", paragraphs:[]}}),
 			div().addStyle("marginLeft","30px").a(EnvVars({docs: docs.envvars}).addStyle("marginTop", "15px"))
 		)
+		document.getElementById("root").appendChild(app.e)
+    </script>
+    `)
+})
+
+app.get('/config', (req, res) => {    
+    res.send(`
+    <div id="root"></div>
+    <script src="https://unpkg.com/@easychessanimations/foo@1.0.21/lib/fooweb.js"></script>
+	<script src="/smartdom.js"></script>
+    <script>
+		let config = JSON.parse(\`${JSON.stringify(config, null, 2)}\`)			
+		let app = EnvVars({docs:config})
 		document.getElementById("root").appendChild(app.e)
     </script>
     `)
