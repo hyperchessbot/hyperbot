@@ -316,7 +316,13 @@ app.get('/', (req, res) => {
 
                     console.log(content)
 
-                    if(content.match(/^bestmove/)) document.getElementById("logBestmove").innerHTML = content
+                    if(content.match(/^bestmove/)){
+						let m = content.match(/score value: (.*)/)
+						let scoreValue = parseInt(m[1])
+						let color = scoreValue >= 0 ? "#070" : "#700"
+						content = content.replace(m[0], \`score value: <span style="font-size: 18px;color: \${color};font-weight: bold;">\${scoreValue}</span>\`)
+						document.getElementById("logBestmove").innerHTML = content
+					}
                 }
             }
 
