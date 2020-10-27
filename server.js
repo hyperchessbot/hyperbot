@@ -283,7 +283,7 @@ app.get('/', (req, res) => {
 				var showGameTimeout = null
 				function showGame(id, fen, orientation, title){
 					if(showGameTimeout) clearTimeout(showGameTimeout)
-					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title), 2000)
+					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title), 1000)
 				}
 				function refreshGame(id, fen, orientation, title){
 					showGame(id, fen, orientation, title)
