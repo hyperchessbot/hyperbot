@@ -320,7 +320,7 @@ app.get('/', (req, res) => {
 						let m = content.match(/score value: (.*)/)
 						let scoreValue = parseInt(m[1])
 						let color = scoreValue >= 0 ? "#070" : "#700"
-						let scoreUnit = content.match(/score unit: ([^\\s]+)/)[1]
+						let scoreUnit = content.match(/score unit: ([^,]+)/)[1]
 						content = content.replace(m[0], \`score value: <span style="font-size: 20px;color: \${color};font-weight: bold;">\${scoreUnit == "mate" ? "#":""}\${scoreValue}</span>\`)
 						document.getElementById("logBestmove").innerHTML = content
 					}
