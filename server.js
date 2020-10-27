@@ -387,7 +387,8 @@ function playGame(gameId){
 			
 			state.orientation = botWhite ? "w" : "b"
 			state.title = `${whiteName} ${formatTime(state.wtime)} - ${blackName} ${formatTime(state.btime)} ${state.variant}`
-			state.lastmove = state.moves.length ? state.moves[state.moves.length - 1] || null
+			state.lastmove = null
+			if(state.moves.length) state.lastmove = state.moves.slice().pop()
 			
 			ssesend({
 				kind: "refreshGame",
