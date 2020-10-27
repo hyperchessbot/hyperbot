@@ -274,19 +274,19 @@ app.get('/', (req, res) => {
 					<iframe height="200" width="800" src="/chr"></iframe>
 					\`
 				}
-				function showGameFunc(id, fen, orientation, title){
+				function showGameFunc(id, fen, orientation, title, lastmove){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}"></iframe>
+					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}"></iframe>
 					\`
 				}
 				var showGameTimeout = null
-				function showGame(id, fen, orientation, title){
+				function showGame(id, fen, orientation, title, lastmove){
 					if(showGameTimeout) clearTimeout(showGameTimeout)
-					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title), 1000)
+					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title, lastmove), 1000)
 				}
-				function refreshGame(id, fen, orientation, title){
-					showGame(id, fen, orientation, title)
+				function refreshGame(id, fen, orientation, title, lastmove){
+					showGame(id, fen, orientation, title, lastmove)
 				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -303,11 +303,11 @@ app.get('/', (req, res) => {
                 }
 
 				if(blob.kind == "showGame"){
-					showGame(blob.gameId, blob.fen, blob.orientation, blob.title)
+					showGame(blob.gameId, blob.fen, blob.orientation, blob.title, blob.lastmove)
 				}
 
 				if(blob.kind == "refreshGame"){
-					refreshGame(blob.gameId, blob.fen, blob.orientation, blob.title)
+					refreshGame(blob.gameId, blob.fen, blob.orientation, blob.title, blob.lastmove)
 				}
 
                 if(blob.kind == "logPage"){
@@ -387,13 +387,15 @@ function playGame(gameId){
 			
 			state.orientation = botWhite ? "w" : "b"
 			state.title = `${whiteName} ${formatTime(state.wtime)} - ${blackName} ${formatTime(state.btime)} ${state.variant}`
+			state.lastmove = state.moves.length ? state.moves[state.moves.length - 1] || null
 			
 			ssesend({
 				kind: "refreshGame",
 				gameId: gameId,
 				fen: state.fen,
 				orientation: state.orientation,
-				title: state.title
+				title: state.title,
+				lastmove: state.lastmove
 			})
 
             let whiteMoves = (moves.length % 2) == 0
@@ -541,6 +543,13 @@ app.get('/board', (req, res) => {
 				fen: "${(req.query.fen || startFen).split(" ")[0]}",
 				orientation: "${req.query.orientation || "w"}"
 			})			
+			let lastmove = "${req.query.lastmove || ""}"
+			if(lastmove){
+				let from = lastmove.substring(0,2)
+				let to = lastmove.substring(2,4)				
+				if(!lastmove.match(/@/)) board.selectSquare(from)
+				board.selectSquare(to)
+			}
 		</script>
 	</body>
 	</html>
