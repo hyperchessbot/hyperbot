@@ -27,6 +27,8 @@ const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 envKeys.push('GENERAL_TIMEOUT')
 const engineThreads = process.env.ENGINE_THREADS || "1"
 envKeys.push('ENGINE_THREADS')
+const engineHash = process.env.ENGINE_HASH || "16"
+envKeys.push('ENGINE_HASH')
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 envKeys.push('ENGINE_MOVE_OVERHEAD')
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
@@ -225,7 +227,7 @@ async function makeMove(gameId, state, moves){
     }
 
     if(!enginePromise){
-        logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
+        logPage(`engine thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
          enginePromise = engine
         .position(`fen ${state.initialFen}`, moves)
         //.position('startpos', moves)
@@ -362,6 +364,7 @@ function playGame(gameId){
 
     engine
     .setoption("Threads", engineThreads)
+	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`), 2000)
