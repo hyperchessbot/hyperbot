@@ -22,7 +22,7 @@
     "@easychessanimations/fetchutils": "^1.0.3",
     "@easychessanimations/foo": "^1.0.21",
     "@easychessanimations/lichessutils": "^1.0.15",
-    "@easychessanimations/scalachess": "^1.0.3",
+    "@easychessanimations/scalachess": "^1.0.4",
     "@easychessanimations/showchessboard": "^1.0.1",
     "@easychessanimations/sse": "^1.0.6",
     "@easychessanimations/uci": "^1.0.27",

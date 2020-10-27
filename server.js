@@ -205,8 +205,8 @@ async function makeMove(gameId, state, moves){
     if(!enginePromise){
         logPage(`engine thinking with ${engineThreads} thread(s) and overhead ${engineMoveOverhead}`)
          enginePromise = engine
-        //.position(`fen ${state.initialFen}`, moves)
-        .position('startpos', moves)
+        .position(`fen ${state.initialFen}`, moves)
+        //.position('startpos', moves)
         .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
     }else{
         engine.stop()
@@ -367,6 +367,7 @@ function playGame(gameId){
             if(useScalachess){
                 engine
                 .setoption("UCI_Variant", variant.toLowerCase())
+				.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
             }            
         }
 
@@ -385,7 +386,7 @@ function playGame(gameId){
 				state.movesArray = moves
 
                 if(useScalachess){
-                    const scalachess = new Scalachess(state.variant)
+                    const scalachess = new Scalachess(state.variant, state.initialFen)
                     await scalachess.init(state.variant)
                     state.fen = await scalachess.makeMoves(moves)
                 }else{

@@ -28,8 +28,8 @@ if(false){
 const { Scalachess } = require('@easychessanimations/scalachess');
 
 (async function(){
-	let sc = new Scalachess('crazyhouse')
+	let sc = new Scalachess('chess960', 'nbrqkrbn/pppppppp/8/8/8/8/PPPPPPPP/NBRQKRBN w KQkq - 0 1')
 	console.log(await sc.init())
-	console.log(await sc.makeMoves(['e2e4','d7d5','e4d5','e7e6','P@g4']))
+	console.log(await sc.makeMoves(['h1g3','a7a6','f2f3','b7b6','g1e3','c7c6','e1f1']))
 })()
 
