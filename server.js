@@ -373,6 +373,7 @@ function playGame(gameId){
 
             if(state.moves){
                 moves = state.moves.split(" ")
+				state.movesArray = moves
 
                 if(useScalachess){
                     const scalachess = new Scalachess(state.variant)
@@ -388,7 +389,7 @@ function playGame(gameId){
 			state.orientation = botWhite ? "w" : "b"
 			state.title = `${whiteName} ${formatTime(state.wtime)} - ${blackName} ${formatTime(state.btime)} ${state.variant}`
 			state.lastmove = null
-			if(state.moves.length) state.lastmove = state.moves.slice().pop()
+			if(state.movesArray.length) state.lastmove = state.movesArray.slice().pop()
 			
 			ssesend({
 				kind: "refreshGame",
