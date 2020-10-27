@@ -265,13 +265,14 @@ app.get('/', (req, res) => {
 					<iframe height="200" width="800" src="/chr"></iframe>
 					\`
 				}
-				function showGame(id){
+				function showGame(id, fen){
 					document.getElementById("showGame").innerHTML = \`
-					<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>
+					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
+					<iframe height="400" width="800" src="/board/fen=\${fen}"></iframe>
 					\`
 				}
-				function refreshGame(id){
-					showGame(id)
+				function refreshGame(id, fen){
+					showGame(id, fen)
 				}
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
@@ -288,7 +289,7 @@ app.get('/', (req, res) => {
                 }
 
 				if(blob.kind == "showGame"){
-					showGame(blob.gameId)
+					showGame(blob.gameId, blob.fen)
 				}
 
 				if(blob.kind == "refreshGame"){
@@ -312,12 +313,7 @@ app.get('/', (req, res) => {
 })
 
 function playGame(gameId){
-    logPage(`playing game: ${gameId}`)
-	
-	ssesend({
-		kind: "showGame",
-		gameId: gameId
-	})
+    logPage(`playing game: ${gameId}`)	
 
     engine
     .setoption("Threads", engineThreads)
@@ -349,12 +345,7 @@ function playGame(gameId){
             }            
         }
 
-        if(blob.type != "chatLine"){                
-			ssesend({
-				kind: "refreshGame",
-				gameId: gameId
-			})
-			
+        if(blob.type != "chatLine"){                			
             let moves = []
 
             let state = blob.type == "gameFull" ? blob.state : blob
@@ -376,6 +367,12 @@ function playGame(gameId){
                     state.fen = chess.fen()
                 }
             }
+			
+			ssesend({
+				kind: "refreshGame",
+				gameId: gameId,
+				fen: state.fen
+			})
 
             let whiteMoves = (moves.length % 2) == 0
             let botTurn = (whiteMoves && botWhite) || ((!whiteMoves) && (!botWhite))
@@ -500,6 +497,28 @@ app.get('/docs', (req, res) => {
 		document.getElementById("root").appendChild(app.e)
     </script>
     `)
+})
+
+app.get('/board', (req, res) => {
+    res.send(`
+	<!DOCTYPE html>
+	<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Chessboard</title>
+		<link href="chessboard.css" rel="stylesheet">
+		<script src="chessboard.js"></script>
+	</head>
+	<body>
+		<div id="board"></div>
+
+		<script>
+			let board = new window.ChessBoard('board', {size: ${parseInt(req.query.size || "45")}})			
+			board.setPosition("${req.query.fen || startFen}")
+		</script>
+	</body>
+	</html>
+	`)
 })
 
 app.use('/', express.static(__dirname))
