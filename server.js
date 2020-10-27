@@ -534,8 +534,8 @@ app.get('/board', (req, res) => {
 	<head>
 		<meta charset="utf-8">
 		<title>Chessboard</title>
-		<link href="chessboard.css" rel="stylesheet">
-		<script src="chessboard.js"></script>
+		<link href="https://unpkg.com/@easychessanimations/showchessboard/lib/chessboard.css" rel="stylesheet">
+		<script src="https://unpkg.com/@easychessanimations/showchessboard/lib/chessboard.js"></script>
 	</head>
 	<body>
 		<div style="width:100%;text-align:center;font-weight:bold;font-family:monospace;">${req.query.title || "? - ?"}</div>
