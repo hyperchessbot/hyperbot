@@ -7,6 +7,11 @@ function formatTime(ms){
 	return `${hour} : ${min} : ${sec}`
 }
 
+function formatName(name, title){
+	if(!title) return name
+	return `${title} ${name}`
+}
+
 const fs = require('fs')
 const { Section, EnvVars } = require('./smartmd.js')
 
@@ -361,7 +366,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, oppTitle
+    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -375,8 +380,6 @@ function playGame(gameId){
 			blackTitle = blob.black.title
 			
             botWhite = whiteName == lichessBotName
-			
-			oppTitle = botWhite ? whiteTitle : blackTitle
 
             variant = blob.variant.key
             initialFen = blob.initialFen
@@ -399,6 +402,8 @@ function playGame(gameId){
             state.initialFen = initialFen
             state.fen = initialFen
 			state.movesArray = []
+			state.whiteTitle = whiteTitle
+			state.blackTitle = blackTitle			
 
             if(state.moves){
                 moves = state.moves.split(" ")
@@ -416,7 +421,7 @@ function playGame(gameId){
             }
 			
 			state.orientation = botWhite ? "w" : "b"
-			state.title = `${whiteName} ${formatTime(state.wtime)} - ${blackName} ${formatTime(state.btime)} ${state.variant}`
+			state.title = `${formatName(whiteName, whiteTitle)} ${formatTime(state.wtime)} - ${formatName(blackName, blackTitle)} ${formatTime(state.btime)} ${state.variant}`
 			state.lastmove = null
 			if(state.movesArray.length) state.lastmove = state.movesArray.slice().pop()
 			
@@ -453,6 +458,8 @@ function streamEvents(){
             let challenge = blob.challenge
             let challengeId = challenge.id
 			let rated = challenge.rated
+			let challenger = challenge.challenger
+			let challengerTitle = challenger.title
 
             if(playingGameId){
                 logPage(`can't accept challenge ${challengeId}, already playing`)
@@ -464,9 +471,9 @@ function streamEvents(){
                 logPage(`can't accept challenge ${challengeId}, rated`)
             }else if((!rated) && disableCasual){
                 logPage(`can't accept challenge ${challengeId}, casual`)
-            }else if((oppTitle == "BOT") && disableBot){
+            }else if((challengerTitle == "BOT") && disableBot){
                 logPage(`can't accept challenge ${challengeId}, bot`)
-            }else if((oppTitle != "BOT") && disableHuman){
+            }else if((challengerTitle != "BOT") && disableHuman){
                 logPage(`can't accept challenge ${challengeId}, human`)
             }else{
                 lichessUtils.postApi({
