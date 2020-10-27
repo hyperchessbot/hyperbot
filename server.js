@@ -288,7 +288,7 @@ app.get('/', (req, res) => {
 				function showGameFunc(id, fen, orientation, title, lastmove){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe id="boardframe" style="cursor: pointer; display: none;" onclick="window.open('\https://lichess.org/\${id}')" onload="setTimeout(_=>document.getElementById('boardframe').style.display='inline-block', 250);" height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}"></iframe>
+					<iframe id="boardframe" style="display: none;" onload="setTimeout(_=>document.getElementById('boardframe').style.display='inline-block', 250);" height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}&gameId=\${id}"></iframe>
 					\`
 				}
 				var showGameTimeout = null
@@ -575,7 +575,9 @@ app.get('/board', (req, res) => {
 		<script src="https://unpkg.com/@easychessanimations/showchessboard/lib/chessboard.js"></script>
 	</head>
 	<body>
-		<div style="width:100%;text-align:center;font-weight:bold;font-family:monospace;">${req.query.title || "? - ?"}</div>
+		<div style="width:100%;text-align:center;font-weight:bold;font-family:monospace;">${req.query.title || "? - ?"} 
+		<a href="https://lichess.org/${req.query.gameId}" rel="noopener noreferrer" target="blank">open</a>
+		</div>
 		<div id="board" style="margin-top: 5px;"></div>
 
 		<script>
