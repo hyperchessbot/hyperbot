@@ -278,7 +278,7 @@ app.get('/', (req, res) => {
 				function showGameFunc(id, fen, orientation, title, lastmove){
 					document.getElementById("showGame").innerHTML = \`
 					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}"></iframe>
+					<iframe id="boardframe" style="display:none;" onload="setTimeout(_=>document.getElementById('boardframe').style.display='block', 250);" height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}"></iframe>
 					\`
 				}
 				var showGameTimeout = null
