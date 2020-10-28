@@ -369,7 +369,7 @@ function playGame(gameId){
 	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running on https://github.com/hyperchessbot/hyperbot`), 2000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running github.com/hyperchessbot/hyperbot`), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
 
     playingGameId = gameId
