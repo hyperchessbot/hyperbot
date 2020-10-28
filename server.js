@@ -374,7 +374,7 @@ function playGame(gameId){
 
     playingGameId = gameId
 
-    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating
+    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating, rated, mode
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -393,6 +393,9 @@ function playGame(gameId){
 
             variant = blob.variant.key			
             initialFen = blob.initialFen
+			
+			rated = blob.rated
+			mode = rated ? "rated" : "casual"
 
             if(initialFen == 'startpos') initialFen = startFen
 
@@ -414,6 +417,8 @@ function playGame(gameId){
 			state.movesArray = []
 			state.whiteTitle = whiteTitle
 			state.blackTitle = blackTitle			
+			state.rated = rated
+			state.mode = mode
 
             if(state.moves){
                 moves = state.moves.split(" ")
@@ -431,7 +436,7 @@ function playGame(gameId){
             }
 			
 			state.orientation = botWhite ? "w" : "b"
-			state.title = `${formatName(whiteName, whiteTitle)} ( ${whiteRating} ) ${formatTime(state.wtime)} - ${formatName(blackName, blackTitle)} ( ${blackRating} ) ${formatTime(state.btime)} ${state.variant}`
+			state.title = `${formatName(whiteName, whiteTitle)} ( ${whiteRating} ) ${formatTime(state.wtime)} - ${formatName(blackName, blackTitle)} ( ${blackRating} ) ${formatTime(state.btime)} ${state.variant} ${state.mode}`
 			state.lastmove = null
 			if(state.movesArray.length) state.lastmove = state.movesArray.slice().pop()
 			
