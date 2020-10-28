@@ -54,6 +54,8 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **ACCEPT_VARIANTS** : space separated list of variant keys to accept, for other than standard USE_SCALACHESS has to be set to 'true' , example : `'standard atomic horde racingKings'`  
   
+**ACCEPT_SPEEDS** : space separated list of speeds to accept ( default : 'bullet blitz rapid classical' )  
+  
 **DISABLE_RATED** : set it to 'true' to reject rated challenges  
   
 **DISABLE_CASUAL** : set it to 'true' to reject casual challenges  
