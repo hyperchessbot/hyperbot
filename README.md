@@ -52,9 +52,9 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **USE_SCALACHESS** : set it to 'true' to use scalachess library and multi variant engine  
   
-**ACCEPT_VARIANTS** : space separated list of variant keys to accept, for other than standard USE_SCALACHESS has to be set to 'true' , example : `'standard atomic horde racingKings'`  
+**ACCEPT_VARIANTS** : space separated list of variant keys to accept ( default : 'standard' ), for non standard variants USE_SCALACHESS has to be set to 'true' , example : `'standard atomic horde racingKings'`  
   
-**ACCEPT_SPEEDS** : space separated list of speeds to accept ( default : 'bullet blitz rapid classical' )  
+**ACCEPT_SPEEDS** : space separated list of speeds to accept ( default : 'bullet blitz rapid classical' ), cannot play infinite or correspondence !  
   
 **DISABLE_RATED** : set it to 'true' to reject rated challenges  
   
