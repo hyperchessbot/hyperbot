@@ -191,7 +191,7 @@ async function makeMove(gameId, state, moves){
 
     let bookalgeb = null
 
-    if(useBook && (moves.length < bookDepth)){
+    if(useBook && (moves.length <= bookDepth)){
         let blob = await requestBook(state)
 
         if(blob){
