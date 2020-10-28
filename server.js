@@ -32,7 +32,7 @@ envKeys.push('ENGINE_HASH')
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 envKeys.push('ENGINE_MOVE_OVERHEAD')
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
-envKeys.push('QUERY_PLAYING_INTERVAL')
+//envKeys.push('QUERY_PLAYING_INTERVAL')
 const allowPonder = process.env.ALLOW_PONDER == "true"
 envKeys.push('ALLOW_PONDER')
 const useBook = process.env.USE_BOOK == "true"
@@ -48,7 +48,7 @@ envKeys.push('BOOK_SPEEDS')
 const logApi = process.env.LOG_API == "true"
 envKeys.push('LOG_API')
 const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
-//envKeys.push('CHALLENGE_INTERVAL')
+envKeys.push('CHALLENGE_INTERVAL')
 const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 envKeys.push('CHALLENGE_TIMEOUT')
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
@@ -56,8 +56,10 @@ const useScalachess = process.env.USE_SCALACHESS == "true"
 envKeys.push('USE_SCALACHESS')
 const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
 envKeys.push('ACCEPT_VARIANTS')
-const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "5")
-//envKeys.push('GAME_START_DELAY')
+const acceptSpeeds = (process.env.ACCEPT_SPEEDS || "bullet blitz rapid classical").split(" ")
+envKeys.push('ACCEPT_SPEEDS')
+const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "2")
+envKeys.push('GAME_START_DELAY')
 const disableRated = process.env.DISABLE_RATED == "true"
 envKeys.push('DISABLE_RATED')
 const disableCasual = process.env.DISABLE_CASUAL == "true"
@@ -389,7 +391,7 @@ function playGame(gameId){
 			
             botWhite = whiteName == lichessBotName
 
-            variant = blob.variant.key
+            variant = blob.variant.key			
             initialFen = blob.initialFen
 
             if(initialFen == 'startpos') initialFen = startFen
@@ -468,13 +470,15 @@ function streamEvents(){
 			let rated = challenge.rated
 			let challenger = challenge.challenger
 			let challengerTitle = challenger.title
+			let variant = challenge.variant.key
+			let speed = challenge.speed
 
             if(playingGameId){
-                logPage(`can't accept challenge ${challengeId}, already playing`)
-            }else if(challenge.speed == "correspondence"){
-                logPage(`can't accept challenge ${challengeId}, no correspondence`)
-            }else if(!acceptVariants.includes(challenge.variant.key)){
-                logPage(`can't accept challenge ${challengeId}, non standard`)
+                logPage(`can't accept challenge ${challengeId}, playing ${playingGameId}`)
+            }else if(!acceptVariants.includes(variant)){
+                logPage(`can't accept challenge ${challengeId}, ${variant}`)
+            }else if(!acceptSpeeds.includes(speed)){
+                logPage(`can't accept challenge ${challengeId}, ${speed}`)
             }else if(rated && disableRated){
                 logPage(`can't accept challenge ${challengeId}, rated`)
             }else if((!rated) && disableCasual){
@@ -643,7 +647,7 @@ app.listen(port, _ => {
 
     streamEvents()
 
-    setInterval(_=>{
+    /*setInterval(_=>{
         fetch(`https://lichess.org/api/user/${lichessBotName}`).then(response=>response.text().then(content=>{
             try{
                 let blob = JSON.parse(content)
@@ -661,7 +665,7 @@ app.listen(port, _ => {
                 }
             }catch(err){console.log(err)}
         }))
-    }, queryPlayingInterval * 1000)
+    }, queryPlayingInterval * 1000)*/
 
     let lastPlayedAt = 0
     setInterval(_=>{

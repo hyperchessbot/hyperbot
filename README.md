@@ -30,34 +30,40 @@ Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .
   
 Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
 ## Config vars
-**GENERAL_TIMEOUT** for event streams in seconds ( default : 15 )  
+**GENERAL_TIMEOUT** : for event streams in seconds ( default : 15 )  
   
-**ENGINE_THREADS** engine Threads option ( default : 1 )  
+**ENGINE_THREADS** : engine Threads option ( default : 1 )  
   
-**ENGINE_HASH** engine Hash option ( default : 16 )  
+**ENGINE_HASH** : engine Hash option ( default : 16 )  
   
-**ENGINE_MOVE_OVERHEAD** engine Move Overhead option in milliseconds ( default : 500 )  
+**ENGINE_MOVE_OVERHEAD** : engine Move Overhead option in milliseconds ( default : 500 )  
   
-**ALLOW_PONDER** set it to 'true' to make the bot think on opponent time  
+**ALLOW_PONDER** : set it to 'true' to make the bot think on opponent time  
   
-**BOOK_DEPTH** up to how many plies should the bot use the book ( default : 20 )  
+**BOOK_DEPTH** : up to how many plies should the bot use the book ( default : 20 )  
   
-**BOOK_SPREAD** select the move from that many of the top book moves ( default : 4 )  
+**BOOK_SPREAD** : select the move from that many of the top book moves ( default : 4 )  
   
-**BOOK_RATINGS** comma separated list of allowed book rating brackets ( default : '2200,2500')  
+**BOOK_RATINGS** : comma separated list of allowed book rating brackets ( default : '2200,2500')  
   
-**BOOK_SPEEDS** comma separated list of allowed book speeds ( default : 'blitz,rapid' )  
+**BOOK_SPEEDS** : comma separated list of allowed book speeds ( default : 'blitz,rapid' )  
   
-**LOG_API** set it to 'true' to allow more verbose logging  
+**LOG_API** : set it to 'true' to allow more verbose logging  
   
-**USE_SCALACHESS** set it to 'true' to use scalachess library and multi variant engine  
+**USE_SCALACHESS** : set it to 'true' to use scalachess library and multi variant engine  
   
-**ACCEPT_VARIANTS** space separated list of variant keys to accept, for other than standard USE_SCALACHESS has to be set to 'true' , example : `'standard atomic horde racingKings'`  
+**ACCEPT_VARIANTS** : space separated list of variant keys to accept, for other than standard USE_SCALACHESS has to be set to 'true' , example : `'standard atomic horde racingKings'`  
   
-**DISABLE_RATED** set it to 'true' to reject rated challenges  
+**DISABLE_RATED** : set it to 'true' to reject rated challenges  
   
-**DISABLE_CASUAL** set it to 'true' to reject casual challenges  
+**DISABLE_CASUAL** : set it to 'true' to reject casual challenges  
   
-**DISABLE_BOT** set it to 'true' to reject bot challenges  
+**DISABLE_BOT** : set it to 'true' to reject bot challenges  
   
-**DISABLE_HUMAN** set it to 'true' to reject human challenges
+**DISABLE_HUMAN** : set it to 'true' to reject human challenges  
+  
+**GAME_START_DELAY** : delay between accepting challenge and starting to play game in seconds ( default : 2 )  
+  
+**CHALLENGE_INTERVAL** : delay between auto challenge attempts in minutes ( default : 30 )  
+  
+**CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many munutes ( default : 60 )
