@@ -368,6 +368,7 @@ function playGame(gameId){
     .setoption("Threads", engineThreads)
 	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)
+	.setoption("Use NNUE", "false")
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running github.com/hyperchessbot/hyperbot`), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
