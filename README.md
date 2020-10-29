@@ -68,4 +68,6 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **CHALLENGE_INTERVAL** : delay between auto challenge attempts in minutes ( default : 30 )  
   
-**CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many munutes ( default : 60 )
+**CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many munutes ( default : 60 )  
+  
+**USE_NNUE** : set it to true to use NNUE for variants other than standard
