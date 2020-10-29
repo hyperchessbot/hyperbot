@@ -68,6 +68,8 @@ const disableBot = process.env.DISABLE_BOT == "true"
 envKeys.push('DISABLE_BOT')
 const disableHuman = process.env.DISABLE_HUMAN == "true"
 envKeys.push('DISABLE_HUMAN')
+const useNNUE = process.env.USE_NNUE == "true"
+envKeys.push('USE_NNUE')
 
 let config = {}
 for (let envKey of envKeys){
@@ -367,8 +369,7 @@ function playGame(gameId){
     engine
     .setoption("Threads", engineThreads)
 	.setoption("Hash", engineHash)
-    .setoption("Move Overhead", engineMoveOverhead)
-	.setoption("Use NNUE", "false")
+    .setoption("Move Overhead", engineMoveOverhead)	
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running github.com/hyperchessbot/hyperbot`), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
@@ -405,6 +406,9 @@ function playGame(gameId){
                 .setoption("UCI_Variant", variant.toLowerCase())
 				.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
             }            
+			
+			engine.setoption("Use NNUE",
+				( (variant == "standard") || (variant == "fromPosition") || useNNUE ) ? "true" : "false")
         }
 
         if(blob.type != "chatLine"){                			
