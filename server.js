@@ -1,5 +1,15 @@
 const fooVersion = '1.0.22'
 
+let lastPlayedAt = 0
+
+function getLowerCaseEnv(key){
+	return ( process.env[key] || "" ).toLowerCase()
+}
+
+function isEnvTrue(key){
+	return getLowerCaseEnv(key) == "true"
+}
+
 function formatTime(ms){
 	let sec = Math.floor(ms / 1000)
 	let min = Math.floor(sec / 60)
@@ -33,9 +43,9 @@ const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 envKeys.push('ENGINE_MOVE_OVERHEAD')
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
 //envKeys.push('QUERY_PLAYING_INTERVAL')
-const allowPonder = process.env.ALLOW_PONDER == "true"
+const allowPonder = isEnvTrue('ALLOW_PONDER')
 envKeys.push('ALLOW_PONDER')
-const useBook = process.env.USE_BOOK == "true"
+const useBook = isEnvTrue('USE_BOOK')
 envKeys.push('USE_BOOK')
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
 envKeys.push('BOOK_DEPTH')
@@ -45,14 +55,14 @@ const bookRatings = (process.env.BOOK_RATINGS || "2200,2500").split(",")
 envKeys.push('BOOK_RATINGS')
 const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
 envKeys.push('BOOK_SPEEDS')
-const logApi = process.env.LOG_API == "true"
+const logApi = isEnvTrue('LOG_API')
 envKeys.push('LOG_API')
 const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
 envKeys.push('CHALLENGE_INTERVAL')
 const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
 envKeys.push('CHALLENGE_TIMEOUT')
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
-const useScalachess = process.env.USE_SCALACHESS == "true"
+const useScalachess = isEnvTrue('USE_SCALACHESS')
 envKeys.push('USE_SCALACHESS')
 const acceptVariants = (process.env.ACCEPT_VARIANTS || "standard").split(" ")
 envKeys.push('ACCEPT_VARIANTS')
@@ -60,15 +70,15 @@ const acceptSpeeds = (process.env.ACCEPT_SPEEDS || "bullet blitz rapid classical
 envKeys.push('ACCEPT_SPEEDS')
 const gameStartDelay = parseInt(process.env.GAME_START_DELAY || "2")
 envKeys.push('GAME_START_DELAY')
-const disableRated = process.env.DISABLE_RATED == "true"
+const disableRated = isEnvTrue('DISABLE_RATED')
 envKeys.push('DISABLE_RATED')
-const disableCasual = process.env.DISABLE_CASUAL == "true"
+const disableCasual = isEnvTrue('DISABLE_CASUAL')
 envKeys.push('DISABLE_CASUAL')
-const disableBot = process.env.DISABLE_BOT == "true"
+const disableBot = isEnvTrue('DISABLE_BOT')
 envKeys.push('DISABLE_BOT')
-const disableHuman = process.env.DISABLE_HUMAN == "true"
+const disableHuman = isEnvTrue('DISABLE_HUMAN')
 envKeys.push('DISABLE_HUMAN')
-const useNNUE = process.env.USE_NNUE == "true"
+const useNNUE = isEnvTrue('USE_NNUE')
 envKeys.push('USE_NNUE')
 
 let config = {}
@@ -383,6 +393,8 @@ function playGame(gameId){
         
         if(playingGameId == gameId) playGame(gameId)
     }, callback: async function(blob){        
+		lastPlayedAt = new Date().getTime()
+		
         if(blob.type == "gameFull"){                
 			whiteName = blob.white.name
 			whiteTitle = blob.white.title
@@ -676,12 +688,9 @@ app.listen(port, _ => {
             }catch(err){console.log(err)}
         }))
     }, queryPlayingInterval * 1000)*/
-
-    let lastPlayedAt = 0
+    
     setInterval(_=>{
-        if(playingGameId){
-            lastPlayedAt = new Date().getTime()
-        }else{
+        if(!playingGameId){
             if((new Date().getTime() - lastPlayedAt) > challengeTimeout * 60 * 1000){
                 console.log(`idle timed out`)
                 challengeRandomBot()
