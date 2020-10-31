@@ -26,6 +26,8 @@ export BOT_NAME={BOT username}
   
 node server.js
 ## Discussion / Feedback
+Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .  
+  
 Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .  
   
 Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
