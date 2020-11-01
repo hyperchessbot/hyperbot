@@ -15,6 +15,10 @@ In the app's dashboard go to the Deploy tab. Use the GitHub button to connect th
 Create an API access token with your BOT account ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API ) and in Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token and also create a variable BOT_NAME and set its value to your bot's username.  
   
 Congratulations, you have an up and running lichess bot.
+## Upgrade to bot and play games in your browser
+To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games, visit https://hypereasy.herokuapp.com .  
+  
+For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1 .
 ## Install the bot locally
 Open the project's gitpod terminal https://gitpod.io#https://github.com/hyperchessbot/hyperbot , then type  
   
