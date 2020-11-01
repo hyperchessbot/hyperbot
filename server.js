@@ -334,6 +334,11 @@ app.get('/', (req, res) => {
             <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> | 
 			<a href="/config" rel="noopener noreferrer" target="_blank">view config</a> )
             </p>
+			<p class="p">
+To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit <a href="https://hypereasy.herokuapp.com" rel="noopener noreferrer" target="_blank">Hyper Easy</a> . 
+
+For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> .
+			</p>
             <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
 			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
             <script>            
