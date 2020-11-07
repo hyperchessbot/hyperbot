@@ -80,6 +80,8 @@ const disableHuman = isEnvTrue('DISABLE_HUMAN')
 envKeys.push('DISABLE_HUMAN')
 const useNNUE = isEnvTrue('USE_NNUE')
 envKeys.push('USE_NNUE')
+const useLc0 = isEnvTrue('USE_LC0')
+envKeys.push('USE_LC0')
 
 let config = {}
 for (let envKey of envKeys){
@@ -115,7 +117,12 @@ const { chessHandler, Scalachess } = require("@easychessanimations/scalachess")
 
 const { UciEngine, setLogEngine } = require('@easychessanimations/uci')
 
-const engine = new UciEngine(path.join(__dirname, useScalachess ? 'stockfish12m' : 'stockfish12'))
+const engine = new UciEngine(path.join(__dirname, useLc0 ? "lc0goorm/lc0" : useScalachess ? 'stockfish12m' : 'stockfish12'))
+
+if(useLc0){
+	engine.setoption("Weights File", "weights.pb.gz")	
+	engine.gothen({depth:1}).then(result => console.log(result))
+}
 
 const { Chess } = require('chess.js')
 
