@@ -25,6 +25,7 @@ function formatName(name, title){
 	return `${title} ${name}`
 }
 
+
 const fs = require('fs')
 const { Section, EnvVars } = require('@easychessanimations/foo/lib/smartmd.js')
 
