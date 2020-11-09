@@ -84,6 +84,8 @@ envKeys.push('USE_NNUE')
 const useLc0 = isEnvTrue('USE_LC0')
 envKeys.push('USE_LC0')
 
+const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
+
 let config = {}
 for (let envKey of envKeys){
 	let value = process.env[envKey]
@@ -118,7 +120,7 @@ const { chessHandler, Scalachess } = require("@easychessanimations/scalachess")
 
 const { UciEngine, setLogEngine } = require('@easychessanimations/uci')
 
-const engine = new UciEngine(path.join(__dirname, useLc0 ? "lc0goorm/lc0" : useScalachess ? 'stockfish12m' : 'stockfish12'))
+const engine = new UciEngine(path.join(__dirname, useLc0 ? LC0_EXE : useScalachess ? 'stockfish12m' : 'stockfish12'))
 
 if(useLc0){
 	engine.setoption("Weights File", "weights.pb.gz")	
