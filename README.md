@@ -31,6 +31,8 @@ export TOKEN={BOT API token}
 export BOT_NAME={BOT username}  
   
 node server.js
+## Use Lc0 on a Windows machine
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Using-Lc0-on-Windows#to-use-the-lc0-engine-on-a-windows-machine-do-the-following .
 ## Discussion / Feedback
 Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .  
   
