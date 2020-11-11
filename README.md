@@ -1,5 +1,5 @@
 # Welcome to Hyper Bot !
-## Create your own Hyper Bot
+## Create your own permanent Hyper Bot ( runs on Heroku, no Lc0 )
 If you want to create your own permanent bot, do the following:  
   
 Sign up to GitHub https://github.com/join , if you have not already.  
@@ -21,7 +21,7 @@ Congratulations, you have an up and running lichess bot.
 To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit https://hypereasy.herokuapp.com .  
   
 For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1 .
-## Install the bot locally
+## Install bot using Gitpod ( no Lc0 )
 Open the project's gitpod terminal https://gitpod.io#https://github.com/hyperchessbot/hyperbot , then type  
   
 npm install  
@@ -90,4 +90,4 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **USE_NNUE** : set it to true to use NNUE for variants other than standard  
   
-**USE_LC0** : set it to true to use Lc0 engine, only works with Windows and goorm installation, on Heroku you should not use it or set it to false
+**USE_LC0** : set it to true to use Lc0 engine, only works with Windows and goorm installation, on Heroku and Gitpod you should not use it or set it to false
