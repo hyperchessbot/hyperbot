@@ -35,7 +35,7 @@ file of size 25 bytes
 
 
 # README.md
-file of size 4639 bytes
+file of size 4958 bytes
 
 ### ReadMe of the project
 
@@ -145,5 +145,5 @@ file of size 1947 bytes
 # update.sh
 file of size 209 bytes
 
-### scirpt for updating Wiki
+### script for updating Wiki
 
