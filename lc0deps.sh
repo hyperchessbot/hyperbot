@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "installing lc0deps"
 
 sudo apt-get update -y
