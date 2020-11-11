@@ -25,7 +25,7 @@ const expl = {
 	"stockfish12m" : "multi variant Stockfish 12 Linux",
 	"stockfish12m.exe" : "multi variant Stockfish 12 Windows",
 	"update.js" : "script for updating file information",
-	"update.sh" : "scirpt for updating Wiki"	
+	"update.sh" : "script for updating Wiki"	
 }
 
 function intSize(size){
