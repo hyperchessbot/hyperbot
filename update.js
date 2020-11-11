@@ -10,6 +10,8 @@ const expl = {
 	"README.md" : "ReadMe of the project",
 	"Wiki" : "stores Wiki pages",
 	"favicon.ico" : "favicon of the app",
+	"latest.bat" : "script for updating to latest version ( Windows )",
+	"latest.sh" : "script for updating to latest version ( Linux )",
 	"lc0deps.sh" : "script for installing Lc0 dependencies",
 	"lc0goorm" : "contains Lc0 code and weights",
 	"libopenblas.dll" : "file necessary for running Lc0 on Windows",

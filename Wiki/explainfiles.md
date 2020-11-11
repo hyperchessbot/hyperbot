@@ -35,7 +35,7 @@ file of size 25 bytes
 
 
 # README.md
-file of size 4958 bytes
+file of size 5164 bytes
 
 ### ReadMe of the project
 
@@ -50,6 +50,18 @@ directory
 file of size 15 kilo byte(s)
 
 ### favicon of the app
+
+
+# latest.bat
+file of size 210 bytes
+
+### script for updating to latest version ( Windows )
+
+
+# latest.sh
+file of size 202 bytes
+
+### script for updating to latest version ( Linux )
 
 
 # lc0deps.sh
@@ -137,7 +149,7 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 1947 bytes
+file of size 2082 bytes
 
 ### script for updating file information
 
