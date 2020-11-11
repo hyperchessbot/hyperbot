@@ -35,6 +35,8 @@ node server.js
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Using-Lc0-on-Windows#to-use-the-lc0-engine-on-a-windows-machine-do-the-following .
 ## Install bot on goorm.io ( runs Lc0 )
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-goorm.io#install-bot-on-goormio .
+## Explanation of files
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git .
 ## Discussion / Feedback
 Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .  
   
