@@ -12,6 +12,7 @@ sudo apt-get upgrade -y
 sudo apt-get dist-upgrade -y
 
 chmod +x lc0goorm/lc0
+chmod +x serve.sh
 
 echo "installing lc0deps done"
 
