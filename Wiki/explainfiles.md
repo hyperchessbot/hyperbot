@@ -53,13 +53,13 @@ file of size 15 kilo byte(s)
 
 
 # latest.bat
-file of size 210 bytes
+file of size 316 bytes
 
 ### script for updating to latest version ( Windows )
 
 
 # latest.sh
-file of size 202 bytes
+file of size 308 bytes
 
 ### script for updating to latest version ( Linux )
 
