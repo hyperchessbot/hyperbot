@@ -1,9 +1,17 @@
-#install lc0 dependencies ( known to work on goorm.io )
+echo "installing lc0deps"
 
 sudo apt-get update -y
+
+sudo apt-get install software-properties-common -y
+
 sudo apt-get install libopenblas-base -y
 sudo apt-get install libstdc++6 -y
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test 
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get dist-upgrade
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+sudo apt-get update -y
+sudo apt-get upgrade -y
+sudo apt-get dist-upgrade -y
+
+chmod +x lc0goorm/lc0
+
+echo "installing lc0deps done"
+
