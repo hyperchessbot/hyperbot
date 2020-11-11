@@ -38,7 +38,7 @@ Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on
 ## Download a net for Lc0
 Dowload a net from https://lczero.org/dev/wiki/best-nets-for-lc0 .  
   
-Rename the weights file `weights.pb.gz`, then copy it to the `lc0goorm` folder. Overwrite the old file.
+Rename the weights file 'weights.pb.gz', then copy it to the 'lc0goorm' folder. Overwrite the old file.
 ## Explanation of files
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git .
 ## Discussion / Feedback
