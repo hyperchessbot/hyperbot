@@ -31,9 +31,9 @@ export TOKEN={BOT API token}
 export BOT_NAME={BOT username}  
   
 node server.js
-## Use Lc0 on a Windows machine
+## Install bot on Windows ( runs Lc0 )
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Using-Lc0-on-Windows#to-use-the-lc0-engine-on-a-windows-machine-do-the-following .
-## Install bot on goorm.io
+## Install bot on goorm.io ( runs Lc0 )
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-goorm.io#install-bot-on-goormio .
 ## Discussion / Feedback
 Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .  
@@ -82,4 +82,6 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many munutes ( default : 60 )  
   
-**USE_NNUE** : set it to true to use NNUE for variants other than standard
+**USE_NNUE** : set it to true to use NNUE for variants other than standard  
+  
+**USE_LC0** : set it to true to use Lc0 engine, only works with Windows and goorm installation, on Heroku you should not use it or set it to false
