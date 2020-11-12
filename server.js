@@ -372,9 +372,10 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 
                     if(content.match(/^bestmove/)){
 						let m = content.match(/score value: (.*)/)
-						let scoreValue = parseInt(m[1])
+						let scoreValue = parseInt(m[1])						
 						let color = scoreValue >= 0 ? "#070" : "#700"
 						let scoreUnit = content.match(/score unit: ([^,]+)/)[1]
+						if(scoreUnit == "cp") scoreValue = scoreValue / 100
 						content = content.replace(m[0], \`score value: <span style="font-size: 20px;color: \${color};font-weight: bold;">\${scoreUnit == "mate" ? "#":""}\${scoreValue}</span>\`)
 						document.getElementById("logBestmove").innerHTML = content
 					}
