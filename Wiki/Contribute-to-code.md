@@ -37,9 +37,9 @@ Edit the source files to modify the code.
 
 ### Example
 
-Open `server.js` and change `let scoreValue = parseInt(m[1])` to `let scoreValue = parseInt(m[1])/100` in order to display score in pawns instead of centipawns.
+Open `server.js` and change `if(scoreUnit == "cp") scoreValue = scoreValue` to `if(scoreUnit == "cp") scoreValue = scoreValue / 100` in order to display score in pawns instead of centipawns.
 
-![](https://i.imgur.com/604lysM.png)
+![](https://i.imgur.com/a7qnVYL.png)
 
 Save the file using Ctrl + S or File / Save.
 
