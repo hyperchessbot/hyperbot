@@ -64,3 +64,15 @@ Leave a comment if necessary, then press Create pull request
 ![](https://i.imgur.com/vy2rmoR.png)
 
 You have created a pull request and from now on it depends on the maintainer of the main project to accept or reject it.
+
+## Update your app on accepted pull request
+
+If your pull request has been accepted, you can update your app according to these Wikis
+
+### Update Heroku app
+
+https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod
+
+### Update Windows / goorm installation
+
+https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows-or-goorm#update-to-latest-version-on-windows--goorm
