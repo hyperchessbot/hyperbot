@@ -21,16 +21,8 @@ Congratulations, you have an up and running lichess bot.
 To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit https://hypereasy.herokuapp.com .  
   
 For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1 .
-## Install bot using Gitpod ( no Lc0 )
-Open the project's gitpod terminal https://gitpod.io#https://github.com/hyperchessbot/hyperbot , then type  
-  
-npm install  
-  
-export TOKEN={BOT API token}  
-  
-export BOT_NAME={BOT username}  
-  
-node server.js
+## Update Heroku app to latest version using Gitpod
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod .
 ## Install bot on Windows ( runs Lc0 )
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Using-Lc0-on-Windows#to-use-the-lc0-engine-on-a-windows-machine-do-the-following .
 ## Install bot on goorm.io ( runs Lc0 )
@@ -39,8 +31,8 @@ Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on
 Dowload a net from https://lczero.org/dev/wiki/best-nets-for-lc0 .  
   
 Rename the weights file 'weights.pb.gz', then copy it to the 'lc0goorm' folder. Overwrite the old file.
-## Update to latest version
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version#update-to-latest-version .
+## Update to latest version on Windows / goorm
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows---goorm#update-to-latest-version-on-windows--goorm .
 ## Explanation of files
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git .
 ## Discussion / Feedback
