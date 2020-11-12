@@ -24,9 +24,9 @@ For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyp
 ## Update Heroku app to latest version using Gitpod
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod .
 ## Install bot on Windows ( runs Lc0 )
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Using-Lc0-on-Windows#to-use-the-lc0-engine-on-a-windows-machine-do-the-following .
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-Windows-(-runs-Lc0-)#install-bot-on-windows--runs-lc0- .
 ## Install bot on goorm.io ( runs Lc0 )
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-goorm.io#install-bot-on-goormio .
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-goorm.io-(-runs-Lc0-)#install-bot-on-goormio--runs-lc0- .
 ## Download a net for Lc0
 Dowload a net from https://lczero.org/dev/wiki/best-nets-for-lc0 .  
   
@@ -35,6 +35,8 @@ Rename the weights file 'weights.pb.gz', then copy it to the 'lc0goorm' folder. 
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows---goorm#update-to-latest-version-on-windows--goorm .
 ## Explanation of files
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git .
+## Contribute to code
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Contribute-to-code#contribute-to-code .
 ## Discussion / Feedback
 Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .  
   
