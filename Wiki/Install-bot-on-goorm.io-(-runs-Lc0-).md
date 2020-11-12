@@ -4,13 +4,13 @@
 
 Visit https://www.goorm.io/ and press Sign up.
 
-## Create Node.js container
+## Create a Node.js container
 
 Visit https://ide.goorm.io/my, and click on Create new container.
 
 Fill in "Nodejs" for both Name and Description.
 
-From the stack options select Nodejs.
+From the stack options select Node.js.
 
 Press the Create (Ctrl + M) button.
 
