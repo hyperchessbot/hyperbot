@@ -44,6 +44,8 @@ Each config var goes to a separate line, at the top of the file, in the form
 set CONFIG_VAR_NAME=value
 ```
 
+By default the only configuration apart from credentials is `USE_LC0=true` which makes your bot use the Lc0 engine and `ENGINE_MOVE_OVERHEAD=1000` so that your engine does not time out ( increase this if necessary ).
+
 ## Download a net ( weights ) for Lc0
 
 Download a net from https://github.com/LeelaChessZero/lc0/wiki/Best-Nets-for-Lc0 .

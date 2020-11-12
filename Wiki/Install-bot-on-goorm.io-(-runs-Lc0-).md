@@ -85,9 +85,9 @@ or
 bash serve.sh
 ```
 
-## Configuring bot
+## Configure your bot
 
-To configure your bot, edit serve.sh and for every config var enter a new line at the top of the document, but below the first `#!/bin/bash` line, in the form
+To configure your bot, edit `serve.sh` and for every config var enter a new line at the top of the document, but below the first `#!/bin/bash` line, in the form
 
 ```
 export CONFIG_VAR_NAME=value
