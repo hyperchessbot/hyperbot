@@ -38,7 +38,7 @@ In your browser visit http://localhost:3000. Your bot is now up and plays using 
 
 Add the necessary config variables by editing `serve.bat`.
 
-Each config var goes to a separate line, in the format `set CONFIG_VAR_NAME=value` .
+Each config var goes to a separate line, at the top of the file, in the format `set CONFIG_VAR_NAME=value` .
 
 ## Download a net ( weights ) for Lc0
 
