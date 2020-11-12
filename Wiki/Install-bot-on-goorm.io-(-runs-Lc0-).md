@@ -1,4 +1,4 @@
-# Install bot on goorm.io
+# Install bot on goorm.io ( runs Lc0 )
 
 ## Sign up to goorm.io
 

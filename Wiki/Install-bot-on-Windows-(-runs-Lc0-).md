@@ -1,4 +1,4 @@
-# To use the Lc0 engine on a Windows machine do the following
+# Install bot on Windows ( runs Lc0 )
 
 ## Download and install git
 
