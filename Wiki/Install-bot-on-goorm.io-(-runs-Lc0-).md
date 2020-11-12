@@ -106,3 +106,9 @@ Click on the open window icon of this url ( button right to the url ).
 ![](https://i.imgur.com/6emvf27.png)
 
 If your bot is not running, this window may show Connection Refused. In this case run your bot and refresh the window.
+
+## Download a net ( weights ) for Lc0
+
+Download a net from https://github.com/LeelaChessZero/lc0/wiki/Best-Nets-for-Lc0 .
+
+Rename the weights file `weights.pb.gz` and copy it to the `lc0goorm` folder of your cloned repository ( overwrite the old weights file ).
