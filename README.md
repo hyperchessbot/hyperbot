@@ -44,29 +44,29 @@ Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .
   
 Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
 ## Config vars
-**GENERAL_TIMEOUT** : for event streams in seconds ( default : 15 )  
+**GENERAL_TIMEOUT** : timeout for event streams in seconds ( default : 15 )  
   
 **ENGINE_THREADS** : engine Threads option ( default : 1 )  
   
-**ENGINE_HASH** : engine Hash option ( default : 16 )  
+**ENGINE_HASH** : engine Hash option in megabytes ( default : 16 )  
   
 **ENGINE_MOVE_OVERHEAD** : engine Move Overhead option in milliseconds ( default : 500 )  
   
 **ALLOW_PONDER** : set it to 'true' to make the bot think on opponent time  
   
-**BOOK_DEPTH** : up to how many plies should the bot use the book ( default : 20 )  
+**BOOK_DEPTH** : up to how many plies into the game should the bot use the book, choosing too high book depth is running the risk of playing unsound moves ( default : 20 )  
   
-**BOOK_SPREAD** : select the move from that many of the top book moves ( default : 4 )  
+**BOOK_SPREAD** : select the move from that many of the top book moves, choosing to high book spread is running the risk of playing unsound moves ( default : 4 )  
   
-**BOOK_RATINGS** : comma separated list of allowed book rating brackets ( default : '2200,2500')  
+**BOOK_RATINGS** : comma separated list of allowed book rating brackets, possible ratings are 1600, 1800, 2000, 2200, 2500 ( default : '2200,2500')  
   
-**BOOK_SPEEDS** : comma separated list of allowed book speeds ( default : 'blitz,rapid' )  
+**BOOK_SPEEDS** : comma separated list of allowed book speeds, possible speeds are bullet, blitz, rapid, classical ( default : 'blitz,rapid' )  
   
-**LOG_API** : set it to 'true' to allow more verbose logging  
+**LOG_API** : set it to 'true' to allow more verbose logging, logs are available in the Inspection / Console of the browser  
   
 **USE_SCALACHESS** : set it to 'true' to use scalachess library and multi variant engine  
   
-**ACCEPT_VARIANTS** : space separated list of variant keys to accept ( default : 'standard' ), for non standard variants USE_SCALACHESS has to be set to 'true' , example : `'standard atomic horde racingKings'`  
+**ACCEPT_VARIANTS** : space separated list of variant keys to accept ( default : 'standard' ), for non standard variants USE_SCALACHESS has to be set to 'true' , example : `'standard crazyhouse chess960 kingOfTheHill threeCheck antichess atomic horde racingKings fromPosition'`  
   
 **ACCEPT_SPEEDS** : space separated list of speeds to accept ( default : 'bullet blitz rapid classical' ), cannot play infinite or correspondence !  
   
@@ -82,7 +82,7 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **CHALLENGE_INTERVAL** : delay between auto challenge attempts in minutes ( default : 30 )  
   
-**CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many munutes ( default : 60 )  
+**CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many minutes ( default : 60 )  
   
 **USE_NNUE** : set it to true to use NNUE for variants other than standard  
   
