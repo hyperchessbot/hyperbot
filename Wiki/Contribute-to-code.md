@@ -1,6 +1,6 @@
 # Contribute to code
 
-## Opening project in Gitpod
+## Open project in Gitpod
 
 Visit your forked repo, then press the Gitpod button
 
