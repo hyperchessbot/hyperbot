@@ -195,6 +195,7 @@ function requestBook(state){
 			}
 			
 			resolve({
+				source: "polyglot",
 				moves: entries.map(entry => ({
 					white: 0,
 					draws: entry.weight,
@@ -213,6 +214,8 @@ function requestBook(state){
         fetch(reqUrl).then(response=>response.text().then(content=>{
             try{
                 let blob = JSON.parse(content)
+				
+				blob.source = "lichess"
 
                 resolve(blob)
             }catch(err){resolve(null)}
@@ -286,10 +289,10 @@ async function makeMove(gameId, state, moves){
     }
 
     if(bookalgeb){
-        logPage(`lichess book move founnd ${bookalgeb}`)
+        logPage(`${blob.source} book move found ${bookalgeb}`)
         enginePromise = Promise.resolve({
             bestmove: bookalgeb,
-            source: "lichess book"
+            source: blob.source + " book"
         })
     }
 
