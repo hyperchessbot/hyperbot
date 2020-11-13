@@ -1,5 +1,9 @@
 const fooVersion = '1.0.22'
 
+const fs = require('fs')
+
+const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
 let lastPlayedAt = 0
 
 function getLowerCaseEnv(key){
@@ -25,8 +29,6 @@ function formatName(name, title){
 	return `${title} ${name}`
 }
 
-
-const fs = require('fs')
 const { Section, EnvVars } = require('@easychessanimations/foo/lib/smartmd.js')
 
 const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
@@ -83,6 +85,26 @@ const useNNUE = isEnvTrue('USE_NNUE')
 envKeys.push('USE_NNUE')
 const useLc0 = isEnvTrue('USE_LC0')
 envKeys.push('USE_LC0')
+const usePolyglot = isEnvTrue('USE_POLYGLOT')
+envKeys.push('USE_POLYGLOT')
+
+const polyglotBookName = "elo-3300.bin"
+
+const Polyglot = require('./polyglot/index.js')
+
+const book = new Polyglot()
+
+let bookLoaded = false
+
+if(usePolyglot){
+	console.log(`loading polyglot book ${polyglotBookName}`)
+	
+	book.load_book(fs.createReadStream(polyglotBookName))
+
+	book.on("loaded", ()=> {	
+		console.log(`loaded polyglot book ${polyglotBookName}`)
+	})	
+}
 
 const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
 
@@ -163,6 +185,27 @@ const possibleOpeningResponses = {
 
 function requestBook(state){
     return new Promise(resolve=>{
+		if(usePolyglot){
+			let entries = book.find(fen)
+			
+			if((!entries) || (!entries.length)){
+				resolve(null)
+				
+				return
+			}
+			
+			resolve({
+				moves: entries.map(entry => ({
+					white: 0,
+					draws: entry.weight,
+					black: 0,
+					uci: entry.algebraic_move
+				}))
+			})
+			
+			return
+		}
+		
         let reqUrl = `https://explorer.lichess.ovh/lichess?fen=${state.fen}&${urlArray("ratings", bookRatings)}&${urlArray("speeds", bookSpeeds)}&moves=${bookSpread}&variant=${state.variant}`
         
         if(logApi) console.log(reqUrl)
@@ -213,7 +256,7 @@ async function makeMove(gameId, state, moves){
 
     let bookalgeb = null
 
-    if(useBook && (moves.length <= bookDepth)){
+    if((useBook || (usePolyglot && bookLoaded)) && (moves.length <= bookDepth)){
         let blob = await requestBook(state)
 
         if(blob){

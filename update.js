@@ -9,6 +9,7 @@ const expl = {
 	"Procfile" : "Heroku Procfile, tells the process type ( web ) and how to run the app",
 	"README.md" : "ReadMe of the project",
 	"Wiki" : "stores Wiki pages",
+	"elo-3300.bin" : "CCRL 3300 polyglot book",
 	"favicon.ico" : "favicon of the app",
 	"latest.bat" : "script for updating to latest version ( Windows )",
 	"latest.sh" : "script for updating to latest version ( Linux )",
