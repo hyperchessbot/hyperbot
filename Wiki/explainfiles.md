@@ -49,7 +49,7 @@ directory
 # elo-3300.bin
 file of size 9972 kilo byte(s)
 
-### CCRL 3300 polyglot book
+### CCRL ELO 3300 polyglot book
 
 
 # favicon.ico
@@ -161,7 +161,7 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 2177 bytes
+file of size 2181 bytes
 
 ### script for updating file information
 
