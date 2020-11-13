@@ -6,6 +6,10 @@ const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 let lastPlayedAt = 0
 
+function isStandard(variant){
+	return ((variant == "standard") || (variant == "fromPosition"))
+}
+
 function getLowerCaseEnv(key){
 	return ( process.env[key] || "" ).toLowerCase()
 }
@@ -187,7 +191,7 @@ const possibleOpeningResponses = {
 
 function requestBook(state){
     return new Promise(resolve=>{
-		if(usePolyglot){
+		if(usePolyglot && isStandard(state.variant)){
 			if(!bookLoaded){
 				console.log("polyglot book not yet loaded")
 				
