@@ -1,37 +1,10 @@
-const fooVersion = '1.0.22'
+const fooVersion = '1.0.43'
 
 const fs = require('fs')
 
-const fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
-
 let lastPlayedAt = 0
 
-function isStandard(variant){
-	return ((variant == "standard") || (variant == "fromPosition"))
-}
-
-function getLowerCaseEnv(key){
-	return ( process.env[key] || "" ).toLowerCase()
-}
-
-function isEnvTrue(key){
-	return getLowerCaseEnv(key) == "true"
-}
-
-function formatTime(ms){
-	let sec = Math.floor(ms / 1000)
-	let min = Math.floor(sec / 60)
-	sec -= min * 60
-	let hour = Math.floor(min / 60)
-	min -= hour * 60
-	if(hour) return `${hour} : ${min} : ${sec}`
-	return `${min} : ${sec}`
-}
-
-function formatName(name, title){
-	if(!title) return name
-	return `${title} ${name}`
-}
+const { isEnvTrue, formatTime, formatName } = require('@easychessanimations/tinyutils')
 
 const { Section, EnvVars } = require('@easychessanimations/foo/lib/smartmd.js')
 
@@ -115,6 +88,7 @@ if(usePolyglot){
 const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
 
 let config = {}
+
 for (let envKey of envKeys){
 	let value = process.env[envKey]
 	if(value) config[envKey] = value
@@ -191,7 +165,7 @@ const possibleOpeningResponses = {
 
 function requestBook(state){
     return new Promise(resolve=>{
-		if(usePolyglot && isStandard(state.variant)){
+		if(usePolyglot && lichessUtils.isStandard(state.variant)){
 			if(!bookLoaded){
 				console.log("polyglot book not yet loaded")
 				
@@ -217,6 +191,12 @@ function requestBook(state){
 					uci: entry.algebraic_move
 				}))
 			})
+			
+			return
+		}
+		
+		if(!useBook){
+			resolve(null)
 			
 			return
 		}
@@ -459,7 +439,7 @@ function playGame(gameId){
 	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)	
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `${lichessBotName} running github.com/hyperchessbot/hyperbot`), 2000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `coded by @hyperchessbotauthor`), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
 
     playingGameId = gameId
