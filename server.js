@@ -103,6 +103,8 @@ if(usePolyglot){
 
 	book.on("loaded", ()=> {	
 		console.log(`loaded polyglot book ${polyglotBookName}`)
+		
+		bookLoaded = true
 	})	
 }
 
