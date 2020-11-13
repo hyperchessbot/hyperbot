@@ -186,7 +186,7 @@ const possibleOpeningResponses = {
 function requestBook(state){
     return new Promise(resolve=>{
 		if(usePolyglot){
-			let entries = book.find(fen)
+			let entries = book.find(state.fen)
 			
 			if((!entries) || (!entries.length)){
 				resolve(null)
