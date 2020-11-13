@@ -24,6 +24,7 @@
     "@easychessanimations/scalachess": "^1.0.4",
     "@easychessanimations/sse": "^1.0.7",
     "@easychessanimations/uci": "^1.0.27",
+    "chess-tools": "^0.3.0",
     "chess.js": "^0.11.0",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
