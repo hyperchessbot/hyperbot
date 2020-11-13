@@ -19,6 +19,7 @@ const expl = {
 	"node_modules" : "Node.js dependencies of the app",
 	"package-lock.json" : "necessary for reproducible build",
 	"package.json" : "lists Node.js dependencies to install for the app",
+	"polyglot" : "module for reading polyglot book",
 	"serve.bat" : "bot start script for Windows",
 	"serve.sh" : "bot start script for goorm ( Linux )",
 	"server.js" : "entry point and code of app",

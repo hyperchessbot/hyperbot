@@ -35,7 +35,7 @@ file of size 25 bytes
 
 
 # README.md
-file of size 5483 bytes
+file of size 5977 bytes
 
 ### ReadMe of the project
 
@@ -44,6 +44,12 @@ file of size 5483 bytes
 directory
 
 ### stores Wiki pages
+
+
+# elo-3300.bin
+file of size 9972 kilo byte(s)
+
+### CCRL 3300 polyglot book
 
 
 # favicon.ico
@@ -89,15 +95,21 @@ directory
 
 
 # package-lock.json
-file of size 16 kilo byte(s)
+file of size 17 kilo byte(s)
 
 ### necessary for reproducible build
 
 
 # package.json
-file of size 890 bytes
+file of size 959 bytes
 
 ### lists Node.js dependencies to install for the app
+
+
+# polyglot
+directory
+
+### module for reading polyglot book
 
 
 # serve.bat
@@ -113,7 +125,7 @@ file of size 113 bytes
 
 
 # server.js
-file of size 25 kilo byte(s)
+file of size 26 kilo byte(s)
 
 ### entry point and code of app
 
@@ -149,7 +161,7 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 2082 bytes
+file of size 2177 bytes
 
 ### script for updating file information
 
