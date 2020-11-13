@@ -186,6 +186,14 @@ const possibleOpeningResponses = {
 function requestBook(state){
     return new Promise(resolve=>{
 		if(usePolyglot){
+			if(!bookLoaded){
+				console.log("polyglot book not yet loaded")
+				
+				resolve(null)
+				
+				return
+			}
+			
 			let entries = book.find(state.fen)
 			
 			if((!entries) || (!entries.length)){
@@ -260,7 +268,7 @@ async function makeMove(gameId, state, moves){
     let bookalgeb = null
 	let bookSource = null
 
-    if((useBook || (usePolyglot && bookLoaded)) && (moves.length <= bookDepth)){
+    if((useBook || usePolyglot) && (moves.length <= bookDepth)){
         let blob = await requestBook(state)
 
         if(blob){
