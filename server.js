@@ -308,7 +308,8 @@ async function makeMove(gameId, state, moves){
     }
 
     if(!enginePromise){
-        logPage(`engine thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
+		let doPonder = ( state.botTime > 15000 ) && allowPonder
+        logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
          enginePromise = engine
         .position(`fen ${state.initialFen}`, moves)
         //.position('startpos', moves)
@@ -427,6 +428,8 @@ function playGame(gameId){
                 }
             }
 			
+			state.botWhite = botWhite
+			state.botTime = botWhite ? state.wtime : state.btime
 			state.orientation = botWhite ? "w" : "b"
 			state.title = `${formatName(whiteName, whiteTitle)} ( ${whiteRating} ) ${formatTime(state.wtime)} - ${formatName(blackName, blackTitle)} ( ${blackRating} ) ${formatTime(state.btime)} ${state.variant} ${state.mode}`
 			state.lastmove = null
