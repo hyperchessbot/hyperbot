@@ -49,7 +49,7 @@ directory
 # elo-3300.bin
 file of size 9972 kilo byte(s)
 
-### CCRL 3300 polyglot book
+### CCRL ELO 3300 polyglot book
 
 
 # favicon.ico
