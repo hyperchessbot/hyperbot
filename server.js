@@ -258,6 +258,7 @@ async function makeMove(gameId, state, moves){
     }    
 
     let bookalgeb = null
+	let bookSource = null
 
     if((useBook || (usePolyglot && bookLoaded)) && (moves.length <= bookDepth)){
         let blob = await requestBook(state)
@@ -281,6 +282,7 @@ async function makeMove(gameId, state, moves){
                     currentTotal += bmove.total                                            
                     if(currentTotal >= rand){
                         bookalgeb = bmove.uci
+						bookSource = blob.source
                         break
                     }                                            
                 }
@@ -289,10 +291,10 @@ async function makeMove(gameId, state, moves){
     }
 
     if(bookalgeb){
-        logPage(`${blob.source} book move found ${bookalgeb}`)
+        logPage(`${bookSource} book move found ${bookalgeb}`)
         enginePromise = Promise.resolve({
             bestmove: bookalgeb,
-            source: blob.source + " book"
+            source: bookSource + " book"
         })
     }
 
