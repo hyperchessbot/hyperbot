@@ -309,11 +309,16 @@ async function makeMove(gameId, state, moves){
 
     if(!enginePromise){
 		let doPonder = ( state.botTime > 15000 ) && allowPonder
+		if(state.botTime < 15000) state.botTime = state.botTime / 2
         logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
          enginePromise = engine
         .position(`fen ${state.initialFen}`, moves)
         //.position('startpos', moves)
-        .gothen({ wtime: state.wtime, winc: state.winc, btime: state.btime, binc: state.binc, ponderAfter: allowPonder })
+        .gothen({
+			wtime: state.botWhite ? state.botTime : state.wtime, winc: state.winc,
+			btime: state.botWhite ? state.btime : state.botTime, binc: state.binc,
+			ponderAfter: allowPonder
+		})
     }else{
         engine.stop()
     }
