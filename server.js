@@ -1,18 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////
+// init
+
 const fooVersion = '1.0.43'
 
-const fs = require('fs')
-
-let lastPlayedAt = 0
+const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
 
 const { isEnvTrue, formatTime, formatName } = require('@easychessanimations/tinyutils')
 
-const { Section, EnvVars } = require('@easychessanimations/foo/lib/smartmd.js')
-
-const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-
 let envKeys = []
 
-const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 envKeys.push('GENERAL_TIMEOUT')
 const engineThreads = process.env.ENGINE_THREADS || "1"
@@ -65,6 +61,14 @@ envKeys.push('USE_LC0')
 const usePolyglot = isEnvTrue('USE_POLYGLOT')
 envKeys.push('USE_POLYGLOT')
 
+const fs = require('fs')
+
+let lastPlayedAt = 0
+
+const { Section, EnvVars } = require('@easychessanimations/foo/lib/smartmd.js')
+
+const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
 const polyglotBookName = "elo-3300.bin"
 
 const Polyglot = require('./polyglot/index.js')
@@ -85,8 +89,6 @@ if(usePolyglot){
 	})	
 }
 
-const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
-
 let config = {}
 
 for (let envKey of envKeys){
@@ -102,6 +104,7 @@ const port = process.env.PORT || 3000
 const fetch = require('node-fetch')
 
 let docs = null
+
 fetch(`https://raw.githubusercontent.com/hyperbotauthor/hyperbot/docs/docs.json`).then(response=>response.text().then(content=>{
     try{
         docs = JSON.parse(content)        
@@ -115,17 +118,23 @@ fetch(`https://raw.githubusercontent.com/hyperbotauthor/hyperbot/docs/docs.json`
     }catch(err){console.log(err)}
 }))
 
-const { streamNdjson } = require('@easychessanimations/fetchutils')
 const lichessUtils = require("@easychessanimations/lichessutils")
+
+const { streamNdjson } = require('@easychessanimations/fetchutils')
 
 const { chessHandler, Scalachess } = require("@easychessanimations/scalachess")
 
 const { UciEngine, setLogEngine } = require('@easychessanimations/uci')
 
-const engine = new UciEngine(path.join(__dirname, useLc0 ? LC0_EXE : useScalachess ? 'stockfish12m' : 'stockfish12'))
+const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
+
+const enginePath = useLc0 ? LC0_EXE : useScalachess ? 'stockfish12m' : 'stockfish12'
+
+const engine = new UciEngine(path.join(__dirname, enginePath))
 
 if(useLc0){
 	engine.setoption("Weights File", "weights.pb.gz")	
+	
 	engine.gothen({depth:1}).then(result => console.log(result))
 }
 
@@ -162,6 +171,12 @@ const possibleOpeningResponses = {
     "g1f3": ["d7d5", "d7d6", "c7c5", "g8f6"],
     "e2e3": ["e7e5", "d7d6", "c7c5", "g8f6"]
 }
+
+// end init
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// bot
 
 function requestBook(state){
     return new Promise(resolve=>{
@@ -332,104 +347,6 @@ async function makeMove(gameId, state, moves){
         })
     })
 }
-
-app.get('/', (req, res) => {
-    res.send(`
-    <!doctype html>
-    <html>
-        <head>
-            <title>Hyper Bot</title>
-            <style>
-            .p {
-				min-width: 900px;
-                max-width: 900px;
-                background-color: #eee;
-                padding: 6px;
-                padding-left: 12px;
-                border-style: solid;
-                border-width: 1px;
-                border-color: #aaa;
-                border-radius: 15px;
-            }
-            body {
-                padding-left: 20px;
-            }
-            </style>
-            <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
-        </head>
-        <body>
-			<script>
-				function challengeRandom(ev){
-					ev.preventDefault()
-					document.getElementById("logBestmove").innerHTML = \`
-					<iframe height="200" width="800" src="/chr"></iframe>
-					\`
-				}
-				function showGameFunc(id, fen, orientation, title, lastmove){
-					document.getElementById("showGame").innerHTML = \`
-					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
-					<iframe id="boardframe" style="display: none;" onload="setTimeout(_=>document.getElementById('boardframe').style.display='inline-block', 250);" height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}&gameId=\${id}"></iframe>
-					\`
-				}
-				var showGameTimeout = null
-				function showGame(id, fen, orientation, title, lastmove){
-					if(showGameTimeout) clearTimeout(showGameTimeout)
-					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title, lastmove), 1000)
-				}
-				function refreshGame(id, fen, orientation, title, lastmove){
-					showGame(id, fen, orientation, title, lastmove)
-				}
-			</script>
-            <h1>Welcome to Hyper Bot !</h1>            
-            <p class="p"><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
-            ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
-            <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> | 
-			<a href="/config" rel="noopener noreferrer" target="_blank">view config</a> )
-            </p>
-			<p class="p">
-To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit <a href="https://hypereasy.herokuapp.com" rel="noopener noreferrer" target="_blank">Hyper Easy</a> . 
-
-For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> .
-			</p>
-            <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
-			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
-            <script>            
-            function processSource(blob){
-                if(blob.kind == "tick"){                    
-                    if(isFirstSourceTick) console.log("stream started ticking")
-                }
-
-				if(blob.kind == "showGame"){
-					showGame(blob.gameId, blob.fen, blob.orientation, blob.title, blob.lastmove)
-				}
-
-				if(blob.kind == "refreshGame"){
-					refreshGame(blob.gameId, blob.fen, blob.orientation, blob.title, blob.lastmove)
-				}
-
-                if(blob.kind == "logPage"){
-                    let content = blob.content
-
-                    console.log(content)
-
-                    if(content.match(/^bestmove/)){
-						let m = content.match(/score value: (.*)/)
-						let scoreValue = parseInt(m[1])						
-						let color = scoreValue >= 0 ? "#070" : "#700"
-						let scoreUnit = content.match(/score unit: ([^,]+)/)[1]
-						if(scoreUnit == "cp") scoreValue = scoreValue
-						content = content.replace(m[0], \`score value: <span style="font-size: 20px;color: \${color};font-weight: bold;">\${scoreUnit == "mate" ? "#":""}\${scoreValue}</span>\`)
-						document.getElementById("logBestmove").innerHTML = content
-					}
-                }
-            }
-
-            setupSource(processSource, ${TICK_INTERVAL})    
-            </script>
-        </body>
-    </html>
-    `)  
-})
 
 function playGame(gameId){
     logPage(`playing game: ${gameId}`)	
@@ -636,6 +553,110 @@ function challengeRandomBot(){
     })    
 }
 
+// end bot
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// routes
+
+app.get('/', (req, res) => {
+    res.send(`
+    <!doctype html>
+    <html>
+        <head>
+            <title>Hyper Bot</title>
+            <style>
+            .p {
+				min-width: 900px;
+                max-width: 900px;
+                background-color: #eee;
+                padding: 6px;
+                padding-left: 12px;
+                border-style: solid;
+                border-width: 1px;
+                border-color: #aaa;
+                border-radius: 15px;
+            }
+            body {
+                padding-left: 20px;
+            }
+            </style>
+            <script src="https://unpkg.com/@easychessanimations/sse@1.0.6/lib/sseclient.js"></script>
+        </head>
+        <body>
+			<script>
+				function challengeRandom(ev){
+					ev.preventDefault()
+					document.getElementById("logBestmove").innerHTML = \`
+					<iframe height="200" width="800" src="/chr"></iframe>
+					\`
+				}
+				function showGameFunc(id, fen, orientation, title, lastmove){
+					document.getElementById("showGame").innerHTML = \`
+					<!--<iframe height="400" width="800" src="https://lichess.org/embed/\${id}?theme=maple2&bg=auto&rnd=\${Math.random()}"></iframe>-->
+					<iframe id="boardframe" style="display: none;" onload="setTimeout(_=>document.getElementById('boardframe').style.display='inline-block', 250);" height="400" width="800" src="/board?fen=\${fen}&orientation=\${orientation}&title=\${title}&lastmove=\${lastmove}&gameId=\${id}"></iframe>
+					\`
+				}
+				var showGameTimeout = null
+				function showGame(id, fen, orientation, title, lastmove){
+					if(showGameTimeout) clearTimeout(showGameTimeout)
+					showGameTimeout = setTimeout(_=>showGameFunc(id, fen, orientation, title, lastmove), 1000)
+				}
+				function refreshGame(id, fen, orientation, title, lastmove){
+					showGame(id, fen, orientation, title, lastmove)
+				}
+			</script>
+            <h1>Welcome to Hyper Bot !</h1>            
+            <p class="p"><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
+            ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
+            <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> | 
+			<a href="/config" rel="noopener noreferrer" target="_blank">view config</a> )
+            </p>
+			<p class="p">
+To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit <a href="https://hypereasy.herokuapp.com" rel="noopener noreferrer" target="_blank">Hyper Easy</a> . 
+
+For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> .
+			</p>
+            <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
+			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
+            <script>            
+            function processSource(blob){
+                if(blob.kind == "tick"){                    
+                    if(isFirstSourceTick) console.log("stream started ticking")
+                }
+
+				if(blob.kind == "showGame"){
+					showGame(blob.gameId, blob.fen, blob.orientation, blob.title, blob.lastmove)
+				}
+
+				if(blob.kind == "refreshGame"){
+					refreshGame(blob.gameId, blob.fen, blob.orientation, blob.title, blob.lastmove)
+				}
+
+                if(blob.kind == "logPage"){
+                    let content = blob.content
+
+                    console.log(content)
+
+                    if(content.match(/^bestmove/)){
+						let m = content.match(/score value: (.*)/)
+						let scoreValue = parseInt(m[1])						
+						let color = scoreValue >= 0 ? "#070" : "#700"
+						let scoreUnit = content.match(/score unit: ([^,]+)/)[1]
+						if(scoreUnit == "cp") scoreValue = scoreValue
+						content = content.replace(m[0], \`score value: <span style="font-size: 20px;color: \${color};font-weight: bold;">\${scoreUnit == "mate" ? "#":""}\${scoreValue}</span>\`)
+						document.getElementById("logBestmove").innerHTML = content
+					}
+                }
+            }
+
+            setupSource(processSource, ${TICK_INTERVAL})    
+            </script>
+        </body>
+    </html>
+    `)  
+})
+
 app.get('/chr', (req, res) => {
     challengeRandomBot().then(result=>res.send(result))
 })
@@ -710,6 +731,12 @@ app.get('/board', (req, res) => {
 
 app.use('/', express.static(__dirname))
 
+// end routes
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+// launch
+
 app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
 
@@ -757,3 +784,5 @@ app.listen(port, _ => {
     }, challengeInterval * 60 * 1000)
 })
 
+// end launch
+////////////////////////////////////////////////////////////////////////////////
