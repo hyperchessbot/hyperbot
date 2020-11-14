@@ -21,6 +21,7 @@
     "@easychessanimations/fetchutils": "^1.0.3",
     "@easychessanimations/foo": "^1.0.43",
     "@easychessanimations/lichessutils": "^1.0.16",
+    "@easychessanimations/polyglot": "^1.0.2",
     "@easychessanimations/scalachess": "^1.0.4",
     "@easychessanimations/sse": "^1.0.7",
     "@easychessanimations/tinyutils": "^1.0.1",

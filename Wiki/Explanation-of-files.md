@@ -101,15 +101,9 @@ file of size 17 kilo byte(s)
 
 
 # package.json
-file of size 959 bytes
+file of size 1054 bytes
 
 ### lists Node.js dependencies to install for the app
-
-
-# polyglot
-directory
-
-### module for reading polyglot book
 
 
 # serve.bat
@@ -125,7 +119,7 @@ file of size 113 bytes
 
 
 # server.js
-file of size 26 kilo byte(s)
+file of size 27 kilo byte(s)
 
 ### entry point and code of app
 
@@ -161,7 +155,7 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 2177 bytes
+file of size 2181 bytes
 
 ### script for updating file information
 

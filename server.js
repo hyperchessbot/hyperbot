@@ -71,23 +71,11 @@ const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 
 const polyglotBookName = "elo-3300.bin"
 
-const Polyglot = require('./polyglot/index.js')
+const Polyglot = require('@easychessanimations/polyglot')
 
 const book = new Polyglot()
 
-let bookLoaded = false
-
-if(usePolyglot){
-	console.log(`loading polyglot book ${polyglotBookName}`)
-	
-	book.load_book(fs.createReadStream(polyglotBookName))
-
-	book.on("loaded", ()=> {	
-		console.log(`loaded polyglot book ${polyglotBookName}`)
-		
-		bookLoaded = true
-	})	
-}
+if(usePolyglot) book.loadThen(polyglotBookName)
 
 let config = {}
 
@@ -181,7 +169,7 @@ const possibleOpeningResponses = {
 function requestBook(state){
     return new Promise(resolve=>{
 		if(usePolyglot && lichessUtils.isStandard(state.variant)){
-			if(!bookLoaded){
+			if(!book.loaded){
 				console.log("polyglot book not yet loaded")
 				
 				resolve(null)
