@@ -296,7 +296,7 @@ async function makeMove(gameId, state, moves){
     }
 
     if(!enginePromise){		
-		let doPonder = ( state.botTime > 15000 ) && allowPonder
+		let doPonder = ( ( state.botTime > 15000 ) || isEnvTrue("ALLOW_LATE_PONDER") ) && allowPonder
 		if(isEnvTrue('REDUCE_LATE_TIME')){
 			if(state.botTime < 30000) state.botTime = Math.floor(state.botTime * 0.75)
 			if(state.botTime < 15000) state.botTime = Math.floor(state.botTime * 0.75)	
