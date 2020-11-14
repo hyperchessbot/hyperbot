@@ -48,7 +48,7 @@ Save the file using Ctrl + S or File / Save.
 ```
 git add . -A
 git commit -m "Show cp score in pawns"
-git push origin dev
+git push --force origin dev
 ```
 
 ## Create pull request

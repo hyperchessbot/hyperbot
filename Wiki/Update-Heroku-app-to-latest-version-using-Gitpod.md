@@ -32,7 +32,7 @@ git reset --hard upstream/master
 In the Gitpod terminal type:
 
 ```
-git push
+git push --force
 ```
 
 If you enabled automatic deploys on Heroku, this will update your app to the latest version. If not, open your app's Heroku dashboard and press Deploy Branch in the Deploy tab.

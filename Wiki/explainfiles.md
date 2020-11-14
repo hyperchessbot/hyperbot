@@ -101,7 +101,7 @@ file of size 17 kilo byte(s)
 
 
 # package.json
-file of size 1054 bytes
+file of size 985 bytes
 
 ### lists Node.js dependencies to install for the app
 
@@ -119,7 +119,7 @@ file of size 113 bytes
 
 
 # server.js
-file of size 27 kilo byte(s)
+file of size 26 kilo byte(s)
 
 ### entry point and code of app
 
