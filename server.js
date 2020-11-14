@@ -110,7 +110,7 @@ const lichessUtils = require("@easychessanimations/lichessutils")
 
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 
-const { chessHandler, Scalachess } = require("@easychessanimations/scalachess")
+const { makeUciMoves } = require("@easychessanimations/scalachess/lib/outopt.js")
 
 const { UciEngine, setLogEngine } = require('@easychessanimations/uci')
 
@@ -412,9 +412,8 @@ function playGame(gameId){
 				state.movesArray = moves
 
                 if(useScalachess){
-                    const scalachess = new Scalachess(state.variant, state.initialFen)
-                    await scalachess.init(state.variant)
-                    state.fen = await scalachess.makeMoves(moves)
+					let result = makeUciMoves(state.variant, state.initialFen, moves)					
+                    state.fen = result.fen
                 }else{
                     const chess = new Chess()
                     for(let move of moves) chess.move(move, {sloppy:true})
