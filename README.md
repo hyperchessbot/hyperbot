@@ -32,7 +32,7 @@ Dowload a net from https://lczero.org/dev/wiki/best-nets-for-lc0 .
   
 Rename the weights file 'weights.pb.gz', then copy it to the 'lc0goorm' folder. Overwrite the old file.
 ## Update to latest version on Windows / goorm
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows---goorm#update-to-latest-version-on-windows--goorm .
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows-or-goorm#update-to-latest-version-on-windows--goorm .
 ## Explanation of files
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git .
 ## Contribute to code
