@@ -5,4 +5,3 @@ COPY . .
 RUN bash Dockerfile.sh
 
 CMD ["node", "server.js"]
-
