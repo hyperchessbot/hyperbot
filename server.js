@@ -60,6 +60,12 @@ const useLc0 = isEnvTrue('USE_LC0')
 envKeys.push('USE_LC0')
 const usePolyglot = isEnvTrue('USE_POLYGLOT')
 envKeys.push('USE_POLYGLOT')
+const welcomeMessage = process.env.WELCOME_MESSAGE || `coded by @hyperchessbotauthor`
+envKeys.push('WELCOME_MESSAGE')
+const goodLuckMessage = process.env.GOOD_LUCK_MESSAGE || `Good luck !`
+envKeys.push('GOOD_LUCK_MESSAGE')
+const goodGameMessage = process.env.GOOD_GAME_MESSAGE || `Good game !`
+envKeys.push('GOOD_GAME_MESSAGE')
 
 const fs = require('fs')
 
@@ -353,8 +359,8 @@ function playGame(gameId){
 	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)	
 
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `coded by @hyperchessbotauthor`), 2000)
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good luck !`), 4000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2000)
+    setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodLuckMessage), 4000)
 
     playingGameId = gameId
 
@@ -514,7 +520,7 @@ function streamEvents(){
 
                 engine.stop()
 
-                setTimeout(_=>lichessUtils.gameChat(gameId, "all", `Good game !`), 2000)
+                setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodGameMessage), 2000)
             }
         }         
     }})

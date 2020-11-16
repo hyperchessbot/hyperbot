@@ -88,4 +88,10 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **USE_LC0** : set it to 'true' to use Lc0 engine, only works with Windows and goorm installation, on Heroku and Gitpod you should not use it or set it to false  
   
-**USE_POLYGLOT** : set it to 'true' to use polyglot opening book
+**USE_POLYGLOT** : set it to 'true' to use polyglot opening book  
+  
+**WELCOME_MESSAGE** : game chat welcome message ( delay from game start : 2 seconds , default : 'coded by @hyperchessbotauthor' )  
+  
+**GOOD_LUCK_MESSAGE** : game chat good luck message ( delay from game start : 4 seconds , default : 'Good luck !' )  
+  
+**GOOD_GAME_MESSAGE** : game chat good game message ( delay from game end : 2 seconds , default : 'Good game !' )
