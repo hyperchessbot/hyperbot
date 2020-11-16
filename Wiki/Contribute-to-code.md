@@ -8,6 +8,10 @@ Visit your forked repo, then press the Gitpod button
 
 If you don't have the Gitpod button, prefix the link of the forked repo with `https://gitpod.io/#` and visit the resulting link.
 
+In the top right corner click on your account login and from the menu select Open Access Control. Enable "write public repos".
+
+![](https://i.imgur.com/5fbBCKZ.jpg)
+
 Use the terminal to type in commands:
 
 ![](https://i.imgur.com/mawGHk7.png)
