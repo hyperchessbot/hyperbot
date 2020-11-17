@@ -1,4 +1,4 @@
-rm package-lock.json
+echo "listing root"
 
 ls /
 

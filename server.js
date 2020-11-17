@@ -77,7 +77,7 @@ console.log(`finding syzygy path ${syzygyPath}`)
 
 if(fs.existsSync(syzygyPath)){
 	console.log(`syzygy path exists`)
-	if(!fs.statSync(syzygyPath).isDirectory()){
+	if(fs.statSync(syzygyPath).isDirectory()){
 		console.log(`syzygy path is a directory`)
 	}else{
 		console.log(`syzygy path is not a directory`)
