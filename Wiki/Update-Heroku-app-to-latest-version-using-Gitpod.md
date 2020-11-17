@@ -1,5 +1,35 @@
 # Update Heroku app to latest version using Gitpod
 
+## Enabling syzygy tablebases
+
+If you want to use 3-4-5 piece tablebases, you have to enable container build. If not, skip this section.
+
+### Installing Heroku CLI
+
+https://devcenter.heroku.com/articles/heroku-cli#download-and-install
+
+### Setting stack to container
+
+Open a console ( terminal / command prompt ) window ( if you don't know how to do this on your system, find your way based on a search like this https://www.google.com/search?q=open+terminal+command+prompt+window ).
+
+Open a browser window with your app's Heroku login. This should be the active window when you do the following.
+
+In the console type
+
+```
+heroku login
+```
+
+In the browser popup enable login.
+
+When you are logged into Heroku CLI, in the console type ( change "yourappname" to the actual name of your app )
+
+```
+heroku stack:set container --app yourappname
+```
+
+![](https://i.imgur.com/vWROnFj.png)
+
 ## Opening upstream repo in Gitpod
 
 Visit your forked repo, then press the Gitpod button..

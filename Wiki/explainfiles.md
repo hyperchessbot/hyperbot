@@ -1,3 +1,9 @@
+# .circleci
+directory
+
+### undefined
+
+
 # .git
 directory
 
@@ -22,6 +28,18 @@ file of size 34 bytes
 ### config file for opening the repo in Gitpod
 
 
+# Dockerfile
+file of size 103 bytes
+
+### undefined
+
+
+# Dockerfile.sh
+file of size 106 bytes
+
+### undefined
+
+
 # LICENSE
 file of size 1072 bytes
 
@@ -35,7 +53,7 @@ file of size 25 bytes
 
 
 # README.md
-file of size 5978 bytes
+file of size 6573 bytes
 
 ### ReadMe of the project
 
@@ -56,6 +74,12 @@ file of size 9972 kilo byte(s)
 file of size 15 kilo byte(s)
 
 ### favicon of the app
+
+
+# heroku.yml
+file of size 37 bytes
+
+### undefined
 
 
 # latest.bat
@@ -94,12 +118,6 @@ directory
 ### Node.js dependencies of the app
 
 
-# package-lock.json
-file of size 17 kilo byte(s)
-
-### necessary for reproducible build
-
-
 # package.json
 file of size 985 bytes
 
@@ -119,7 +137,7 @@ file of size 113 bytes
 
 
 # server.js
-file of size 27 kilo byte(s)
+file of size 29 kilo byte(s)
 
 ### entry point and code of app
 
@@ -164,4 +182,10 @@ file of size 2132 bytes
 file of size 209 bytes
 
 ### script for updating Wiki
+
+
+# yarn.lock
+file of size 18 kilo byte(s)
+
+### undefined
 
