@@ -16,7 +16,9 @@ Create a BOT account if you do not already have one. To create one use an accoun
   
 Create an API access token with your BOT account at https://lichess.org/account/oauth/token ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API ) and in Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token and also create a variable BOT_NAME and set its value to your bot's username.  
   
-Congratulations, you have an up and running lichess bot.
+Congratulations, you have an up and running lichess bot.  
+  
+If you want to use 3-4-5 piece tablebases on Heroku, refer to this guide https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#enabling-syzygy-tablebases .
 ## Upgrade to bot and play games in your browser
 To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit https://hypereasy.herokuapp.com .  
   
