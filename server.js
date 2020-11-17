@@ -626,7 +626,11 @@ To upgrade an account, that has played no games yet, to bot, and to make this bo
 For detailed instructions see <a href="https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1" rel="noopener noreferrer" target="_blank">this forum post</a> .
 			</p>
             <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
-			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...</div>
+			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...
+			<p style="font-family: Arial; font-size: 18px; color: #700;">
+Warning: Playing while the bot home page is open introduces increased work load on the server. If in addition you use too high values for ENGINE_HASH ( recommended <= 128 ) and ENGINE_THREADS ( recommended <= 4 ), then Heroku rate limits may set in and temporarily disable server, which wil
+			</p>
+			</div>
             <script>            
             function processSource(blob){
                 if(blob.kind == "tick"){                    
