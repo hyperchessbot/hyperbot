@@ -66,8 +66,35 @@ const goodLuckMessage = process.env.GOOD_LUCK_MESSAGE || `Good luck !`
 envKeys.push('GOOD_LUCK_MESSAGE')
 const goodGameMessage = process.env.GOOD_GAME_MESSAGE || `Good game !`
 envKeys.push('GOOD_GAME_MESSAGE')
+let disableSyzygy = isEnvTrue('DISABLE_SYZYGY')
+envKeys.push('DISABLE_SYZYGY')
 
 const fs = require('fs')
+
+const syzygyPath = "/syzygy"
+
+console.log(`finding syzygy path ${syzygyPath}`)
+
+if(fs.existsSync(syzygyPath)){
+	console.log(`syzygy path exists`)
+	if(!fs.statSync(syzygyPath).isDirectory()){
+		console.log(`syzygy path is a directory`)
+	}else{
+		console.log(`syzygy path is not a directory`)
+		disableSyzygy = true
+	}
+}else{
+	console.log(`syzygy path does not exist`)
+	disableSyzygy = true
+}
+
+if(useLc0){
+	console.log(`syzygy is not enabled for Lc0`)
+	
+	disableSyzygy = true
+}
+
+console.log(`syzygy tablebases ${disableSyzygy ? "disabled" : "enabled"}`)
 
 let lastPlayedAt = 0
 
@@ -359,8 +386,8 @@ function playGame(gameId){
 	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)	
 	
-	if(!useLc0){
-		engine.setoption("SyzygyPath", "/syzygy")
+	if(!disableSyzygy){
+		engine.setoption("SyzygyPath", syzygyPath)
 	}
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2000)
@@ -627,9 +654,12 @@ For detailed instructions see <a href="https://lichess.org/forum/off-topic-discu
 			</p>
             <p class="p" id="logBestmove" style="font-family: monospace;">feedback on random challenges and bot moves will be shown here ...</p>            
 			<div class="p" id="showGame" style="height:410px;font-family:monospace;text-align:center;">board of ongoing game will be shown here ...
+			<p style="font-family: Arial; font-size: 18px; color: #770;">
+Suggestion: To improve your bot performance, your Heroku server should be located in Europe. This can only be changed when creating an app, so if your server is not located in Europe, you have to create a new app and copy all config settings from your old app. It is recommended that you keep the old app, but turn off the old app's web dyno in the Resources tab.
+			</p>
 			<p style="font-family: Arial; font-size: 18px; color: #700;">
 Warning: Playing while the bot home page is open introduces increased work load on the server. If in addition you use too high values for ENGINE_HASH ( recommended <= 128 ) and ENGINE_THREADS ( recommended <= 4 ), then Heroku rate limits may set in and temporarily disable the server, which will prevent the bot from making moves. If your priority is high rating or your bot is playing in a bot tournament, then close the bot homepage while playing. If your bot fails to move look at the Heroku logs ( More -> View logs ), and if you get memory quota exceeded error, then decrease ENGINE_THREADS and ENGINE_HASH. When the bot is hopelessly stuck, restart the app ( More -> Restart all dynos ).
-			</p>
+			</p>			
 			</div>
             <script>            
             function processSource(blob){

@@ -94,4 +94,6 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **GOOD_LUCK_MESSAGE** : game chat good luck message ( delay from game start : 4 seconds , default : 'Good luck !' )  
   
-**GOOD_GAME_MESSAGE** : game chat good game message ( delay from game end : 2 seconds , default : 'Good game !' )
+**GOOD_GAME_MESSAGE** : game chat good game message ( delay from game end : 2 seconds , default : 'Good game !' )  
+  
+**DISABLE_SYZYGY** : set it to 'true' to disable using syzygy tablebases, note that syzygy tablebases are always disabled when USE_LC0 is set to 'true', syzygy tablebases are only installed for deployment on Heroku
