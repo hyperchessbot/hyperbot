@@ -28,7 +28,7 @@ Press "Search" to list all your repositories. Find your forked repo among the li
 
 ![](https://i.imgur.com/7YprEuJ.png)
 
-You should select the branch that has to be deployed ( "master" ). Currently the app only has one branch, so "master" is selected by default.
+You should select the branch that has to be deployed, which is the "master" branch. Currently the app has only one branch "master", so the "master" branch is selected by default.
 
 Press "Enable Automatic Deploys" so that your app is updated when you push changes to your repo.
 
@@ -42,7 +42,7 @@ Wait for the build to finish. After successful build click on "View" to view you
 
 ## Open app
 
-You can open your app using "Open app" button in the top right of your dashboard.
+You can open your app using the "Open app" button in the top right of your dashboard.
 
 ![](https://i.imgur.com/rdtjdRH.png)
 
