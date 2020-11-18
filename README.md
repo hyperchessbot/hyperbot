@@ -6,15 +6,19 @@ Sign up to GitHub https://github.com/join , if you have not already.
   
 With your GitHub account visit https://github.com/hyperchessbot/hyperbot , then click on Fork.  
   
-Sign up to Heroku https://signup.heroku.com/ , if you have not already.  
-  
-At Heroku create a new app using New / Create new app.  
-  
-In the app's dashboard go to the Deploy tab. Use the GitHub button to connect the app to your forked repo. Press Search to find your repositories, then select hyperbot. You need to deploy the master branch. Enable Automatic Deploys and press Deploy Branch, for the initial deploy.  
-  
 Create a BOT account if you do not already have one. To create one use an account that has not played any games yet, log into this account, then visit https://hypereasy.herokuapp.com/auth/lichess/bot , approve oauth and then on the page you are taken to click on 'Request upgrade to bot'.  
   
-Create an API access token with your BOT account at https://lichess.org/account/oauth/token ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API ) and in Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token and also create a variable BOT_NAME and set its value to your bot's username.  
+Create an API access token with your BOT account at https://lichess.org/account/oauth/token ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API )  
+  
+Sign up to Heroku https://signup.heroku.com/ , if you have not already.  
+  
+At Heroku create a new app using New / Create new app. Choose Europe for region.  
+  
+In the app's dashboard go to the Deploy tab. Use the GitHub button to connect the app to your forked repo. Press Search to find your repositories, then select hyperbot. You need to deploy the master branch. Enable Automatic Deploys and press Deploy Branch, for the initial deploy. Wait for the build to finish.  
+  
+In Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token, then create a new variable BOT_NAME and set its value to your bot's lichess username.  
+  
+For more detailed instructions and screenshots on setting up your Heroku app refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Creating-and-configuring-your-app-on-Heroku#creating-and-configuring-your-app-on-heroku .  
   
 Congratulations, you have an up and running lichess bot.  
   
