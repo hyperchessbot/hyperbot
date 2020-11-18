@@ -24,7 +24,7 @@ Click "GitHub" to link your GitHub account.
 
 ![](https://i.imgur.com/rwnYvDt.png)
 
-Press "Search" to list all your repositories. Find your forked repo among the listed and press and to select it for deployment press "Connect".
+Press "Search" to list all your repositories. Find your forked repo among the listed, and to select it for deployment, press "Connect".
 
 ![](https://i.imgur.com/7YprEuJ.png)
 
