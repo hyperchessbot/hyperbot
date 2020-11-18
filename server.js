@@ -424,9 +424,9 @@ function playGame(gameId){
 				.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
             }            
 			
-			engine.setoption("Use NNUE", ( isStandard(variant) || useNNUE ) ? "true" : "false")
+			engine.setoption("Use NNUE", ( lichessUtils.isStandard(variant) || useNNUE ) ? "true" : "false")
 			
-			engine.setoption("SyzygyPath", ( (!disableSyzygy) && isStandard(variant) ) ? syzygyPath : "<empty>")
+			engine.setoption("SyzygyPath", ( (!disableSyzygy) && lichessUtils.isStandard(variant) ) ? syzygyPath : "<empty>")
         }
 
         if(blob.type != "chatLine"){                			

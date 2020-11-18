@@ -1,0 +1,23 @@
+Hit:1 http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu bionic InRelease
+Get:3 https://download.docker.com/linux/ubuntu bionic InRelease [64.4 kB]
+Hit:6 https://deb.nodesource.com/node_10.x bionic InRelease
+Get:5 https://cli-assets.heroku.com/apt ./ InRelease [2879 B]
+Ign:7 https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 InRelease
+Hit:8 https://dl.yarnpkg.com/debian stable InRelease
+Hit:9 https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 Release
+Hit:10 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic InRelease
+Get:11 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]
+Get:4 https://cf-cli-debian-repo.s3.amazonaws.com stable InRelease [2679 B]
+Get:12 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Err:5 https://cli-assets.heroku.com/apt ./ InRelease
+  The following signatures couldn't be verified because the public key is not available: NO_PUBKEY 5DC22404A6F9F1CA
+Get:14 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic-updates/main amd64 Packages [2208 kB]
+Err:4 https://cf-cli-debian-repo.s3.amazonaws.com stable InRelease
+  The following signatures were invalid: EXPKEYSIG 172B5989FCD21EF8 CF CLI Team <cf-cli-eng@pivotal.io>
+Get:15 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic-updates/universe amd64 Packages [2130 kB]
+Err:2 https://security.ubuntu.com/ubuntu bionic-security InRelease
+  502  Bad Gateway [IP: 91.189.88.180 443]
+Get:16 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic-updates/multiverse amd64 Packages [54.4 kB]
+Get:17 http://ap-northeast-2.ec2.archive.ubuntu.com/ubuntu bionic-updates/restricted amd64 Packages [252 kB]
+Fetched 4878 kB in 7s (729 kB/s)
+Reading package lists...
