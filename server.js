@@ -385,10 +385,6 @@ function playGame(gameId){
     .setoption("Threads", engineThreads)
 	.setoption("Hash", engineHash)
     .setoption("Move Overhead", engineMoveOverhead)	
-	
-	if(!disableSyzygy){
-		engine.setoption("SyzygyPath", syzygyPath)
-	}
 
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2000)
     setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodLuckMessage), 4000)
@@ -428,8 +424,9 @@ function playGame(gameId){
 				.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
             }            
 			
-			engine.setoption("Use NNUE",
-				( (variant == "standard") || (variant == "fromPosition") || useNNUE ) ? "true" : "false")
+			engine.setoption("Use NNUE", ( isStandard(variant) || useNNUE ) ? "true" : "false")
+			
+			engine.setoption("SyzygyPath", ( (!disableSyzygy) && isStandard(variant) ) ? syzygyPath : "<empty>")
         }
 
         if(blob.type != "chatLine"){                			
