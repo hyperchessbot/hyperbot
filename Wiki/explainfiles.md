@@ -1,9 +1,3 @@
-# .circleci
-directory
-
-### undefined
-
-
 # .git
 directory
 
@@ -31,13 +25,13 @@ file of size 34 bytes
 # Dockerfile
 file of size 103 bytes
 
-### undefined
+### container build manifest
 
 
 # Dockerfile.sh
 file of size 106 bytes
 
-### undefined
+### container build script
 
 
 # LICENSE
@@ -79,7 +73,7 @@ file of size 15 kilo byte(s)
 # heroku.yml
 file of size 37 bytes
 
-### undefined
+### Heroku container build manifest
 
 
 # latest.bat
@@ -173,7 +167,7 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 2132 bytes
+file of size 2327 bytes
 
 ### script for updating file information
 
@@ -187,5 +181,5 @@ file of size 209 bytes
 # yarn.lock
 file of size 18 kilo byte(s)
 
-### undefined
+### yarn lock file for reproducible build
 

@@ -5,12 +5,15 @@ const expl = {
 	".gitignore": "tells which files to ignore when pushing to git",
 	".gitpod.Dockerfile" : "Dockerfile for opening the repo in Gitpod",
 	".gitpod.yml" : "config file for opening the repo in Gitpod",
+	"Dockerfile" : "container build manifest",
+	"Dockerfile.sh" : "container build script",
 	"LICENSE" : "license for the project ( MIT )",
 	"Procfile" : "Heroku Procfile, tells the process type ( web ) and how to run the app",
 	"README.md" : "ReadMe of the project",
 	"Wiki" : "stores Wiki pages",
 	"elo-3300.bin" : "CCRL ELO 3300 polyglot book",
 	"favicon.ico" : "favicon of the app",
+	"heroku.yml" : "Heroku container build manifest",
 	"latest.bat" : "script for updating to latest version ( Windows )",
 	"latest.sh" : "script for updating to latest version ( Linux )",
 	"lc0deps.sh" : "script for installing Lc0 dependencies",
@@ -28,7 +31,8 @@ const expl = {
 	"stockfish12m" : "multi variant Stockfish 12 Linux",
 	"stockfish12m.exe" : "multi variant Stockfish 12 Windows",
 	"update.js" : "script for updating file information",
-	"update.sh" : "script for updating Wiki"	
+	"update.sh" : "script for updating Wiki",
+	"yarn.lock" : "yarn lock file for reproducible build"
 }
 
 function intSize(size){
