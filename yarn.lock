@@ -15,9 +15,9 @@
   integrity sha512-FLQlegobI5pOg5Gfy3rLhmfQfLoyILUVdluvMbePWo0s6WEmHLPTrlWKdNIHFe0VzrHp2NxiEQIWxrwmMvl+bg==
 
 "@easychessanimations/lichessutils@^1.0.16":
-  version "1.0.16"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/lichessutils/-/lichessutils-1.0.16.tgz#928b4a20bde080e6a07008d9889647e739ae9be6"
-  integrity sha512-yIIhpJA/6QgB6uEBeYsrbG+RXo8dBAnGXSCNGC2qC16E4ZvD+0ssLfvrA2vy1/n/sdv/XP4xjtoCmRVc6rW48w==
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/lichessutils/-/lichessutils-1.0.17.tgz#24162f5405e4841d08af6fbd4d1e0076f36d00a1"
+  integrity sha512-p/fW7u4w5hEiKj9SluJfacrm0AvurCCdXfUHnZSAoLEkBwKArYQMoQSyqTrYRpx1CusAKKRoYUD+wI9/cHQXvA==
   dependencies:
     node-fetch "^2.6.1"
 
