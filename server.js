@@ -54,7 +54,7 @@ const disableBot = isEnvTrue('DISABLE_BOT')
 envKeys.push('DISABLE_BOT')
 const disableHuman = isEnvTrue('DISABLE_HUMAN')
 envKeys.push('DISABLE_HUMAN')
-const useNNUE = isEnvTrue('USE_NNUE')
+const useNNUE = (process.env.USE_NNUE || "standard chess960 fromPosition").split(" ")
 envKeys.push('USE_NNUE')
 const useLc0 = isEnvTrue('USE_LC0')
 envKeys.push('USE_LC0')
@@ -417,16 +417,18 @@ function playGame(gameId){
 			mode = rated ? "rated" : "casual"
 
             if(initialFen == 'startpos') initialFen = startFen
+			
+			if(!useLc0){
+				engine.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
 
-            if(useScalachess){
-                engine
-                .setoption("UCI_Variant", variant.toLowerCase())
-				.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
-            }            
-			
-			engine.setoption("Use NNUE", ( lichessUtils.isStandard(variant) || useNNUE ) ? "true" : "false")
-			
-			engine.setoption("SyzygyPath", ( (!disableSyzygy) && lichessUtils.isStandard(variant) ) ? syzygyPath : "<empty>")
+				if(useScalachess){
+					engine.setoption("UCI_Variant", variant == "threeCheck" ? "3check" : variant.toLowerCase())				
+				}            
+
+				engine.setoption("Use NNUE", useNNUE.includes(variant) ? "true" : "false")
+
+				engine.setoption("SyzygyPath", ( (!disableSyzygy) && lichessUtils.isStandard(variant) ) ? syzygyPath : "<empty>")	
+			}
         }
 
         if(blob.type != "chatLine"){                			

@@ -90,7 +90,7 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **CHALLENGE_TIMEOUT** : start attempting auto challenges after being idle for that many minutes ( default : 60 )  
   
-**USE_NNUE** : set it to 'true' to use NNUE for variants other than standard  
+**USE_NNUE** : space separated list of variant keys for which to use NNUE ( daafault: 'standard chess960 fromPosition' )  
   
 **USE_LC0** : set it to 'true' to use Lc0 engine, only works with Windows and goorm installation, on Heroku and Gitpod you should not use it or set it to false  
   
