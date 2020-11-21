@@ -49,6 +49,12 @@ Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .
 Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .  
   
 Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
+## Getting assistance in lichess PM
+Open an issue at https://github.com/hyperchessbot/hyperbot/issues with the GitHub account on which your forked Hyper Bot, with the title 'Identifying lichess account'. Give a link to your lichess account in the issue.  
+  
+After identification you can PM https://lichess.org/@/hyperchessbotauthor .  
+  
+Seeking assistance in lichess PM without verifying your lichess account with your GitHub account may get you blocked. The block will be lifted once you identify your lichess account with your GitHub account.
 ## Config vars
 **GENERAL_TIMEOUT** : timeout for event streams in seconds ( default : 15 )  
   
