@@ -255,7 +255,7 @@ function requestBook(state){
 			return
 		}
 		
-		if(useMongoBook){
+		if(useMongoBook && poscoll){
 			let key = state.fen.split(" ").slice(0, 4).join(" ")
 			
 			poscoll.find({variant: state.variant, key: key}).toArray().then(result => {
