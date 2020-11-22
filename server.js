@@ -1,6 +1,28 @@
 ////////////////////////////////////////////////////////////////////////////////
 // init
 
+const MongoClient = require('mongodb').MongoClient
+
+const MONGODB_URI = process.env.MONGODB_URI
+
+let client, bookdb, poscoll
+
+if(MONGODB_URI){
+	MongoClient.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, setClient) {  
+		if(err){
+			console.log("MongoDb connection failed.")
+		}else{
+			console.log("MongoDb connected.")
+
+			client = setClient
+
+			bookdb = client.db("book")
+
+			poscoll = bookdb.collection("positions")
+		}
+	})
+}
+
 const fooVersion = '1.0.43'
 
 const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
@@ -23,6 +45,8 @@ const allowPonder = isEnvTrue('ALLOW_PONDER')
 envKeys.push('ALLOW_PONDER')
 const useBook = isEnvTrue('USE_BOOK')
 envKeys.push('USE_BOOK')
+const useMongoBook = isEnvTrue('USE_MONGO_BOOK')
+envKeys.push('USE_MONGO_BOOK')
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
 envKeys.push('BOOK_DEPTH')
 const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
@@ -231,6 +255,32 @@ function requestBook(state){
 			return
 		}
 		
+		if(useMongoBook){
+			let key = state.fen.split(" ").slice(0, 4).join(" ")
+			
+			poscoll.find({variant: state.variant, key: key}).toArray().then(result => {
+				if(result.length){
+					let blob = {
+						source: "mongo",
+						moves: result.map(item => ({							
+							uci: item.uci,
+							white: 0,
+							draws: Math.floor(item.score * 2),
+							black: 0
+						}))
+					}
+					
+					resolve(blob)
+					
+					return
+				}else{
+					resolve(null)
+				}
+			})
+			
+			return
+		}
+		
 		if(!useBook){
 			resolve(null)
 			
@@ -290,7 +340,7 @@ async function makeMove(gameId, state, moves){
     let bookalgeb = null
 	let bookSource = null
 
-    if((useBook || usePolyglot) && (moves.length <= bookDepth)){
+    if((useBook || useMongoBook || usePolyglot) && (moves.length <= bookDepth)){
         let blob = await requestBook(state)
 
         if(blob){
