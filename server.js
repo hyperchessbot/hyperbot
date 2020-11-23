@@ -94,6 +94,10 @@ const goodGameMessage = process.env.GOOD_GAME_MESSAGE || `Good game !`
 envKeys.push('GOOD_GAME_MESSAGE')
 let disableSyzygy = isEnvTrue('DISABLE_SYZYGY')
 envKeys.push('DISABLE_SYZYGY')
+const filterThresoldPlays = parseInt(process.env.FILTER_THRESOLD_PLAYS, "10")
+envKeys.push('FILTER_THRESOLD_PLAYS')
+const bookForgiveness = parseInt(process.env.BOOK_FORGIVENESS, "20")
+envKeys.push('BOOK_FORGIVENESS')
 
 const fs = require('fs')
 
@@ -270,6 +274,10 @@ function requestBook(state){
 					
 					let filteredMoves = moves.filter(move => {
 						let perf = move.score / move.plays
+						
+						if(move.plays < filterThresoldPlays) return true
+						
+						if((Math.random() * 100) < bookForgiveness) return true
 						
 						if(perf < mongoFilter) return false
 						
