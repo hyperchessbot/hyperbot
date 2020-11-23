@@ -23,7 +23,7 @@ file of size 34 bytes
 
 
 # Dockerfile
-file of size 103 bytes
+file of size 108 bytes
 
 ### container build manifest
 
@@ -47,7 +47,7 @@ file of size 25 bytes
 
 
 # README.md
-file of size 7080 bytes
+file of size 8095 bytes
 
 ### ReadMe of the project
 
@@ -68,6 +68,12 @@ file of size 9972 kilo byte(s)
 file of size 15 kilo byte(s)
 
 ### favicon of the app
+
+
+# fetchutils.js
+file of size 1478 bytes
+
+### fetch utils for building MongoDb book
 
 
 # heroku.yml
@@ -106,6 +112,12 @@ file of size 20 mega byte(s)
 ### file necessary for running Lc0 on Windows
 
 
+# mbooks.js
+file of size 3582 bytes
+
+### builds self learning MongoDb book
+
+
 # node_modules
 directory
 
@@ -113,7 +125,7 @@ directory
 
 
 # package.json
-file of size 985 bytes
+file of size 1010 bytes
 
 ### lists Node.js dependencies to install for the app
 
@@ -131,13 +143,13 @@ file of size 113 bytes
 
 
 # server.js
-file of size 29 kilo byte(s)
+file of size 30 kilo byte(s)
 
 ### entry point and code of app
 
 
 # startserver.sh
-file of size 58 bytes
+file of size 75 bytes
 
 ### script for starting the server on Heroku
 
@@ -167,7 +179,7 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 2327 bytes
+file of size 2439 bytes
 
 ### script for updating file information
 
@@ -179,7 +191,7 @@ file of size 209 bytes
 
 
 # yarn.lock
-file of size 18 kilo byte(s)
+file of size 23 kilo byte(s)
 
 ### yarn lock file for reproducible build
 
