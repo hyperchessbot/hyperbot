@@ -1,4 +1,3 @@
-
 const MAX_GAMES = parseInt(process.env.MAX_GAMES || "250")
 
 const { makeSanMovesScala } = require('@easychessanimations/scalachess/lib/outopt.js')
@@ -73,18 +72,24 @@ async function processGame(game, resolve){
 			score = game.winner == "white" ? 1 : 0
 		}
 		
-		if(game.players.black.user.name == BOT_NAME){			
-			score = 1 - score
-		}
+		const botWhite = game.players.white.user.name == BOT_NAME
 		
-		for(let j = 1; j < fens.length; j++){
+		for(let j = 1; j < ucis.length; j++){
 			let san = moves[j-1]
 			let uci = ucis[j]
 			let fen = fens[j-1]
-			let key = fen.split(" ").slice(0, 4).join(" ")
+			let keyparts = fen.split(" ").slice(0, 4)
+			let key = keyparts.join(" ")
+			
+			let turnfen = keyparts[1]
+			
+			if((botWhite && (turnfen == "b")) || ((!botWhite) && (turnfen == "w"))){
+				console.log("skipping opponent move", turnfen, game.players.white.user.name, game.players.black.user.name, san, uci, key)
+				continue
+			}
 			
 			let index = i++
-
+			
 			console.log(index, san, uci, key)
 
 			result = await poscoll.findOne({
