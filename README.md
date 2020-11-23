@@ -110,4 +110,8 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **GOOD_GAME_MESSAGE** : game chat good game message ( delay from game end : 2 seconds , default : 'Good game !' )  
   
-**DISABLE_SYZYGY** : set it to 'true' to disable using syzygy tablebases, note that syzygy tablebases are always disabled when USE_LC0 is set to 'true', syzygy tablebases are only installed for deployment on Heroku
+**DISABLE_SYZYGY** : set it to 'true' to disable using syzygy tablebases, note that syzygy tablebases are always disabled when USE_LC0 is set to 'true', syzygy tablebases are only installed for deployment on Heroku  
+  
+**MONGODB_URI** : connect URI of your MongoDb admin user ( only the host, no slash after the host, do database specified, no query string ), if defined, your latest games will be added to the database on every startup, by default this config var is not defined  
+  
+**USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI
