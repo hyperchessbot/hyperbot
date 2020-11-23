@@ -4,4 +4,4 @@ COPY . .
 
 RUN bash Dockerfile.sh
 
-CMD ["node", "server.js"]
+CMD ["bash", "startserver.sh"]
