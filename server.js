@@ -850,6 +850,16 @@ app.get('/board', (req, res) => {
 	`)
 })
 
+app.get('/mongostats', (req, res) => {
+	if(poscoll){
+		poscoll.countDocuments().then(result => {
+			res.send(`number of documents in your position collection is <b>${result}</b>`)
+		})
+	}else{
+		res.send(`your database is not connected`)
+	}
+})
+
 app.use('/', express.static(__dirname))
 
 // end routes
