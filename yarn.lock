@@ -29,10 +29,10 @@
     int64-buffer "^1.0.0"
     js-string-compression "^1.0.1"
 
-"@easychessanimations/scalachess@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/scalachess/-/scalachess-1.0.6.tgz#991602c46edd4fda0b7dba5ac39a23059f0f4c72"
-  integrity sha512-ns7O89Bz3erbCyLWAUzHQvsVY4l+XiNmhvP7HKEiYoGUYi2AefogloxzGt373ClCUmISD4/Jmym1thPQfOmW9w==
+"@easychessanimations/scalachess@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/scalachess/-/scalachess-1.0.8.tgz#5ba93dcd67b01278f78460bbc8e72509869706f3"
+  integrity sha512-sOQuPuSCEAPg8TWM6U1NjJL5VCxYpUy0Sa3PzQUJmZz5b4a5hR4WjiJktxuZg3AO6vBjZp5OP/FK7EScZLiZNQ==
 
 "@easychessanimations/sse@^1.0.7":
   version "1.0.7"
