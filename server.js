@@ -47,6 +47,8 @@ const useBook = isEnvTrue('USE_BOOK')
 envKeys.push('USE_BOOK')
 const useMongoBook = isEnvTrue('USE_MONGO_BOOK')
 envKeys.push('USE_MONGO_BOOK')
+const mongoFilter = parseInt(process.env.MONGO_FILTER || "30")
+envKeys.push('MONGO_FILTER')
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
 envKeys.push('BOOK_DEPTH')
 const bookSpread = parseInt(process.env.BOOK_SPREAD || "4")
@@ -260,12 +262,32 @@ function requestBook(state){
 			
 			poscoll.find({variant: state.variant, key: key}).toArray().then(result => {
 				if(result.length){
+					let moves = result.map(item => ({													
+						uci: item.uci,
+						plays: item.plays,
+						score: Math.floor(item.score * 100)
+					}))					
+					
+					let filteredMoves = moves.filter(move => {
+						let perf = move.score / move.plays
+						
+						if(perf < mongoFilter) return false
+						
+						return true
+					})
+					
+					if(!filteredMoves.length){
+						resolve(null)
+						
+						return
+					}
+					
 					let blob = {
 						source: "mongo",
-						moves: result.map(item => ({							
-							uci: item.uci,
+						moves: filteredMoves.map(move => ({							
+							uci: move.uci,
 							white: 0,
-							draws: Math.floor(item.score * 2),
+							draws: move.score,
 							black: 0
 						}))
 					}
