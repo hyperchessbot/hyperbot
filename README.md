@@ -114,4 +114,6 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **MONGODB_URI** : connect URI of your MongoDb admin user ( only the host, no slash after the host, do database specified, no query string ), if defined, your latest games will be added to the database on every startup, by default this config var is not defined  
   
-**USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI
+**USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI  
+  
+**APP_NAME** : Heroku app name ( necessary for interactive viewing of MongoDb book )
