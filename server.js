@@ -47,6 +47,8 @@ const useBook = isEnvTrue('USE_BOOK')
 envKeys.push('USE_BOOK')
 const useMongoBook = isEnvTrue('USE_MONGO_BOOK')
 envKeys.push('USE_MONGO_BOOK')
+const ignoreMongoPercent = parseInt(process.env.IGNORE_MONGO_PERCENT || "20")
+envKeys.push('IGNORE_MONGO_PERCENT')
 const mongoFilter = parseInt(process.env.MONGO_FILTER || "30")
 envKeys.push('MONGO_FILTER')
 const bookDepth = parseInt(process.env.BOOK_DEPTH || "20")
@@ -262,6 +264,12 @@ function requestBook(state){
 		}
 		
 		if(useMongoBook && poscoll){
+			if((Math.random() * 100) < ignoreMongoPercent){
+				resolve(null)
+				
+				return
+			}
+			
 			let key = state.fen.split(" ").slice(0, 4).join(" ")
 			
 			poscoll.find({variant: state.variant, key: key}).toArray().then(result => {
@@ -858,6 +866,46 @@ app.get('/mongostats', (req, res) => {
 	}else{
 		res.send(`your database is not connected`)
 	}
+})
+
+app.get('/book', (req, res) => {
+	let accept = req.headers.accept || req.headers.Accept
+	
+	const json = ( accept == "application/json" )
+	
+	if(!poscoll){
+		res.send(json ? JSON.stringify({
+			error: true,
+			status: "no database"
+		}) : "error: no database")
+		
+		return
+	}
+	
+	const variant = req.query.variant || "standard"
+	const fen = req.query.fen || startFen
+	const includeGameIds = req.query.includeGameIds == "true"
+	
+	const key = fen.split(" ").slice(0, 4).join(" ")
+	
+	poscoll.find({variant: variant, key: key}).toArray().then(result => {
+		if(!includeGameIds){
+			result = result.map(item => {
+				delete item["gameids"]
+				return item
+			})
+		}
+		
+		if(json){
+			res.set("Content-Type", "application/json")
+			
+			res.send(JSON.stringify(result))	
+		}else{
+			res.set("Content-Type", "text/html")
+			
+			res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
+		}
+	})
 })
 
 app.use('/', express.static(__dirname))

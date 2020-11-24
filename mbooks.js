@@ -53,7 +53,15 @@ function processGameThen(game){
 	return new Promise(resolve => processGame(game, resolve))
 }
 
-async function processGame(game, resolve){	
+async function processGame(game, resolve){
+	if(game.status == "started"){
+		console.log(`skipping game ${game.id} in progress`)
+		
+		resolve(false)
+		
+		return
+	}
+	
 	console.log(`processing game ${game.id}`)
 
 	if(game.moves){				
