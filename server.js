@@ -516,7 +516,11 @@ function playGame(gameId){
 				engine.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
 
 				if(useScalachess){
-					engine.setoption("UCI_Variant", variant == "threeCheck" ? "3check" : variant.toLowerCase())				
+					let uciVariant = ( variant == "threeCheck" ? "3check" : variant.toLowerCase() )
+					
+					if(lichessUtils.isStandard(variant)) uciVariant = "chess"
+					
+					engine.setoption("UCI_Variant", uciVariant)				
 				}            
 
 				engine.setoption("Use NNUE", useNNUE.includes(variant) ? "true" : "false")
