@@ -239,6 +239,12 @@ const possibleOpeningResponses = {
 
 function requestBook(state){
     return new Promise(resolve=>{
+		if(!state.fen){
+			resolve(null)
+			
+			return
+		}
+		
 		if(usePolyglot && lichessUtils.isStandard(state.variant)){
 			if(!book.loaded){
 				console.log("polyglot book not yet loaded")
