@@ -282,7 +282,9 @@ function requestBook(state){
 			return
 		}
 		
-		if(useMongoBook && poscoll){
+		let coll = (mongoVersion == 1) ? poscoll : movecoll
+		
+		if( useMongoBook && coll ){
 			if((Math.random() * 100) < ignoreMongoPercent){
 				resolve(null)
 				
@@ -291,7 +293,7 @@ function requestBook(state){
 			
 			let key = state.fen.split(" ").slice(0, 4).join(" ")
 			
-			poscoll.find({variant: state.variant, key: key}).toArray().then(result => {
+			getBook(state.variant, key).then(result => {
 				if(result.length){
 					let moves = result.map(item => ({													
 						uci: item.uci,
@@ -896,6 +898,61 @@ app.get('/mongostats', (req, res) => {
 	}
 })
 
+function getBook(variant, key){
+	if(mongoVersion == 1) return getBook1(variant, key)	
+	if(mongoVersion == 2) return getBook2(variant, key)
+}
+
+function getBook1(variant, key){
+	return poscoll.find({variant: variant, key: key}).toArray()
+}
+
+function getBook2(variant, key){
+	return new Promise(resolve => {
+		movecoll.find({variant: variant, key: key}).toArray().then(resultRaw => {						
+			let resultMove = {}
+
+			let result = []
+
+			for(let item of resultRaw){				
+				let uci = item.uci
+				let san = item.san				
+				let gameResult = item.result
+
+				let score = 0.5
+
+				if(gameResult == "1-0") score = 1
+				if(gameResult == "0-1") score = 0
+
+				let keyparts = key.split(" ")
+
+				let turn = keyparts[1]
+
+				if(turn == "b") score = 1 - score
+
+				if(resultMove[uci]){
+					resultMove[uci].score += score
+					resultMove[uci].plays++
+				}else{
+					resultMove[uci] = {
+						uci: uci,
+						san: san,
+						key: key,
+						plays: 1,
+						score: score
+					}
+				}
+			}
+
+			for(let uci in resultMove){
+				result.push(resultMove[uci])
+			}
+			
+			resolve(result)
+		})
+	})														 		
+}
+
 app.get('/book', (req, res) => {
 	let accept = req.headers.accept || req.headers.Accept
 	
@@ -925,76 +982,24 @@ app.get('/book', (req, res) => {
 	
 	const key = fen.split(" ").slice(0, 4).join(" ")
 	
-	if(mongoVersion == 1){
-		poscoll.find({variant: variant, key: key}).toArray().then(result => {
-			if(!includeGameIds){
-				result = result.map(item => {
-					delete item["gameids"]
-					return item
-				})
-			}
+	getBook(variant, key).then(result => {
+		if(!includeGameIds){
+			result = result.map(item => {
+				delete item["gameids"]
+				return item
+			})
+		}
 
-			if(json){
-				res.set("Content-Type", "application/json")
+		if(json){
+			res.set("Content-Type", "application/json")
 
-				res.send(JSON.stringify(result))	
-			}else{
-				res.set("Content-Type", "text/html")
+			res.send(JSON.stringify(result))	
+		}else{
+			res.set("Content-Type", "text/html")
 
-				res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
-			}
-		})
-	}else if(mongoVersion == 2){		
-		movecoll.find({variant: variant, key: key}).toArray().then(resultRaw => {			
-			let resultMove = {}
-			
-			let result = []
-			
-			for(let item of resultRaw){				
-				let uci = item.uci
-				let san = item.san				
-				let gameResult = item.result
-				
-				let score = 0.5
-				
-				if(gameResult == "1-0") score = 1
-				if(gameResult == "0-1") score = 0
-				
-				let keyparts = key.split(" ")
-				
-				let turn = keyparts[1]
-				
-				if(turn == "b") score = 1 - score
-				
-				if(resultMove[uci]){
-					resultMove[uci].score += score
-					resultMove[uci].plays++
-				}else{
-					resultMove[uci] = {
-						uci: uci,
-						san: san,
-						key: key,
-						plays: 1,
-						score: score
-					}
-				}
-			}
-			
-			for(let uci in resultMove){
-				result.push(resultMove[uci])
-			}
-			
-			if(json){
-				res.set("Content-Type", "application/json")
-
-				res.send(JSON.stringify(result))	
-			}else{
-				res.set("Content-Type", "text/html")
-
-				res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
-			}
-		})
-	}
+			res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
+		}
+	})
 })
 
 app.use('/', express.static(__dirname))
