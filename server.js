@@ -914,8 +914,7 @@ function getBook2(variant, key){
 			san: 1,
 			result: 1,
 			site: 1
-		}).toArray().then(resultRaw => {									
-			console.log(resultRaw)
+		}).toArray().then(resultRaw => {												
 			let resultMove = {}
 
 			let result = []
