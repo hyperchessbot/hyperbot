@@ -885,13 +885,14 @@ app.get('/board', (req, res) => {
 })
 
 app.get('/mongostats', (req, res) => {
+	const verMsg =`<div style="font-family: monospace; font-size: 16;">your mongo version is <b>${mongoVersion}</b><hr>`
 	if(poscoll){
 		poscoll.countDocuments().then(result => {
-			res.send(`number of documents in your position collection is <b>${result}</b>
-<script>
-	setTimeout(_ => document.location.reload(), 5000)
-</script>
-`)
+			res.send(`${verMsg}number of documents in your position collection is <b>${result}</b><script>setTimeout(_ => document.location.reload(), 5000)</script>`)
+		})
+	}else if(movecoll){
+		movecoll.countDocuments().then(result => {
+			res.send(`${verMsg}number of moves in your move collection is <b>${result}</b><script>setTimeout(_ => document.location.reload(), 5000)</script>`)
 		})
 	}else{
 		res.send(`your database is not connected`)
