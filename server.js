@@ -929,6 +929,18 @@ function getBook2(variant, key){
 				let turn = keyparts[1]
 
 				if(turn == "b") score = 1 - score
+				
+				let site = item.site
+				
+				let gameid = undefined
+				
+				if(site){
+					let m = site.match(/\/(.+)$/)
+					
+					if(m){
+						gameid = m[1]
+					}
+				}
 
 				if(resultMove[uci]){
 					resultMove[uci].score += score
@@ -939,8 +951,13 @@ function getBook2(variant, key){
 						san: san,
 						key: key,
 						plays: 1,
-						score: score
+						score: score,
+						gameids: []
 					}
+				}
+				
+				if(gameid){
+					resultMove.gameids.push(gameid)
 				}
 			}
 

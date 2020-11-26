@@ -44,8 +44,6 @@ Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of
 ## Contribute to code
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Contribute-to-code#contribute-to-code .
 ## Discussion / Feedback
-Join the HyperChessBot team https://lichess.org/team/hyperchessbot-team .  
-  
 Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .  
   
 Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
