@@ -755,10 +755,13 @@ app.get('/', (req, res) => {
 			</script>
             <h1>Welcome to Hyper Bot !</h1>            
             <p class="p"><a href="https://lichess.org/@/${lichessBotName}" rel="noopener noreferrer" target="_blank">${lichessBotName}</a> is powered by Hyper Bot 
-            ( <a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
+            ( 
+			<a href="/chr" rel="noopener noreferrer" target="_blank" onclick="challengeRandom(event)">challenge random bot by ${lichessBotName}</a> |
             <a href="/docs" rel="noopener noreferrer" target="_blank">view docs</a> | 
 			<a href="/config" rel="noopener noreferrer" target="_blank">view config</a> |
-			<a href="https://scalachess.netlify.app/?app=${appName}" rel="noopener noreferrer" target="_blank">view book</a>)
+			<a href="https://scalachess.netlify.app/?app=${appName}" rel="noopener noreferrer" target="_blank">view book</a> |
+			<a href="/mongostats" rel="noopener noreferrer" target="_blank">mongostats</a>
+			)
             </p>
 			<p class="p">
 To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit <a href="https://hypereasy.herokuapp.com" rel="noopener noreferrer" target="_blank">Hyper Easy</a> . 
