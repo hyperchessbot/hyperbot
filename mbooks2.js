@@ -1,3 +1,19 @@
+//https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
+
+Object.defineProperty(String.prototype, 'hashCode', {
+  value: function() {
+    var hash = 0, i, chr;
+    for (i = 0; i < this.length; i++) {
+      chr   = this.charCodeAt(i);
+      hash  = ((hash << 5) - hash) + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  }
+});
+
+const PGN_URL = process.env.PGN_URL
+
 const variantName2variantKey = {
 	"Standard": "standard",
 	"Three-check": "threeCheck",
@@ -95,6 +111,11 @@ async function processPgn(pgn, resolve){
 		tags.variant = "standard"
 	}
 	
+	if(PGN_URL){
+		tags.hash = pgn.hashCode().toString()
+		console.log(`created hash code ${tags.hash}`)
+	}
+	
 	let stored = await gamecoll.findOne(tags)
 	
 	let rebuild = true
@@ -182,7 +203,12 @@ function processPgnThen(pgn){
 
 async function processPgns(content){
 	let pgns = content.split("\n\n\n")
-		
+	
+	if(PGN_URL){
+		content = content.replace(/\n\n\[/g, "\n\n[[")
+		pgns = content.split("\n\n[")
+	}
+	
 	for(let pgn of pgns){
 		await processPgnThen(pgn)
 	}
@@ -197,11 +223,19 @@ async function processPgns(content){
 function loadGames(){
 	movecoll.countDocuments().then(result=>console.log("moves", result))
 	
-	fetch(`https://lichess.org/api/games/user/${BOT_NAME}?max=${MAX_GAMES}`, {
-		headers: {
-			Authorization: `Bearer ${BOT_TOKEN}`
-		}
-	}).then(response => response.text().then(content => {		
+	let url = PGN_URL || `https://lichess.org/api/games/user/${BOT_NAME}?max=${MAX_GAMES}`
+	
+	console.log(`downloading pgn games from ${url}`)
+	
+	let headers = {}
+	
+	if(!PGN_URL) headers.Authorization = `Bearer ${BOT_TOKEN}`
+
+	fetch(url, {
+		headers: headers
+	}).then(response => response.text().then(content => {			
+		content = content.replace(/\r/g, "")
+		
 		processPgns(content)
 	}))
 }
