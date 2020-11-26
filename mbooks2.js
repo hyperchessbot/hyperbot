@@ -78,10 +78,6 @@ async function processPgn(pgn, resolve){
 	
 	let tags = result.tags
 	
-	let stored = await gamecoll.findOne(tags)
-	
-	let rebuild = true
-	
 	if(tags.variant){
 		let variantKey = variantName2variantKey[tags.variant]
 		
@@ -97,6 +93,10 @@ async function processPgn(pgn, resolve){
 	}else{
 		tags.variant = "standard"
 	}
+	
+	let stored = await gamecoll.findOne(tags)
+	
+	let rebuild = true
 	
 	if(stored){
 		if(stored.bookdepth >= BOOK_DEPTH){
