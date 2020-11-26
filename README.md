@@ -56,6 +56,8 @@ After identification you can PM https://lichess.org/@/hyperchessbotauthor .
   
 Seeking assistance in lichess PM without verifying your lichess account with your GitHub account may get you blocked. The block may be lifted once you identify your lichess account with your GitHub account.
 ## Config vars
+**KEEP_ALIVE_URL** : set this to the full link of your bot home page ( https://<yourappname>.herokuapp.com , where change <yourappname> to your Heroku app name ) if you want your bot to be kept alive from early morning till late night Europe time, keeping alive a free Heroku bot for 24/7 is not possible, because a free Heroku account has a monthly quota of 550 hours  
+  
 **GENERAL_TIMEOUT** : timeout for event streams in seconds ( default : 15 )  
   
 **ENGINE_THREADS** : engine Threads option ( default : 1 )  
