@@ -7,7 +7,8 @@ const variantName2variantKey = {
 	"Chess960": "chess960",
 	"Atomic": "atomic",
 	"From Position": "fromPosition",
-	"Racing Kings": "racingKings"
+	"Racing Kings": "racingKings",
+	"Antichess" : "antichess"
 }
 
 const mongoVersion = parseInt(process.env.MONGO_VERSION || "1")
