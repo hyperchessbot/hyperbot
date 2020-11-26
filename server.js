@@ -911,11 +911,11 @@ function getBook2(variant, key){
 	return new Promise(resolve => {
 		movecoll.find({variant: variant, key: key}).project({
 			uci: 1,
-			san: 1,			
-			plays: 1,
-			score: 1,
+			san: 1,
+			result: 1,
 			site: 1
 		}).toArray().then(resultRaw => {									
+			console.log(resultRaw)
 			let resultMove = {}
 
 			let result = []
@@ -953,11 +953,13 @@ function getBook2(variant, key){
 					resultMove[uci].plays++
 				}else{
 					resultMove[uci] = {
-						uci: uci,
-						san: san,
+						"_id": "aggregated",
+						variant: variant,
 						key: key,
-						plays: 1,
+						uci: uci,
+						san: san,												
 						score: score,
+						plays: 1,
 						gameids: []
 					}
 				}
