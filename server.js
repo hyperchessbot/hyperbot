@@ -911,13 +911,11 @@ function getBook2(variant, key){
 	return new Promise(resolve => {
 		movecoll.find({variant: variant, key: key}).project({
 			uci: 1,
-			san: 1,
-			key: 1,
+			san: 1,			
 			plays: 1,
 			score: 1,
 			site: 1
-		}).toArray().then(resultRaw => {						
-			console.log(resultRaw)
+		}).toArray().then(resultRaw => {									
 			let resultMove = {}
 
 			let result = []
