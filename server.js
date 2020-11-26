@@ -1,24 +1,29 @@
 ////////////////////////////////////////////////////////////////////////////////
 // init
-
 const MongoClient = require('mongodb').MongoClient
 
 const MONGODB_URI = process.env.MONGODB_URI
 
-let client, bookdb, poscoll
+let client, bookdb, poscoll, movecoll
 
 if(MONGODB_URI){
 	MongoClient.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, setClient) {  
 		if(err){
 			console.log("MongoDb connection failed.")
 		}else{
-			console.log("MongoDb connected.")
+			console.log("MongoDb connected. Version", mongoVersion, ".")
 
 			client = setClient
+			
+			if(mongoVersion == 1){
+				bookdb = client.db("book")
 
-			bookdb = client.db("book")
+				poscoll = bookdb.collection("positions")	
+			}else if(mongoVersion == 2){
+				bookdb = client.db("book2")
 
-			poscoll = bookdb.collection("positions")
+				movecoll = bookdb.collection("moves")
+			}
 		}
 	})
 }
@@ -49,6 +54,8 @@ const useBook = isEnvTrue('USE_BOOK')
 envKeys.push('USE_BOOK')
 const useMongoBook = isEnvTrue('USE_MONGO_BOOK')
 envKeys.push('USE_MONGO_BOOK')
+const mongoVersion = parseInt(process.env.MONGO_VERSION || "1")
+envKeys.push('MONGO_VERSION')
 const ignoreMongoPercent = parseInt(process.env.IGNORE_MONGO_PERCENT || "20")
 envKeys.push('IGNORE_MONGO_PERCENT')
 const mongoFilter = parseInt(process.env.MONGO_FILTER || "30")
@@ -894,11 +901,20 @@ app.get('/book', (req, res) => {
 	
 	const json = ( accept == "application/json" )
 	
-	if(!poscoll){
+	if((mongoVersion == 1)&&(!poscoll)){
 		res.send(json ? JSON.stringify({
 			error: true,
-			status: "no database"
-		}) : "error: no database")
+			status: "no database ( version 1 )"
+		}) : "error: no database ( version 1 )")
+		
+		return
+	}
+	
+	if((mongoVersion == 2)&&(!movecoll)){
+		res.send(json ? JSON.stringify({
+			error: true,
+			status: "no database ( version 2 )"
+		}) : "error: no database ( version 2 )")
 		
 		return
 	}
@@ -909,24 +925,76 @@ app.get('/book', (req, res) => {
 	
 	const key = fen.split(" ").slice(0, 4).join(" ")
 	
-	poscoll.find({variant: variant, key: key}).toArray().then(result => {
-		if(!includeGameIds){
-			result = result.map(item => {
-				delete item["gameids"]
-				return item
-			})
-		}
-		
-		if(json){
-			res.set("Content-Type", "application/json")
+	if(mongoVersion == 1){
+		poscoll.find({variant: variant, key: key}).toArray().then(result => {
+			if(!includeGameIds){
+				result = result.map(item => {
+					delete item["gameids"]
+					return item
+				})
+			}
+
+			if(json){
+				res.set("Content-Type", "application/json")
+
+				res.send(JSON.stringify(result))	
+			}else{
+				res.set("Content-Type", "text/html")
+
+				res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
+			}
+		})
+	}else if(mongoVersion == 2){		
+		movecoll.find({variant: variant, key: key}).toArray().then(resultRaw => {			
+			let resultMove = {}
 			
-			res.send(JSON.stringify(result))	
-		}else{
-			res.set("Content-Type", "text/html")
+			let result = []
 			
-			res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
-		}
-	})
+			for(let item of resultRaw){				
+				let uci = item.uci
+				let san = item.san				
+				let gameResult = item.result
+				
+				let score = 0.5
+				
+				if(gameResult == "1-0") score = 1
+				if(gameResult == "0-1") score = 0
+				
+				let keyparts = key.split(" ")
+				
+				let turn = keyparts[1]
+				
+				if(turn == "b") score = 1 - score
+				
+				if(resultMove[uci]){
+					resultMove[uci].score += score
+					resultMove[uci].plays++
+				}else{
+					resultMove[uci] = {
+						uci: uci,
+						san: san,
+						key: key,
+						plays: 1,
+						score: score
+					}
+				}
+			}
+			
+			for(let uci in resultMove){
+				result.push(resultMove[uci])
+			}
+			
+			if(json){
+				res.set("Content-Type", "application/json")
+
+				res.send(JSON.stringify(result))	
+			}else{
+				res.set("Content-Type", "text/html")
+
+				res.send("<pre>" + JSON.stringify(result, null, 2) + "</pre>")	
+			}
+		})
+	}
 })
 
 app.use('/', express.static(__dirname))

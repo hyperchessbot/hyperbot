@@ -1,3 +1,7 @@
+const mongoVersion = parseInt(process.env.MONGO_VERSION || "1")
+
+if(mongoVersion != 1) process.exit(0)
+
 const MAX_GAMES = parseInt(process.env.MAX_GAMES || "250")
 
 const { makeSanMovesScala } = require('@easychessanimations/scalachess/lib/outopt.js')
@@ -8,13 +12,9 @@ let bookdb
 
 let poscoll
 
-const { spawn } = require('child_process')
-
 let result
 
 let i = 0
-
-const fs = require('fs')
 
 const MongoClient = require('mongodb').MongoClient
  

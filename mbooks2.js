@@ -1,3 +1,19 @@
+const variantName2variantKey = {
+	"Standard": "standard",
+	"Three-check": "threeCheck",
+	"Crazyhouse": "crazyhouse",
+	"King of the Hill": "kingOfTheHill",
+	"Horde": "horde",
+	"Chess960": "chess960",
+	"Atomic": "atomic",
+	"From Position": "fromPosition",
+	"Racing Kings": "racingKings"
+}
+
+const mongoVersion = parseInt(process.env.MONGO_VERSION || "1")
+
+if(mongoVersion != 2) process.exit(0)
+
 const fetch = require('node-fetch')
 
 const MAX_GAMES = parseInt(process.env.MAX_GAMES || "250")
@@ -41,6 +57,7 @@ MongoClient.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: tru
 		
 		if(drop){
 			gamecoll.drop()
+			movecoll.drop()
 			return
 		}
 		
@@ -65,6 +82,22 @@ async function processPgn(pgn, resolve){
 	
 	let rebuild = true
 	
+	if(tags.variant){
+		let variantKey = variantName2variantKey[tags.variant]
+		
+		if(!variantKey){
+			console.log(`unknown variant ${tags.variant}`)
+			
+			resolve(false)
+			
+			return
+		}
+		
+		tags.variant = variantKey
+	}else{
+		tags.variant = "standard"
+	}
+	
 	if(stored){
 		if(stored.bookdepth >= BOOK_DEPTH){
 			rebuild = false
@@ -80,8 +113,10 @@ async function processPgn(pgn, resolve){
 		
 		if(effFens.length > (BOOK_DEPTH+1)) effFens = effFens.slice(0, BOOK_DEPTH+1)
 		
-		for(let item of effFens){
-			let { uci, san, fen } = item
+		for(let i =1; i < effFens.length; i++){
+			let { uci, san } = effFens[i]
+			
+			let fen = effFens[i-1].fen
 			
 			if(uci){
 				let parts = fen.split(" ")
