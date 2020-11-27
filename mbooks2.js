@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 //https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
 
 Object.defineProperty(String.prototype, 'hashCode', {
@@ -202,6 +204,8 @@ function processPgnThen(pgn){
 }
 
 async function processPgns(content){
+	content = content.replace(/\r/g, "")
+	
 	let pgns = content.split("\n\n\n")
 	
 	if(PGN_URL){
@@ -231,11 +235,60 @@ function loadGames(){
 	
 	if(!PGN_URL) headers.Authorization = `Bearer ${BOT_TOKEN}`
 
-	fetch(url, {
-		headers: headers
-	}).then(response => response.text().then(content => {			
-		content = content.replace(/\r/g, "")
+	if(PGN_URL && url.match(/\.7z$/)){
+		console.log(`7zip url detected`)
 		
-		processPgns(content)
-	}))
+		fetch(url, {
+			headers: headers
+		}).then(response => {
+			const dest = fs.createWriteStream(`temp.7z`)
+        	response.body.pipe(dest)
+        	response.body.on('end', _ => {
+				console.log(`7z file written to disk`)
+				
+				const Seven = require('node-7z')
+ 
+				const myStream = Seven.extractFull('temp.7z', '.', { 
+					$progress: true
+				})
+				
+				let pgnFile = null
+ 
+				myStream.on('data', function (data) {
+					console.log(data)
+					
+					if(data.status == "extracted"){
+						let file = data.file
+						
+						if(file.match(/\.pgn$/)){
+							pgnFile = file
+						}
+					}
+				})
+ 
+				myStream.on('end', function () {					
+					console.log(`7z file extraced ok ${pgnFile}`)
+					
+					let content = fs.readFileSync(pgnFile).toString()
+					
+					processPgns(content)
+				})
+
+				myStream.on('error', err => {
+					console.log(`an error occured unzipping 7z file`, err)
+					
+					client.close()
+				})
+			})
+			dest.on('error', err => {
+				console.log(`an error occured writing 7z file`, err)
+			})
+		})	
+	}else{
+		fetch(url, {
+			headers: headers
+		}).then(response => response.text().then(content => {			
+			processPgns(content)
+		}))	
+	}
 }
