@@ -29,6 +29,8 @@ To upgrade an account, that has played no games yet, to bot, and to make this bo
 For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1 .
 ## Update Heroku app to latest version using Gitpod
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod .
+## Build external multi game PGN file with MongoDb book builder ( version 2 )
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Build-book-from-external-multi-game-PGN-file .
 ## Install bot on Windows ( runs Lc0 )
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-Windows-(-runs-Lc0-)#install-bot-on-windows--runs-lc0- .
 ## Install bot on goorm.io ( runs Lc0 )
