@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@easychessanimations/fetchutils@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/fetchutils/-/fetchutils-1.0.3.tgz#9ac4b77fc4538c7b4faf49639ab8112e5f976ef7"
-  integrity sha512-Wd4VXVpMtvCZ8hDESeOECLxKtEcJGKKwd+yqBud+tTPp+mqF9mjujnlcTaP/j+E0LNk4VLFCVABc6VSv0UM23Q==
+"@easychessanimations/fetchutils@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/fetchutils/-/fetchutils-1.0.4.tgz#36c2fd1bd99e56a320e1305760393785aa699806"
+  integrity sha512-lJ8QVJpXvqI5qCwZqctY49tDosPkLyERbxR3S9rXjW3sqdtH8sAHXW47ynHDjEKNgwTayRhlHF4bbpjp2kpeDA==
   dependencies:
     node-fetch "^2.6.1"
 

@@ -47,7 +47,7 @@ file of size 25 bytes
 
 
 # README.md
-file of size 8095 bytes
+file of size 8480 bytes
 
 ### ReadMe of the project
 
@@ -68,12 +68,6 @@ file of size 9972 kilo byte(s)
 file of size 15 kilo byte(s)
 
 ### favicon of the app
-
-
-# fetchutils.js
-file of size 1478 bytes
-
-### fetch utils for building MongoDb book
 
 
 # heroku.yml
@@ -113,9 +107,15 @@ file of size 20 mega byte(s)
 
 
 # mbooks.js
-file of size 3582 bytes
+file of size 4023 bytes
 
-### builds self learning MongoDb book
+### builds self learning MongoDb book ( mongo version 1 )
+
+
+# mbooks2.js
+file of size 5162 bytes
+
+### builds self learning + external pgn MongoDb book ( mongo version 2 )
 
 
 # node_modules
@@ -125,7 +125,7 @@ directory
 
 
 # package.json
-file of size 1010 bytes
+file of size 1033 bytes
 
 ### lists Node.js dependencies to install for the app
 
@@ -143,13 +143,13 @@ file of size 113 bytes
 
 
 # server.js
-file of size 30 kilo byte(s)
+file of size 35 kilo byte(s)
 
 ### entry point and code of app
 
 
 # startserver.sh
-file of size 75 bytes
+file of size 93 bytes
 
 ### script for starting the server on Heroku
 
@@ -179,13 +179,13 @@ file of size 1257 kilo byte(s)
 
 
 # update.js
-file of size 2439 bytes
+file of size 2488 bytes
 
 ### script for updating file information
 
 
 # update.sh
-file of size 209 bytes
+file of size 299 bytes
 
 ### script for updating Wiki
 

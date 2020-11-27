@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/hyperchessbot/hyperbot#readme",
   "dependencies": {
-    "@easychessanimations/fetchutils": "^1.0.3",
+    "@easychessanimations/fetchutils": "^1.0.4",
     "@easychessanimations/foo": "^1.0.43",
     "@easychessanimations/lichessutils": "^1.0.17",
     "@easychessanimations/polyglot": "^1.0.3",

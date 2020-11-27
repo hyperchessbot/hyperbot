@@ -22,7 +22,7 @@ const MONGODB_URI = process.env.MONGODB_URI
  
 const dbName = 'games'
 
-const { streamNdjson } = require('./fetchutils.js')
+const { streamNdjson } = require('@easychessanimations/fetchutils')
 
 const BOT_NAME = process.env.BOT_NAME || "chesshyperbot"
 const BOT_TOKEN = process.env.TOKEN
