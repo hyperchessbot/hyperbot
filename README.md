@@ -30,9 +30,9 @@ For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyp
 ## Update Heroku app to latest version using Gitpod
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod .
 ## Creating a MongoDb account
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Creating-a-MongoDb-account .
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Creating-a-MongoDb-account#creating-a-mongodb-account .
 ## Build external multi game PGN file with MongoDb book builder ( version 2 )
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Build-book-from-external-multi-game-PGN-file .
+Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Build-book-from-external-multi-game-PGN-file#build-book-from-external-multi-game-pgn-file .
 ## Install bot on Windows ( runs Lc0 )
 Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-Windows-(-runs-Lc0-)#install-bot-on-windows--runs-lc0- .
 ## Install bot on goorm.io ( runs Lc0 )
