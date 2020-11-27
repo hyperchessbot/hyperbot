@@ -58,6 +58,16 @@ Seeking assistance in lichess PM without verifying your lichess account with you
 ## Config vars
 **KEEP_ALIVE_URL** : set this to the full link of your bot home page ( https://[yourappname].herokuapp.com , where change [yourappname] to your Heroku app name ) if you want your bot to be kept alive from early morning till late night Europe time, keeping alive a free Heroku bot for 24/7 is not possible, because a free Heroku account has a monthly quota of 550 hours  
   
+**MONGODB_URI** : connect URI of your MongoDb admin user ( only the host, no slash after the host, do database specified, no query string ), if defined, your latest games or games downloaded from an url ( version 2 only ) will be added to the database on every startup, by default this config var is not defined  
+  
+**USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI  
+  
+**MONGODB_VERSION** : MongoDb book builder version, possible values are 1 ( default, builds a book from bot games as downloaded from lichess as JSON ), 2 ( builds a book from bot games as downloaded from lichess as PGN, or from an arbitrary url specified in PGN_URL )  
+  
+**PGN_URL** : url for downloading a multi game PGN file for MongoDb book builder ( version 2 only )  
+  
+**MAX_GAMES** : maximum number of games to be built by MongoDb book builder  
+  
 **GENERAL_TIMEOUT** : timeout for event streams in seconds ( default : 15 )  
   
 **ENGINE_THREADS** : engine Threads option ( default : 1 )  
@@ -111,9 +121,5 @@ Seeking assistance in lichess PM without verifying your lichess account with you
 **GOOD_GAME_MESSAGE** : game chat good game message ( delay from game end : 2 seconds , default : 'Good game !' )  
   
 **DISABLE_SYZYGY** : set it to 'true' to disable using syzygy tablebases, note that syzygy tablebases are always disabled when USE_LC0 is set to 'true', syzygy tablebases are only installed for deployment on Heroku  
-  
-**MONGODB_URI** : connect URI of your MongoDb admin user ( only the host, no slash after the host, do database specified, no query string ), if defined, your latest games will be added to the database on every startup, by default this config var is not defined  
-  
-**USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI  
   
 **APP_NAME** : Heroku app name ( necessary for interactive viewing of MongoDb book )

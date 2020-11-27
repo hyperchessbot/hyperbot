@@ -15,14 +15,33 @@ if(MONGODB_URI){
 
 			client = setClient
 			
+			let coll
+			
 			if(mongoVersion == 1){
 				bookdb = client.db("book")
 
 				poscoll = bookdb.collection("positions")	
+				
+				coll = poscoll
 			}else if(mongoVersion == 2){
 				bookdb = client.db("book2")
 
 				movecoll = bookdb.collection("moves")
+				
+				coll = movecoll
+			}
+			
+			if(coll){
+				let index = {
+					variant: 1,
+					key: 1
+				}
+				
+				console.log(`creating index ${JSON.stringify(index)}`)
+				
+				coll.createIndex(index).then(result => {
+					console.log(`index creation result ${result}`)
+				})
 			}
 		}
 	})
