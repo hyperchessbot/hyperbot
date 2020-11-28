@@ -128,6 +128,8 @@ const filterThresoldPlays = parseInt(process.env.FILTER_THRESOLD_PLAYS, "10")
 envKeys.push('FILTER_THRESOLD_PLAYS')
 const bookForgiveness = parseInt(process.env.BOOK_FORGIVENESS, "20")
 envKeys.push('BOOK_FORGIVENESS')
+const alwaysOn = isEnvTrue('ALWAYS_ON')
+envKeys.push('ALWAYS_ON')
 
 const fs = require('fs')
 
@@ -1065,7 +1067,7 @@ app.listen(port, _ => {
 
         setInterval(_=>{
             let hours = new Date().getHours()
-            if((hours > 5)&&(hours<23)){
+            if( ( (hours > 5) && (hours < 23) ) || alwaysOn ){
                 console.log(`hours ok: ${hours}, keep alive`)
                 fetch(KEEP_ALIVE_URL)
             }        
