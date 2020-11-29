@@ -130,6 +130,8 @@ const bookForgiveness = parseInt(process.env.BOOK_FORGIVENESS, "20")
 envKeys.push('BOOK_FORGIVENESS')
 const alwaysOn = isEnvTrue('ALWAYS_ON')
 envKeys.push('ALWAYS_ON')
+const abortAfter = parseInt(process.env.ABORT_AFTER || "120")
+envKeys.push('ABORT_AFTER')
 
 const fs = require('fs')
 
@@ -508,8 +510,25 @@ async function makeMove(gameId, state, moves){
     })
 }
 
+function abortGame(gameId){
+	console.log(`aborting game ${gameId}`)
+	
+	lichessUtils.postApi({
+		url: lichessUtils.abortGameUrl(gameId), log: logApi, token: process.env.TOKEN,
+		callback: content => logPage(`abort game response: ${content}`)
+	})
+}
+
+let abortGameTimeout = null
+
 function playGame(gameId){
-    logPage(`playing game: ${gameId}`)	
+    logPage(`playing game: ${gameId}`)
+	
+	abortGameTimeout = setTimeout(_ => {
+		console.log(`opponent failed to make their opening move for ${abortAfter} seconds`)
+		
+		abortGame(gameId)
+	}, abortAfter * 1000)
 
     engine
     .setoption("Threads", engineThreads)
@@ -592,6 +611,12 @@ function playGame(gameId){
                     state.fen = chess.fen()
                 }
             }
+			
+			if( abortGameTimeout && ( (botWhite && (state.movesArray.length > 1)) || ((!botWhite) && (state.movesArray.length > 0)) ) ){
+				clearTimeout(abortGameTimeout)
+				
+				abortGameTimeout = null				
+			}
 			
 			state.botWhite = botWhite
 			state.botTime = botWhite ? state.wtime : state.btime

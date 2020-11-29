@@ -128,4 +128,6 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **DISABLE_SYZYGY** : set it to 'true' to disable using syzygy tablebases, note that syzygy tablebases are always disabled when USE_LC0 is set to 'true', syzygy tablebases are only installed for deployment on Heroku  
   
-**APP_NAME** : Heroku app name ( necessary for interactive viewing of MongoDb book )
+**APP_NAME** : Heroku app name ( necessary for interactive viewing of MongoDb book )  
+  
+**ABORT_AFTER** : abort game after that many seconds if the opponent fails to make their opening move ( default : 120 )
