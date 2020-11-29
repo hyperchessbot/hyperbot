@@ -62,7 +62,7 @@ Seeking assistance in lichess PM without verifying your lichess account with you
 ## Config vars
 **KEEP_ALIVE_URL** : set this to the full link of your bot home page ( https://[yourappname].herokuapp.com , where change [yourappname] to your Heroku app name ) if you want your bot to be kept alive from early morning till late night Europe time, keeping alive a free Heroku bot for 24/7 is not possible, because a free Heroku account has a monthly quota of 550 hours  
   
-**ALWAYS_ON** : set it to 'true' to keep the bot alive all the time ( otherwise it will be kept alive from early morning till late night Heroku server time )  
+**ALWAYS_ON** : set it to 'true' to keep the bot alive all the time ( otherwise it will be kept alive from early morning till late night Heroku server time ), you have to set KEEP_ALIVE_URL to your bot's full home page link for ALWAYS_ON to work ( see also the explanation of KEEP_ALIVE_URL config var )  
   
 **MONGODB_URI** : connect URI of your MongoDb admin user ( only the host, no slash after the host, do database specified, no query string ), if defined, your latest games or games downloaded from an url ( version 2 only ) will be added to the database on every startup, by default this config var is not defined  
   
