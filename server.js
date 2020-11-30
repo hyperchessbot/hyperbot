@@ -132,6 +132,10 @@ const alwaysOn = isEnvTrue('ALWAYS_ON')
 envKeys.push('ALWAYS_ON')
 const abortAfter = parseInt(process.env.ABORT_AFTER || "120")
 envKeys.push('ABORT_AFTER')
+const allowCorrespondence = isEnvTrue('ALLOW_CORRESPONDENCE')
+envKeys.push('ALLOW_CORRESPONDENCE')
+const correspondenceThinkingTime = parseInt(process.env.CORRESPONDENCE_THINKING_TIME || "120")
+envKeys.push('CORRESPONDENCE_THINKING_TIME')
 
 const fs = require('fs')
 
@@ -213,13 +217,17 @@ const { streamNdjson } = require('@easychessanimations/fetchutils')
 
 const { makeUciMoves } = require("@easychessanimations/scalachess/lib/outopt.js")
 
-const { UciEngine, setLogEngine } = require('@easychessanimations/uci')
+const { UciEngine, setLogEngine, AnalyzeJob } = require('@easychessanimations/uci')
 
 const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
 
-const enginePath = useLc0 ? LC0_EXE : useScalachess ? 'stockfish12m' : 'stockfish12'
+const stockfishPath = useScalachess ? 'stockfish12m' : 'stockfish12'
+
+const enginePath = useLc0 ? LC0_EXE : stockfishPath
 
 const engine = new UciEngine(path.join(__dirname, enginePath))
+
+const corrEngine = allowCorrespondence ? new UciEngine(path.join(__dirname, stockfishPath)) : null
 
 if(useLc0){
 	engine.setoption("Weights File", "weights.pb.gz")	
@@ -385,9 +393,10 @@ function requestBook(state){
     })    
 }
 
-async function makeMove(gameId, state, moves){
-    if(gameId != playingGameId){
-        logPage(`refused to make move for invalid game ${gameId} ( playing : ${playingGameId} )`)
+async function makeMove(gameId, state, moves, analyzejob, actualengine){
+    if(state.realtime && (gameId != playingGameId)){
+        logPage(`refused to make move for real time game ${gameId} ( already playing real time : ${playingGameId} )`)
+		
         return
     }
 
@@ -462,22 +471,36 @@ async function makeMove(gameId, state, moves){
 
     if(!enginePromise){		
 		let doPonder = ( ( state.botTime > 15000 ) || isEnvTrue("ALLOW_LATE_PONDER") ) && allowPonder
+		
 		if(isEnvTrue('REDUCE_LATE_TIME')){
 			if(state.botTime < 30000) state.botTime = Math.floor(state.botTime * 0.75)
 			if(state.botTime < 15000) state.botTime = Math.floor(state.botTime * 0.75)	
 		}		
+		
         logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
-         enginePromise = engine
-        .position(`fen ${state.initialFen}`, moves)
-        //.position('startpos', moves)
-        .gothen({
+		
+		analyzejob.position(`fen ${state.initialFen}`, moves)
+		
+		let timecontrol = state.realtime ? {
 			wtime: state.botWhite ? state.botTime : state.wtime, winc: state.winc,
 			btime: state.botWhite ? state.btime : state.botTime, binc: state.binc,
 			ponderAfter: allowPonder
-		})
-    }else{
-        engine.stop()
-    }
+		}
+			:
+		{
+			wtime: correspondenceThinkingTime * 1000, winc: 0,
+			btime: correspondenceThinkingTime * 1000, binc: 0
+		}
+		
+		analyzejob.setTimecontrol(timecontrol)
+		
+		analyzejob.processing = false
+		analyzejob.waiting = true
+		
+        enginePromise = actualengine.enqueueJob(analyzejob)
+	}else{
+		if(state.realtime) engine.stop()
+	}
     
     enginePromise.then(result => {
         let bestmove = result.bestmove
@@ -523,33 +546,59 @@ let abortGameTimeout = null
 
 function playGame(gameId){
     logPage(`playing game: ${gameId}`)
+
+    let actualengine, analyzejob, speed, correspondence, realtime, botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating, rated, mode
 	
-	abortGameTimeout = setTimeout(_ => {
-		console.log(`opponent failed to make their opening move for ${abortAfter} seconds`)
-		
-		abortGame(gameId)
-	}, abortAfter * 1000)
-
-    engine
-    .setoption("Threads", engineThreads)
-	.setoption("Hash", engineHash)
-    .setoption("Move Overhead", engineMoveOverhead)	
-
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2000)
-    setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodLuckMessage), 4000)
-
-    playingGameId = gameId
-
-    let botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating, rated, mode
+	let playgame = true
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
         
-        if(playingGameId == gameId) playGame(gameId)
+        playGame(gameId)
     }, callback: async function(blob){        
+		if(!playgame) return
+		
 		lastPlayedAt = new Date().getTime()
 		
         if(blob.type == "gameFull"){                
+			speed = blob.speed
+			correspondence = ( speed == "correspondence" )
+			realtime = !correspondence
+			
+			if(realtime && playingGameId){
+				playgame = false
+				
+                logPage(`can't start new game ${gameId}, already playing ${playingGameId}`)
+				
+				return
+            }
+			
+			if(realtime){
+				playingGameId = gameId
+				
+				setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2000)
+				setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodLuckMessage), 4000)
+				
+				engine.spawn()
+				
+				engine
+				.setoption("Threads", engineThreads)
+				.setoption("Hash", engineHash)
+				.setoption("Move Overhead", engineMoveOverhead)	
+				
+				actualengine = engine
+			}else{
+				actualengine = corrEngine
+			}
+			
+			console.log("actual engine", actualengine)
+
+			abortGameTimeout = setTimeout(_ => {
+				console.log(`opponent failed to make their opening move for ${abortAfter} seconds`)
+
+				abortGame(gameId)
+			}, abortAfter * 1000)
+			
 			whiteName = blob.white.name
 			whiteTitle = blob.white.title
 			whiteRating = blob.white.rating
@@ -567,20 +616,22 @@ function playGame(gameId){
 
             if(initialFen == 'startpos') initialFen = startFen
 			
+			analyzejob = new AnalyzeJob()
+			
 			if(!useLc0){
-				engine.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
+				analyzejob.setoption("UCI_Chess960", variant == "chess960" ? "true" : "false")
 
 				if(useScalachess){
 					let uciVariant = ( variant == "threeCheck" ? "3check" : variant.toLowerCase() )
 					
 					if(lichessUtils.isStandard(variant)) uciVariant = "chess"
 					
-					engine.setoption("UCI_Variant", uciVariant)				
+					analyzejob.setoption("UCI_Variant", uciVariant)				
 				}            
 
-				engine.setoption("Use NNUE", useNNUE.includes(variant) ? "true" : "false")
+				analyzejob.setoption("Use NNUE", useNNUE.includes(variant) ? "true" : "false")
 
-				engine.setoption("SyzygyPath", ( (!disableSyzygy) && lichessUtils.isStandard(variant) ) ? syzygyPath : "<empty>")	
+				analyzejob.setoption("SyzygyPath", ( (!disableSyzygy) && lichessUtils.isStandard(variant) ) ? syzygyPath : "<empty>")	
 			}
         }
 
@@ -597,6 +648,8 @@ function playGame(gameId){
 			state.blackTitle = blackTitle			
 			state.rated = rated
 			state.mode = mode
+			state.correspondence = correspondence
+			state.realtime = realtime
 
             if(state.moves){
                 moves = state.moves.split(" ")
@@ -625,7 +678,7 @@ function playGame(gameId){
 			state.lastmove = null
 			if(state.movesArray.length) state.lastmove = state.movesArray.slice().pop()
 			
-			ssesend({
+			if(realtime) ssesend({
 				kind: "refreshGame",
 				gameId: gameId,
 				fen: state.fen,
@@ -641,8 +694,10 @@ function playGame(gameId){
 
             if(botTurn){
                 try{
-                    makeMove(gameId, state, moves)
-                }catch(err){console.log(err)}
+                    makeMove(gameId, state, moves, analyzejob, actualengine)
+                }catch(err){
+					console.log(err)
+				}
             }
         }     
     }})
@@ -662,12 +717,18 @@ function streamEvents(){
 			let challengerTitle = challenger.title
 			let variant = challenge.variant.key
 			let speed = challenge.speed
+			let correspondence = speed == "correspondence"
+			let realtime = !correspondence
+			
+			let speedok = acceptSpeeds.includes(speed)
+			
+			if(correspondence && allowCorrespondence) speedok = true
 
-            if(playingGameId){
+            if(realtime && playingGameId){
                 logPage(`can't accept challenge ${challengeId}, playing ${playingGameId}`)
             }else if(!acceptVariants.includes(variant)){
                 logPage(`can't accept challenge ${challengeId}, ${variant}`)
-            }else if(!acceptSpeeds.includes(speed)){
+            }else if(!speedok){
                 logPage(`can't accept challenge ${challengeId}, ${speed}`)
             }else if(rated && disableRated){
                 logPage(`can't accept challenge ${challengeId}, rated`)
@@ -687,30 +748,22 @@ function streamEvents(){
 
         if(blob.type == "gameStart"){                
             let gameId = blob.game.id
-
-            if(playingGameId){
-                logPage(`can't start new game ${gameId}, already playing`)
-            }else{
-				engine.spawn() // restart engine for new game
-				
-                setTimeout(_=>playGame(gameId), gameStartDelay * 1000)
-            }                    
+			
+            setTimeout(_=>playGame(gameId), gameStartDelay * 1000)
         }
 
         if(blob.type == "gameFinish"){                
             let gameId = blob.game.id
+			
+			logPage(`game ${gameId} terminated ( playing : ${playingGameId} )`)
 
-            if(gameId == playingGameId){
-                if(gameId == playingGameId){
-                    playingGameId = null
-                }
-                
-                logPage(`game ${gameId} terminated ( playing : ${playingGameId} )`)
+            if(gameId == playingGameId){                
+                playingGameId = null
 
                 engine.stop()
-
-                setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodGameMessage), 2000)
             }
+			
+			setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodGameMessage), 2000)
         }         
     }})
 }
@@ -1101,26 +1154,6 @@ app.listen(port, _ => {
 
     streamEvents()
 
-    /*setInterval(_=>{
-        fetch(`https://lichess.org/api/user/${lichessBotName}`).then(response=>response.text().then(content=>{
-            try{
-                let blob = JSON.parse(content)
-
-                let playing = blob.count.playing
-
-                if(logApi) logPage(`playing: ${playing}`)
-
-                if(!playing){
-                    if(playingGameId && false){
-                        logPage(`inconsistent playing information, resetting playing game id`)
-
-                        playingGameId = null
-                    }
-                }
-            }catch(err){console.log(err)}
-        }))
-    }, queryPlayingInterval * 1000)*/
-    
     setInterval(_=>{
         if(!playingGameId){
             if((new Date().getTime() - lastPlayedAt) > challengeTimeout * 60 * 1000){

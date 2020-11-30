@@ -64,6 +64,10 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **ALWAYS_ON** : requires paid Heroku account, set it to 'true' to keep the bot alive 24/7, you have to set KEEP_ALIVE_URL to your bot's full home page link for ALWAYS_ON to work ( see also the explanation of KEEP_ALIVE_URL config var )  
   
+**ALLOW_CORRESPONDENCE** : set it to 'true' to allow playing correspondence and infinite time control games  
+  
+**CORRESPONDENCE_THINKING_TIME** : think in correspondence as if the bot had that many seconds left on its clock ( default : 120 ), the actual thinking time will be decided by the engine  
+  
 **MONGODB_URI** : connect URI of your MongoDb admin user ( only the host, no slash after the host, do database specified, no query string ), if defined, your latest games or games downloaded from an url ( version 2 only ) will be added to the database on every startup, by default this config var is not defined  
   
 **USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI  
@@ -98,7 +102,7 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **ACCEPT_VARIANTS** : space separated list of variant keys to accept ( default : 'standard' ), for non standard variants USE_SCALACHESS has to be set to 'true' , example : `'standard crazyhouse chess960 kingOfTheHill threeCheck antichess atomic horde racingKings fromPosition'`  
   
-**ACCEPT_SPEEDS** : space separated list of speeds to accept ( default : 'bullet blitz rapid classical' ), cannot play infinite or correspondence !  
+**ACCEPT_SPEEDS** : space separated list of speeds to accept ( default : 'bullet blitz rapid classical' ), to allow correspondence set ALLOW_CORRESPONDENCE to 'true'  
   
 **DISABLE_RATED** : set it to 'true' to reject rated challenges  
   
