@@ -526,7 +526,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
             callback: content => {
                 if(logApi) logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
-					if(playingGameId && (gameId == playingGameId)){
+					if(state.realtime && playingGameId && (gameId == playingGameId)){
 						logPage(`retry move for ${gameId} ${bestmove}`)
 					
 						engine.spawn() // restart engine for retry move
@@ -599,11 +599,17 @@ function playGame(gameId){
 				
 				actualengine = engine
 				
-				if(blob.clock){					
-					console.log("clock", blob.clock)
-					duration = blob.clock.initial + 40 * blob.clock.increment					
+				if(blob.clock){		
+					const clock = clock
+					
+					console.log("clock", clock)
+					
+					const initial = clock.initial || 0
+					const increment = clock.increment || 0
+					
+					duration = initial + 40 * increment					
 				}else{
-					duration = 3 * 60 * 60 * 1000 + 40 * 180 * 1000
+					duration = ( 180 * 60 * 1000 ) + ( 40 * 180 * 1000 )
 				}
 				
 				console.log("duration", duration)
