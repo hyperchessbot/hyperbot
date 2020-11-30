@@ -14,10 +14,10 @@
   resolved "https://registry.yarnpkg.com/@easychessanimations/foo/-/foo-1.0.43.tgz#ae813a485d560ca422d44ad52b2af4a1ab5f92ad"
   integrity sha512-FLQlegobI5pOg5Gfy3rLhmfQfLoyILUVdluvMbePWo0s6WEmHLPTrlWKdNIHFe0VzrHp2NxiEQIWxrwmMvl+bg==
 
-"@easychessanimations/lichessutils@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/lichessutils/-/lichessutils-1.0.18.tgz#b680c67078c13c2a65689bd5919a677a4a074abe"
-  integrity sha512-f03B4lG+2AyuFcLZTut8SVFejpWeieofg+Op40SnjgTkXqiWgv0XSojvVmVjABbMv+vkkkBtxPPRRqZfYYnj3g==
+"@easychessanimations/lichessutils@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/lichessutils/-/lichessutils-1.0.19.tgz#d71bae41d98dba440c6005beb0958262cd3dfcca"
+  integrity sha512-WxI0f/PtXaWDObTFtNkg6mELNh6sD8nBbENZR0fRc5Wru2TlfNZILFgfkFY0gB0GggqDBAoxH58DaKO4t64h5A==
   dependencies:
     node-fetch "^2.6.1"
 

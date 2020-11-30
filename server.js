@@ -136,6 +136,8 @@ const allowCorrespondence = isEnvTrue('ALLOW_CORRESPONDENCE')
 envKeys.push('ALLOW_CORRESPONDENCE')
 const correspondenceThinkingTime = parseInt(process.env.CORRESPONDENCE_THINKING_TIME || "120")
 envKeys.push('CORRESPONDENCE_THINKING_TIME')
+const declineHard = isEnvTrue('DECLINE_HARD')
+envKeys.push('DECLINE_HARD')
 
 const fs = require('fs')
 
@@ -705,6 +707,19 @@ function playGame(gameId){
     }})
 }
 
+function decline(challengeId, reason){
+	console.log("ignoring challenge", challengeId, "reason", reason)
+	
+	if(declineHard){
+		console.log("declining challenge", challengeId, "reason", reason)
+		lichessUtils.postApi({
+			url: lichessUtils.declineChallengeUrl(challengeId), log: this.logApi, token: process.env.TOKEN,
+			body: `reason=${reason}`,
+			callback: content => console.log(`decline challenge response: ${content}`)
+		})
+	}
+}
+
 function streamEvents(){
     streamNdjson({url: lichessUtils.streamEventsUrl, token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`event stream timed out`)
@@ -727,19 +742,19 @@ function streamEvents(){
 			if(correspondence && allowCorrespondence) speedok = true
 
             if(realtime && playingGameId){
-                logPage(`can't accept challenge ${challengeId}, playing ${playingGameId}`)
+                decline(challengeId, `already playing ( ${playingGameId} )`)
             }else if(!acceptVariants.includes(variant)){
-                logPage(`can't accept challenge ${challengeId}, ${variant}`)
+                decline(challengeId, `wrong variant ( ${variant} )`)
             }else if(!speedok){
-                logPage(`can't accept challenge ${challengeId}, ${speed}`)
+                decline(challengeId, `wrong speed ( ${speed} )`)
             }else if(rated && disableRated){
-                logPage(`can't accept challenge ${challengeId}, rated`)
+                decline(challengeId, `wrong mode ( rated )`)
             }else if((!rated) && disableCasual){
-                logPage(`can't accept challenge ${challengeId}, casual`)
+                decline(challengeId, `wrong mode ( casual )`)
             }else if((challengerTitle == "BOT") && disableBot){
-                logPage(`can't accept challenge ${challengeId}, bot`)
+                this.decline(challengeId, `wrong opponent ( BOT )`)
             }else if((challengerTitle != "BOT") && disableHuman){
-                logPage(`can't accept challenge ${challengeId}, human`)
+                this.decline(challengeId, `wrong opponent ( human )`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: logApi, token: process.env.TOKEN,

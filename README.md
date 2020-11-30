@@ -134,4 +134,6 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **APP_NAME** : Heroku app name ( necessary for interactive viewing of MongoDb book )  
   
-**ABORT_AFTER** : abort game after that many seconds if the opponent fails to make their opening move ( default : 120 )
+**ABORT_AFTER** : abort game after that many seconds if the opponent fails to make their opening move ( default : 120 )  
+  
+**DECLINE_HARD** : set it to 'true' to explicitly decline unwanted challenges ( by default they are only ignored and can be accepted manually )
