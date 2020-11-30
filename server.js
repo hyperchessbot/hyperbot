@@ -526,11 +526,13 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
             callback: content => {
                 if(logApi) logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
-                    logPage(`retry move for ${gameId} ${moves}`)
+					if(playingGameId && (gameId == playingGameId)){
+						logPage(`retry move for ${gameId} ${bestmove}`)
 					
-					engine.spawn() // restart engine for retry move
+						engine.spawn() // restart engine for retry move
 
-                    setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine), gameStartDelay * 1000)
+						setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine), gameStartDelay * 5000)	
+					}                    
                 }
             }
         })
