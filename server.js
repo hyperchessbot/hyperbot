@@ -215,6 +215,8 @@ fetch(`https://raw.githubusercontent.com/hyperbotauthor/hyperbot/docs/docs.json`
 
 const lichessUtils = require("@easychessanimations/lichessutils")
 
+console.log(lichessUtils)
+
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 
 const { makeUciMoves } = require("@easychessanimations/scalachess/lib/outopt.js")
