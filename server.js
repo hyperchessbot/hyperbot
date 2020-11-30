@@ -553,8 +553,10 @@ function playGame(gameId){
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
-        
-        playGame(gameId)
+		
+		if( (gameId == playingGameId) || correspondence ){
+			playGame(gameId)	
+		}                
     }, callback: async function(blob){        
 		if(!playgame) return
 		
