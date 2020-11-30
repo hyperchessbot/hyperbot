@@ -396,7 +396,7 @@ function requestBook(state){
 }
 
 async function makeMove(gameId, state, moves, analyzejob, actualengine){
-    if(state.realtime && (gameId != playingGameId)){
+    if(state.realtime && playingGameId && (gameId != playingGameId)){
         logPage(`refused to make move for real time game ${gameId} ( already playing real time : ${playingGameId} )`)
 		
         return
@@ -569,7 +569,7 @@ function playGame(gameId){
 			correspondence = ( speed == "correspondence" )
 			realtime = !correspondence
 			
-			if(realtime && playingGameId){
+			if(realtime && playingGameId && ( gameId != playingGameId )){
 				playgame = false
 				
                 logPage(`can't start new game ${gameId}, already playing ${playingGameId}`)
