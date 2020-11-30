@@ -44,10 +44,10 @@
   resolved "https://registry.yarnpkg.com/@easychessanimations/tinyutils/-/tinyutils-1.0.1.tgz#80487ed8145d41cffabe140955dac3ce29aed678"
   integrity sha512-sNhh+vvZOViuoZpRsLNR7uJCBvJ/YrLFeLL+KSGW2ogeauwNf+lxS0O70WYfKbXBG740FEL//q5dN/oJlEb+uQ==
 
-"@easychessanimations/uci@^1.0.30":
-  version "1.0.30"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/uci/-/uci-1.0.30.tgz#975ba110352dc2fef90312fa0fdca90bff2a6d47"
-  integrity sha512-APSmvsDipynIE4+CMzd5giCA0DR88yx5V2jj/2BpBeLeBAX1nD96A4hvyPIq7QurwJxiJaG5yFAR+rkLXEsfQA==
+"@easychessanimations/uci@^1.0.31":
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/uci/-/uci-1.0.31.tgz#8ea0146c2fd3f03bc3ce5f678fd0441f2d28a3bd"
+  integrity sha512-4xB6KBZXfoCxDJ/H8sdHYGJ3a+9o2tNkza+isKHLdh8eU8FQ28g1x07nmWXv2Nj4rzd7tBYrrFzsNTOrp1JbGw==
 
 accepts@~1.3.7:
   version "1.3.7"

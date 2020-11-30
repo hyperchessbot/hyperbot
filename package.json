@@ -25,7 +25,7 @@
     "@easychessanimations/scalachess": "^1.0.10",
     "@easychessanimations/sse": "^1.0.7",
     "@easychessanimations/tinyutils": "^1.0.1",
-    "@easychessanimations/uci": "^1.0.30",
+    "@easychessanimations/uci": "^1.0.31",
     "chess.js": "^0.11.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
