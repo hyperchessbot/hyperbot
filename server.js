@@ -556,6 +556,9 @@ function playGame(gameId){
     let actualengine, analyzejob, speed, correspondence, realtime, botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating, rated, mode
 	
 	let playgame = true
+	
+	let playgameTimeout = null
+	let duration = null
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -595,6 +598,15 @@ function playGame(gameId){
 				.setoption("Move Overhead", engineMoveOverhead)	
 				
 				actualengine = engine
+				
+				if(blob.clock){					
+					console.log("clock", blob.clock)
+					duration = blob.clock.initial + 40 * blob.clock.increment					
+				}else{
+					duration = 3 * 60 * 60 * 1000 + 40 * 180 * 1000
+				}
+				
+				console.log("duration", duration)
 			}else{
 				actualengine = corrEngine
 			}
@@ -644,6 +656,18 @@ function playGame(gameId){
         }
 
         if(blob.type != "chatLine"){                			
+			if(playgameTimeout){
+				clearTimeout(playgameTimeout)
+			}
+			
+			playgameTimeout = setTimeout(_ => {
+				if(playingGameId && (gameId == playingGameId)){
+					console.log("playing game timed out, shutting down", gameId)
+					
+					playingGameId = null
+				}
+			}, duration)
+			
             let moves = []
 
             let state = blob.type == "gameFull" ? blob.state : blob
