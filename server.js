@@ -600,7 +600,7 @@ function playGame(gameId){
 				actualengine = engine
 				
 				if(blob.clock){		
-					const clock = clock
+					const clock = blob.clock
 					
 					console.log("clock", clock)
 					
