@@ -528,7 +528,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 					
 					engine.spawn() // restart engine for retry move
 
-                    setTimeout(_=>makeMove(gameId, state, moves), gameStartDelay * 1000)
+                    setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine), gameStartDelay * 1000)
                 }
             }
         })
