@@ -20,11 +20,11 @@
   "dependencies": {
     "@easychessanimations/fetchutils": "^1.0.4",
     "@easychessanimations/foo": "^1.0.43",
-    "@easychessanimations/lichessutils": "^1.0.20",
+    "@easychessanimations/lichessutils": "^1.0.21",
     "@easychessanimations/polyglot": "^1.0.3",
     "@easychessanimations/scalachess": "^1.0.10",
     "@easychessanimations/sse": "^1.0.7",
-    "@easychessanimations/tinyutils": "^1.0.1",
+    "@easychessanimations/tinyutils": "^1.0.2",
     "@easychessanimations/uci": "^1.0.32",
     "chess.js": "^0.11.0",
     "cors": "^2.8.5",

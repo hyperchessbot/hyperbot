@@ -14,10 +14,10 @@
   resolved "https://registry.yarnpkg.com/@easychessanimations/foo/-/foo-1.0.43.tgz#ae813a485d560ca422d44ad52b2af4a1ab5f92ad"
   integrity sha512-FLQlegobI5pOg5Gfy3rLhmfQfLoyILUVdluvMbePWo0s6WEmHLPTrlWKdNIHFe0VzrHp2NxiEQIWxrwmMvl+bg==
 
-"@easychessanimations/lichessutils@^1.0.20":
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/lichessutils/-/lichessutils-1.0.20.tgz#9a3b1fa5b5985828508c11a038436c49d2458922"
-  integrity sha512-UTThVxrZAzufvHNuyZjnXPnsos63Sw2EEKOr1qhdSi0pzua8lM25Dk6OaN6qF1PqYqhQFQEtUxEO6kh5OdCJfg==
+"@easychessanimations/lichessutils@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/lichessutils/-/lichessutils-1.0.21.tgz#69ff30230cf6afd9d47b25dda42b150b02160a69"
+  integrity sha512-lfiNduZg+HgFUkPmyd7v918Z/2ZQcRAsCM9SZ7fZnLlGdZ8ER2FjlsH5lla6B5GK98+zYCJfh7D4oRjijYQDvg==
   dependencies:
     node-fetch "^2.6.1"
 
@@ -39,10 +39,10 @@
   resolved "https://registry.yarnpkg.com/@easychessanimations/sse/-/sse-1.0.7.tgz#a6e047b1303dd80937d960653061a7aa9237e270"
   integrity sha512-lenamw+KLnfSiIN0EUcdVCrxXf4BgV8yzIpCkpPdc1u7bybnnAQjT0hcDvR0nX0kvRP3CCLyzHRjFAKWcfT2NA==
 
-"@easychessanimations/tinyutils@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@easychessanimations/tinyutils/-/tinyutils-1.0.1.tgz#80487ed8145d41cffabe140955dac3ce29aed678"
-  integrity sha512-sNhh+vvZOViuoZpRsLNR7uJCBvJ/YrLFeLL+KSGW2ogeauwNf+lxS0O70WYfKbXBG740FEL//q5dN/oJlEb+uQ==
+"@easychessanimations/tinyutils@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@easychessanimations/tinyutils/-/tinyutils-1.0.2.tgz#5ce94435cf5b19b4b7c0fff58c3378d713e424ef"
+  integrity sha512-lLvLhnDTaLpmRFu+hVRi5d545GcWr7pxkvghk4sSuA2VOFMbr0mjEzFR2pZVcbZShjqr+UEBWkq25ZZsSex51w==
 
 "@easychessanimations/uci@^1.0.32":
   version "1.0.32"

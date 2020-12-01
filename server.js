@@ -51,7 +51,7 @@ const fooVersion = '1.0.43'
 
 const lichessBotName = process.env.BOT_NAME || "chesshyperbot"
 
-const { isEnvTrue, formatTime, formatName } = require('@easychessanimations/tinyutils')
+const { isEnvTrue, formatTime, formatName, SECOND, MINUTE } = require('@easychessanimations/tinyutils')
 
 let envKeys = []
 
@@ -214,8 +214,6 @@ fetch(`https://raw.githubusercontent.com/hyperbotauthor/hyperbot/docs/docs.json`
 }))
 
 const lichessUtils = require("@easychessanimations/lichessutils")
-
-console.log(lichessUtils)
 
 const { streamNdjson } = require('@easychessanimations/fetchutils')
 
@@ -474,11 +472,11 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
     }
 
     if(!enginePromise){		
-		let doPonder = ( ( state.botTime > 15000 ) || isEnvTrue("ALLOW_LATE_PONDER") ) && allowPonder
+		let doPonder = ( ( state.botTime > ( 15 * SECOND ) ) || isEnvTrue("ALLOW_LATE_PONDER") ) && allowPonder
 		
 		if(isEnvTrue('REDUCE_LATE_TIME')){
-			if(state.botTime < 30000) state.botTime = Math.floor(state.botTime * 0.75)
-			if(state.botTime < 15000) state.botTime = Math.floor(state.botTime * 0.75)	
+			if(state.botTime < ( 30 * SECOND ) ) state.botTime = Math.floor(state.botTime * 0.75)
+			if(state.botTime < ( 15 * SECOND ) ) state.botTime = Math.floor(state.botTime * 0.75)	
 		}		
 		
         logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
@@ -492,8 +490,8 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 		}
 			:
 		{
-			wtime: correspondenceThinkingTime * 1000, winc: 0,
-			btime: correspondenceThinkingTime * 1000, binc: 0
+			wtime: correspondenceThinkingTime * SECOND, winc: 0,
+			btime: correspondenceThinkingTime * SECOND, binc: 0
 		}
 		
 		analyzejob.setTimecontrol(timecontrol)
@@ -531,7 +529,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 					
 						engine.spawn() // restart engine for retry move
 
-						setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine), gameStartDelay * 5000)	
+						setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine), 10 * SECOND)
 					}                    
                 }
             }
@@ -587,8 +585,8 @@ function playGame(gameId){
 			if(realtime){
 				playingGameId = gameId
 				
-				setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2000)
-				setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodLuckMessage), 4000)
+				setTimeout(_=>lichessUtils.gameChat(gameId, "all", welcomeMessage), 2 * SECOND)
+				setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodLuckMessage), 4 * SECOND)
 				
 				engine.spawn()
 				
@@ -607,9 +605,9 @@ function playGame(gameId){
 					const initial = clock.initial || 0
 					const increment = clock.increment || 0
 					
-					duration = initial + 40 * increment					
+					duration = initial + lichessUtils.AVERAGE_GAME_LENGTH * increment					
 				}else{
-					duration = ( 180 * 60 * 1000 ) + ( 40 * 180 * 1000 )
+					duration = ( 180 * MINUTE ) + ( lichessUtils.AVERAGE_GAME_LENGTH * 180 * SECOND )
 				}
 				
 				console.log("duration", duration)
@@ -623,7 +621,7 @@ function playGame(gameId){
 				console.log(`opponent failed to make their opening move for ${abortAfter} seconds`)
 
 				abortGame(gameId)
-			}, abortAfter * 1000)
+			}, abortAfter * SECOND)
 			
 			whiteName = blob.white.name
 			whiteTitle = blob.white.title
@@ -800,7 +798,7 @@ function streamEvents(){
         if(blob.type == "gameStart"){                
             let gameId = blob.game.id
 			
-            setTimeout(_=>playGame(gameId), gameStartDelay * 1000)
+            setTimeout(_=>playGame(gameId), gameStartDelay * SECOND)
         }
 
         if(blob.type == "gameFinish"){                
@@ -814,7 +812,7 @@ function streamEvents(){
                 engine.stop()
             }
 			
-			setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodGameMessage), 2000)
+			setTimeout(_=>lichessUtils.gameChat(gameId, "all", goodGameMessage), 2 * SECOND)
         }         
     }})
 }
@@ -1200,19 +1198,19 @@ app.listen(port, _ => {
                 console.log(`hours ok: ${hours}, keep alive`)
                 fetch(KEEP_ALIVE_URL)
             }        
-        }, KEEP_ALIVE_INTERVAL * 60 * 1000)
+        }, KEEP_ALIVE_INTERVAL * MINUTE)
     }
 
     streamEvents()
 
     setInterval(_=>{
         if(!playingGameId){
-            if((new Date().getTime() - lastPlayedAt) > challengeTimeout * 60 * 1000){
+            if((new Date().getTime() - lastPlayedAt) > challengeTimeout * MINUTE){
                 console.log(`idle timed out`)
                 challengeRandomBot()
             }
         }
-    }, challengeInterval * 60 * 1000)
+    }, challengeInterval * MINUTE)
 })
 
 // end launch
