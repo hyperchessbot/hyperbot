@@ -2,15 +2,15 @@
 ## Create your own permanent Hyper Bot ( runs on Heroku, no Lc0 )
 If you want to create your own permanent bot, do the following:  
   
-Sign up to GitHub https://github.com/join , if you have not already.  
+Sign up to GitHub [here](https://github.com/join) , if you have not already.  
   
-With your GitHub account visit https://github.com/hyperchessbot/hyperbot , then click on Fork.  
+With your GitHub account visit [this repository](https://github.com/hyperchessbot/hyperbot) , then click on Fork.  
   
-Create a BOT account if you do not already have one. To create one use an account that has not played any games yet, log into this account, then visit https://hypereasy.herokuapp.com/auth/lichess/bot , approve oauth and then on the page you are taken to click on 'Request upgrade to bot'.  
+Create a BOT account if you do not already have one. To create one use an account that has not played any games yet, log into this account, then visit [hypereasy heroku app home page](https://hypereasy.herokuapp.com/auth/lichess/bot) , approve oauth and then on the page you are taken to click on 'Request upgrade to bot'.  
   
-Create an API access token with your BOT account at https://lichess.org/account/oauth/token ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API )  
+Create an API access token with your BOT account [over here](https://lichess.org/account/oauth/token) ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API )  
   
-Sign up to Heroku https://signup.heroku.com/ , if you have not already.  
+Sign up to [Heroku](https://signup.heroku.com/) , if you have not already.  
   
 At Heroku create a new app using New / Create new app. Choose Europe for region.  
   
@@ -18,45 +18,45 @@ In the app's dashboard go to the Deploy tab. Use the GitHub button to connect th
   
 In Heroku Settings / Reveal Config Vars create a new variable TOKEN and set its value to your newly created access token, then create a new variable BOT_NAME and set its value to your bot's lichess username.  
   
-For more detailed instructions and screenshots on setting up your Heroku app refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Creating-and-configuring-your-app-on-Heroku#creating-and-configuring-your-app-on-heroku .  
+For more detailed instructions and screenshots on setting up your Heroku app refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Creating-and-configuring-your-app-on-Heroku#creating-and-configuring-your-app-on-heroku) .  
   
 Congratulations, you have an up and running lichess bot.  
   
-If you want to use 3-4-5 piece tablebases on Heroku, refer to this guide https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#enabling-syzygy-tablebases .
+If you want to use 3-4-5 piece tablebases on Heroku, refer to [this guide](https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#enabling-syzygy-tablebases) .
 ## Upgrade to bot and play games in your browser
-To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit https://hypereasy.herokuapp.com .  
+To upgrade an account, that has played no games yet, to bot, and to make this bot accept challenges and play games in your browser, visit [this link](https://hypereasy.herokuapp.com) .  
   
-For detailed instructions see https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1 .
+For detailed instructions see [this lichess forum](https://lichess.org/forum/off-topic-discussion/hyper-easy-all-variants-lichess-bot-running-in-your-browser#1) .
 ## Update Heroku app to latest version using Gitpod
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Update-Heroku-app-to-latest-version-using-Gitpod#update-heroku-app-to-latest-version-using-gitpod) .
 ## Creating a MongoDb account
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Creating-a-MongoDb-account#creating-a-mongodb-account .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Creating-a-MongoDb-account#creating-a-mongodb-account) .
 ## Build external multi game PGN file with MongoDb book builder ( version 2 )
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Build-book-from-external-multi-game-PGN-file#build-book-from-external-multi-game-pgn-file .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Build-book-from-external-multi-game-PGN-file#build-book-from-external-multi-game-pgn-file) .
 ## Install bot on Windows ( runs Lc0 )
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-Windows-(-runs-Lc0-)#install-bot-on-windows--runs-lc0- .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-Windows-(-runs-Lc0-)#install-bot-on-windows--runs-lc0-) .
 ## Install bot on goorm.io ( runs Lc0 )
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-goorm.io-(-runs-Lc0-)#install-bot-on-goormio--runs-lc0- .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Install-bot-on-goorm.io-(-runs-Lc0-)#install-bot-on-goormio--runs-lc0-) .
 ## Download a net for Lc0
-Dowload a net from https://lczero.org/dev/wiki/best-nets-for-lc0 .  
+Dowload a net [from here](https://lczero.org/dev/wiki/best-nets-for-lc0) .  
   
 Rename the weights file 'weights.pb.gz', then copy it to the 'lc0goorm' folder. Overwrite the old file.
 ## Update to latest version on Windows / goorm
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows-or-goorm#update-to-latest-version-on-windows--goorm .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Update-to-latest-version-on-Windows-or-goorm#update-to-latest-version-on-windows--goorm) .
 ## Explanation of files
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Explanation-of-files#git) .
 ## Contribute to code
-Refer to this Wiki https://github.com/hyperchessbot/hyperbot/wiki/Contribute-to-code#contribute-to-code .
+Refer to [this Wiki](https://github.com/hyperchessbot/hyperbot/wiki/Contribute-to-code#contribute-to-code) .
 ## Discussion / Feedback
-Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .  
+Discuss Hyper Bot on [Discord](https://discord.gg/8m3Muay) .  
   
-Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
+Post [issues on GitHub](https://github.com/hyperchessbot/hyperbot/issues) .
 ## Getting assistance in lichess PM
 You can seek assistance in lichess PM using your BOT account.  
   
-Open an issue at https://github.com/hyperchessbot/hyperbot/issues with the GitHub account on which your forked Hyper Bot, with the title 'Identifying lichess account'. Give a link to your lichess account in the issue.  
+[Open an issue](https://github.com/hyperchessbot/hyperbot/issues) with the GitHub account on which your forked Hyper Bot, with the title 'Identifying lichess account'. Give a link to your lichess account in the issue.  
   
-After identification you can PM https://lichess.org/@/hyperchessbotauthor .  
+After identification you can PM [over here](https://lichess.org/@/hyperchessbotauthor) .  
   
 Seeking assistance in lichess PM without verifying your lichess account with your GitHub account may get you blocked. The block may be lifted once you identify your lichess account with your GitHub account.
 ## Config vars
