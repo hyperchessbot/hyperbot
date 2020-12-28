@@ -80,11 +80,13 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **GENERAL_TIMEOUT** : timeout for event streams in seconds ( default : 15 )  
   
-**ENGINE_THREADS** : engine Threads option ( default : 1 )  
+**ENGINE_THREADS** : engine Threads uci option ( default : 1 )  
   
-**ENGINE_HASH** : engine Hash option in megabytes ( default : 16 )  
+**ENGINE_HASH** : engine Hash uci option in megabytes ( default : 16 )  
   
-**ENGINE_MOVE_OVERHEAD** : engine Move Overhead option in milliseconds ( default : 500 )  
+**ENGINE_CONTEMPT** : engine Contempt uci option in centipawns ( default : 24 )  
+  
+**ENGINE_MOVE_OVERHEAD** : engine Move Overhead uci option in milliseconds ( default : 500 )  
   
 **ALLOW_PONDER** : set it to 'true' to make the bot think on opponent time  
   

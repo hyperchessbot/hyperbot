@@ -63,6 +63,8 @@ const engineThreads = process.env.ENGINE_THREADS || "1"
 envKeys.push('ENGINE_THREADS')
 const engineHash = process.env.ENGINE_HASH || "16"
 envKeys.push('ENGINE_HASH')
+const engineContempt = process.env.ENGINE_CONTEMPT || "24"
+envKeys.push('ENGINE_CONTEMPT')
 const engineMoveOverhead = process.env.ENGINE_MOVE_OVERHEAD || "500"
 envKeys.push('ENGINE_MOVE_OVERHEAD')
 const queryPlayingInterval = parseInt(process.env.QUERY_PLAYING_INTERVAL || "60")
@@ -479,7 +481,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 			if(state.botTime < ( 15 * SECOND ) ) state.botTime = Math.floor(state.botTime * 0.75)	
 		}		
 		
-        logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead}`)
+        logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead} with contempt ${engineContempt}`)
 		
 		analyzejob.position(`fen ${state.initialFen}`, moves)
 		
@@ -593,6 +595,7 @@ function playGame(gameId){
 				engine
 				.setoption("Threads", engineThreads)
 				.setoption("Hash", engineHash)
+				.setoption("Contempt", engineContempt)
 				.setoption("Move Overhead", engineMoveOverhead)	
 				
 				actualengine = engine
