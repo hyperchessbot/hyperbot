@@ -75,6 +75,8 @@ const useBook = isEnvTrue('USE_BOOK')
 envKeys.push('USE_BOOK')
 const useMongoBook = isEnvTrue('USE_MONGO_BOOK')
 envKeys.push('USE_MONGO_BOOK')
+const disableEngineForMongo = isEnvTrue('DISABLE_ENGINE_FOR_MONGO')
+envKeys.push('DISABLE_ENGINE_FOR_MONGO')
 const mongoVersion = parseInt(process.env.MONGO_VERSION || "1")
 envKeys.push('MONGO_VERSION')
 const ignoreMongoPercent = parseInt(process.env.IGNORE_MONGO_PERCENT || "20")
@@ -320,10 +322,12 @@ function requestBook(state){
 		let coll = (mongoVersion == 1) ? poscoll : movecoll
 		
 		if( useMongoBook && coll ){
-			if((Math.random() * 100) < ignoreMongoPercent){
-				resolve(null)
-				
-				return
+			if(!disableEngineForMongo){
+				if((Math.random() * 100) < ignoreMongoPercent){
+					resolve(null)
+
+					return
+				}
 			}
 			
 			let key = state.fen.split(" ").slice(0, 4).join(" ")
@@ -334,23 +338,27 @@ function requestBook(state){
 						uci: item.uci,
 						plays: item.plays,
 						score: Math.floor(item.score * 100)
-					}))					
+					}))	
 					
-					let filteredMoves = moves.filter(move => {
-						let perf = move.score / move.plays
-						
-						if(move.plays < filterThresoldPlays) return true
-						
-						if((Math.random() * 100) < bookForgiveness) return true
-						
-						if(perf < mongoFilter) return false
-						
-						return true
-					})
+					let filteredMoves = moves
+					
+					if(!disableEngineForMongo){
+						filteredMoves = moves.filter(move => {
+							let perf = move.score / move.plays
+
+							if(move.plays < filterThresoldPlays) return true
+
+							if((Math.random() * 100) < bookForgiveness) return true
+
+							if(perf < mongoFilter) return false
+
+							return true
+						})
+					}
 					
 					if(!filteredMoves.length){
 						resolve(null)
-						
+
 						return
 					}
 					

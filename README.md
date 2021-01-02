@@ -72,6 +72,8 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **USE_MONGO_BOOK** : set it to 'true' to use the MongoDb book specified by MONGODB_URI  
   
+**DISABLE_ENGINE_FOR_MONGO** : set it to 'true' to disable using engine completely when a MongoDb book move is available ( by default the bot may ignore a MongoDb book move at its discretion and use the engine instead for better performance and to allow for more varied play )  
+  
 **MONGO_VERSION** : MongoDb book builder version, possible values are 1 ( default, builds a book from bot games as downloaded from lichess as JSON ), 2 ( builds a book from bot games as downloaded from lichess as PGN, or from an arbitrary url specified in PGN_URL )  
   
 **PGN_URL** : url for downloading a multi game PGN file for MongoDb book builder ( version 2 only )  
