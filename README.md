@@ -140,4 +140,6 @@ Seeking assistance in lichess PM without verifying your lichess account with you
   
 **ABORT_AFTER** : abort game after that many seconds if the opponent fails to make their opening move ( default : 120 )  
   
-**DECLINE_HARD** : set it to 'true' to explicitly decline unwanted challenges ( by default they are only ignored and can be accepted manually )
+**DECLINE_HARD** : set it to 'true' to explicitly decline unwanted challenges ( by default they are only ignored and can be accepted manually )  
+  
+**USE_SOLUTION** : set it to 'true' to use antichess solution, depends on http://magma.maths.usyd.edu.au/~watkins/LOSING_CHESS/WEB/browse.php?e2e3 api, may not work in the future

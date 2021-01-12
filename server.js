@@ -120,6 +120,8 @@ const useLc0 = isEnvTrue('USE_LC0')
 envKeys.push('USE_LC0')
 const usePolyglot = isEnvTrue('USE_POLYGLOT')
 envKeys.push('USE_POLYGLOT')
+const useSolution = isEnvTrue('USE_SOLUTION')
+envKeys.push('USE_SOLUTION')
 const welcomeMessage = process.env.WELCOME_MESSAGE || `coded by @hyperchessbotauthor`
 envKeys.push('WELCOME_MESSAGE')
 const goodLuckMessage = process.env.GOOD_LUCK_MESSAGE || `Good luck !`
@@ -289,6 +291,72 @@ function requestBook(state){
 			return
 		}
 		
+		if(useSolution && (state.variant == "antichess")){
+			if(state.movesArray.length){
+				let url = `http://magma.maths.usyd.edu.au/~watkins/LOSING_CHESS/WEB/browse.php?${state.movesArray.join("+")}`
+				console.log("getting solution", url)
+				fetch(url).then(response => response.text().then(content => {					
+					let m = content.match(/<tr class="oddRow"><td><a href="browse.php?[^"]+">([^<]+)/)
+					if(m){
+						let san = m[1]
+						console.log("antichess solution move", san)
+						
+						let result = makeUciMoves("antichess", state.fen, [])		
+						
+						let legalMovesUcis = result.legalMovesUcis
+	
+						let uci = null
+						
+						console.log("legal ucis", legalMovesUcis)
+						
+						for(let test of legalMovesUcis){
+							let result = makeUciMoves("antichess", state.fen, [test])					
+						
+							let sanMoves = result.sanMoves
+							
+							//console.log("convert", test, sanMoves[0])
+							
+							if(sanMoves[0] == san){
+								console.log("solution move", test)
+								
+								resolve({
+									source: "solution",
+									moves: [{
+										white: 1,
+										draws: 0,
+										black: 0,
+										uci: test
+									}]
+								})
+							}
+						}
+						
+						resolve(null)
+						
+						return
+					}else{
+						resolve(null)
+						
+						return
+					}
+				}))
+			}else{
+				resolve({
+					source: "solution",
+					moves: [{
+						white: 1,
+						draws: 0,
+						black: 0,
+						uci: "e2e3"
+					}]
+				})
+				
+				return
+			}
+			
+			return
+		}
+		
 		if(usePolyglot && lichessUtils.isStandard(state.variant)){
 			if(!book.loaded){
 				console.log("polyglot book not yet loaded")
@@ -443,7 +511,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
     let bookalgeb = null
 	let bookSource = null
 
-    if((useBook || useMongoBook || usePolyglot) && (moves.length <= bookDepth)){
+    if((useBook || useMongoBook || usePolyglot || useSolution) && (moves.length <= bookDepth)){
         let blob = await requestBook(state)
 
         if(blob){
@@ -626,7 +694,7 @@ function playGame(gameId){
 				actualengine = corrEngine
 			}
 			
-			console.log("actual engine", actualengine)
+			//console.log("actual engine", actualengine)
 
 			abortGameTimeout = setTimeout(_ => {
 				console.log(`opponent failed to make their opening move for ${abortAfter} seconds`)
