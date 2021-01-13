@@ -294,8 +294,28 @@ function requestBook(state){
 		if(useSolution && (state.variant == "antichess")){
 			if(state.movesArray.length){
 				let url = `http://magma.maths.usyd.edu.au/~watkins/LOSING_CHESS/WEB/browse.php?${state.movesArray.join("+")}`
+				
 				console.log("getting solution", url)
+				
+				let timedOut = false				
+				
+				let solutionTimeout = setTimeout(_=>{					
+					console.log("antichess solution timed out")
+
+					timedOut = true
+
+					resolve(null)
+
+					return
+				}, 5000)
+				
 				fetch(url).then(response => response.text().then(content => {					
+					clearTimeout(solutionTimeout)
+					
+					if(timedOut){
+						return
+					}
+					
 					let m = content.match(/<tr class="oddRow"><td><a href="browse.php?[^"]+">([^<]+)/)
 					if(m){
 						let san = m[1]
