@@ -844,6 +844,7 @@ function decline(challengeId, reason){
 	if(declineHard){
 		console.log("declining challenge", challengeId, "reason", reason)
 		lichessUtils.postApi({
+			contentType: "application/x-www-form-urlencoded",
 			url: lichessUtils.declineChallengeUrl(challengeId), log: this.logApi, token: process.env.TOKEN,
 			body: `reason=${reason}`,
 			callback: content => console.log(`decline challenge response: ${content}`)
@@ -873,19 +874,19 @@ function streamEvents(){
 			if(correspondence && allowCorrespondence) speedok = true
 
             if(realtime && playingGameId){
-                decline(challengeId, `already playing ( ${playingGameId} )`)
+                decline(challengeId, `later`)
             }else if(!acceptVariants.includes(variant)){
-                decline(challengeId, `wrong variant ( ${variant} )`)
+                decline(challengeId, `variant`)
             }else if(!speedok){
-                decline(challengeId, `wrong speed ( ${speed} )`)
+                decline(challengeId, `timeControl`)
             }else if(rated && disableRated){
-                decline(challengeId, `wrong mode ( rated )`)
+                decline(challengeId, `casual`)
             }else if((!rated) && disableCasual){
-                decline(challengeId, `wrong mode ( casual )`)
+                decline(challengeId, `rated`)
             }else if((challengerTitle == "BOT") && disableBot){
-                this.decline(challengeId, `wrong opponent ( BOT )`)
+                decline(challengeId, `noBot`)
             }else if((challengerTitle != "BOT") && disableHuman){
-                this.decline(challengeId, `wrong opponent ( human )`)
+                decline(challengeId, `onlyBot`)
             }else{
                 lichessUtils.postApi({
                     url: lichessUtils.acceptChallengeUrl(challengeId), log: logApi, token: process.env.TOKEN,
