@@ -144,6 +144,8 @@ const correspondenceThinkingTime = parseInt(process.env.CORRESPONDENCE_THINKING_
 envKeys.push('CORRESPONDENCE_THINKING_TIME')
 const declineHard = isEnvTrue('DECLINE_HARD')
 envKeys.push('DECLINE_HARD')
+const disableChallengeRandom = isEnvTrue('DISABLE_CHALLENGE_RANDOM')
+envKeys.push('DISABLE_CHALLENGE_RANDOM')
 
 const fs = require('fs')
 
@@ -1064,7 +1066,11 @@ Warning: Playing while the bot home page is open introduces increased work load 
 })
 
 app.get('/chr', (req, res) => {
-    challengeRandomBot().then(result=>res.send(result))
+	if(disableChallengeRandom){
+		res.send(`<div style="text-align:center;"><b>Challenging random bot is disabled.</b><hr>To enable this feature, set DISABLE_RANDOM_CHALLENGE config/env var to 'false' or delete it entirely.</div>`)
+	}else{
+		challengeRandomBot().then(result => res.send(result))
+	}
 })
 
 app.get('/docs', (req, res) => {
