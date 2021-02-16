@@ -82,6 +82,8 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **ENGINE_MOVE_OVERHEAD** : engine Move Overhead uci option in milliseconds ( default : 500 )  
   
+**ENGINE_SKILL_LEVEL** : engine Skill Level uci option, can be set from 0 to 20 ( default : 20 )  
+  
 **ALLOW_PONDER** : set it to 'true' to make the bot think on opponent time  
   
 **BOOK_DEPTH** : up to how many plies into the game should the bot use the book, choosing too high book depth is running the risk of playing unsound moves ( default : 20 )  

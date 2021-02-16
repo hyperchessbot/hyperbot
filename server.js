@@ -61,6 +61,8 @@ const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
 envKeys.push('GENERAL_TIMEOUT')
 const engineThreads = process.env.ENGINE_THREADS || "1"
 envKeys.push('ENGINE_THREADS')
+const engineSkillLevel = process.env.ENGINE_SKILL_LEVEL || "20"
+envKeys.push('ENGINE_SKILL_LEVEL')
 const engineHash = process.env.ENGINE_HASH || "16"
 envKeys.push('ENGINE_HASH')
 const engineContempt = process.env.ENGINE_CONTEMPT || "24"
@@ -579,7 +581,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 			if(state.botTime < ( 15 * SECOND ) ) state.botTime = Math.floor(state.botTime * 0.75)	
 		}		
 		
-        logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) ${engineHash} hash and overhead ${engineMoveOverhead} with contempt ${engineContempt}`)
+        logPage(`engine time ${state.botTime} ponder ${doPonder} thinking with ${engineThreads} thread(s) at skill level ${engineSkillLevel} using ${engineHash} hash and overhead ${engineMoveOverhead} with contempt ${engineContempt}`)
 		
 		analyzejob.position(`fen ${state.initialFen}`, moves)
 		
@@ -692,6 +694,7 @@ function playGame(gameId){
 				
 				engine
 				.setoption("Threads", engineThreads)
+				.setoption("Skill Level", engineSkillLevel)
 				.setoption("Hash", engineHash)
 				.setoption("Contempt", engineContempt)
 				.setoption("Move Overhead", engineMoveOverhead)	
