@@ -86,6 +86,8 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **ALLOW_PONDER** : set it to 'true' to make the bot think on opponent time  
   
+**USE_BOOK** : use opening explorer book  
+  
 **BOOK_DEPTH** : up to how many plies into the game should the bot use the book, choosing too high book depth is running the risk of playing unsound moves ( default : 20 )  
   
 **BOOK_SPREAD** : select the move from that many of the top book moves, choosing to high book spread is running the risk of playing unsound moves ( default : 4 )  
