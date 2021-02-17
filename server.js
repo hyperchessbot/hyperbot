@@ -938,6 +938,12 @@ function challengeBot(bot){
 
 function challengeRandomBot(){
     return new Promise(resolve=>{
+    	if(disableChallengeRandom){
+    		resolve(`Challenging random bot is disabled.`)
+
+    		return
+    	}
+
         lichessUtils.getOnlineBots().then(bots=>{
             bots = bots.filter(bot=>bot!=lichessBotName)
             if(bots.length > 0){

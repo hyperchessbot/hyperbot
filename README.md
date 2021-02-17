@@ -8,7 +8,7 @@ With your GitHub account visit https://github.com/hyperchessbot/hyperbot , then 
   
 Create a BOT account if you do not already have one. To create one use an account that has not played any games yet, log into this account, then visit https://hypereasy.herokuapp.com/auth/lichess/bot , approve oauth and then on the page you are taken to click on 'Request upgrade to bot'.  
   
-Create an API access token with your BOT account at https://lichess.org/account/oauth/token ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API )  
+Create an API access token with your BOT account at https://lichess.org/account/oauth/token/create?scopes[]=challenge:read&scopes[]=challenge:write&scopes[]=bot:play&description=Hyper%20Bot%20TOKEN ( should have scopes Read incoming challenges / Create, accept, decline challenges / Play games with the bot API )  
   
 Sign up to Heroku https://signup.heroku.com/ , if you have not already.  
   
