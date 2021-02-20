@@ -233,7 +233,7 @@ const { UciEngine, setLogEngine, AnalyzeJob } = require('@easychessanimations/uc
 
 const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
 
-const stockfishPath = useScalachess ? 'stockfish12m' : 'stockfish12'
+const stockfishPath = useScalachess ? 'stockfish12m' : 'stockfish13'
 
 const enginePath = useLc0 ? LC0_EXE : stockfishPath
 
