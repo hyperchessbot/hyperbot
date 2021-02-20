@@ -29,7 +29,7 @@ const expl = {
 	"server.js" : "entry point and code of app",
 	"startserver.sh" : "script for starting the server on Heroku",
 	"stockfish13" : "Stockfish 13 Linux",
-	"stockfish12.exe" : "Stockfish 13 Windows",
+	"stockfish13.exe" : "Stockfish 13 Windows",
 	"stockfish12m" : "multi variant Stockfish 12 Linux",
 	"stockfish12m.exe" : "multi variant Stockfish 12 Windows",
 	"update.js" : "script for updating file information",
