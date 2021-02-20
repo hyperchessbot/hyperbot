@@ -55,6 +55,8 @@ const { isEnvTrue, formatTime, formatName, SECOND, MINUTE } = require('@easyches
 
 let envKeys = []
 
+const useStockfish13 = isEnvTrue('USE_STOCKFISH_13')
+envKeys.push('USE_STOCKFISH_13')
 const appName = process.env.APP_NAME || "hyperchessbot"
 envKeys.push('APP_NAME')
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
@@ -233,7 +235,13 @@ const { UciEngine, setLogEngine, AnalyzeJob } = require('@easychessanimations/uc
 
 const LC0_EXE = (require('os').platform() == "win32") ? "lc0goorm/lc0.exe" : "lc0goorm/lc0"
 
-const stockfishPath = useScalachess ? 'stockfish12m' : 'stockfish12'
+let stockfishPath = useScalachess ? 'stockfish12m' : 'stockfish12'
+
+if(useStockfish13){	
+	stockfishPath = useScalachess ? 'stockfish13m' : 'stockfish13'
+
+	console.log(`using Stockfish 13 ( ${stockfishPath} )`)
+}
 
 const enginePath = useLc0 ? LC0_EXE : stockfishPath
 

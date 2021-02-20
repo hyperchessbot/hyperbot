@@ -52,6 +52,8 @@ Discuss Hyper Bot on Discord https://discord.gg/8m3Muay .
   
 Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
 ## Config vars
+**USE_STOCKFISH_13** : set it to 'true' to use Stockfish 13 ( Heroku / Linux only )  
+  
 **KEEP_ALIVE_URL** : set this to the full link of your bot home page ( https://[yourappname].herokuapp.com , where change [yourappname] to your Heroku app name ) if you want your bot to be kept alive from early morning till late night Heroku server time, keeping alive a free Heroku bot for 24/7 is not possible, because a free Heroku account has a monthly quota of 550 hours  
   
 **ALWAYS_ON** : requires paid Heroku account, set it to 'true' to keep the bot alive 24/7, you have to set KEEP_ALIVE_URL to your bot's full home page link for ALWAYS_ON to work ( see also the explanation of KEEP_ALIVE_URL config var )  
