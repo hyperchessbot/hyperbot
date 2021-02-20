@@ -154,16 +154,16 @@ file of size 93 bytes
 ### script for starting the server on Heroku
 
 
-# stockfish12
-file of size 22 mega byte(s)
+# stockfish13
+file of size 21.3 mega byte(s)
 
-### Stockfish 12 Linux
+### Stockfish 13 Linux
 
 
-# stockfish12.exe
-file of size 22 mega byte(s)
+# stockfish13.exe
+file of size 21.2 mega byte(s)
 
-### Stockfish 12 Windows
+### Stockfish 13 Windows
 
 
 # stockfish12m
