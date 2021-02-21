@@ -99,9 +99,9 @@ const bookSpeeds = (process.env.BOOK_SPEEDS || "blitz,rapid").split(",")
 envKeys.push('BOOK_SPEEDS')
 const logApi = isEnvTrue('LOG_API')
 envKeys.push('LOG_API')
-const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "30")
+const challengeInterval = parseInt(process.env.CHALLENGE_INTERVAL || "15")
 envKeys.push('CHALLENGE_INTERVAL')
-const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "60")
+const challengeTimeout = parseInt(process.env.CHALLENGE_TIMEOUT || "30")
 envKeys.push('CHALLENGE_TIMEOUT')
 const urlArray = (name,items) => items.map(item=>`${name}[]=${item}`).join("&")
 const useScalachess = isEnvTrue('USE_SCALACHESS')
@@ -939,9 +939,20 @@ function streamEvents(){
 
 function challengeBot(bot){
     return new Promise(resolve=>{
+    	if(disableRated && disableCasual){
+    		resolve(`both rated and casual modes are disabled, skip challenging bot`)
+
+    		return
+    	}
+
+    	let rated = ( Math.random() > 0.5 ) ? "true" : "false"
+
+    	if(disableRated) rated = "false"
+    	if(disableCasual) rated = "true"
+
         lichessUtils.postApi({
             url: lichessUtils.challengeUrl(bot), log: logApi, token: process.env.TOKEN,
-            body: `rated=${Math.random()>0.5?"true":"false"}&clock.limit=${60 * (Math.floor(Math.random() * 5) + 1)}&clock.increment=0`,
+            body: `rated=${rated}&clock.limit=${30 * (Math.floor(Math.random() * 4) + 1)}&clock.increment=0`,
             contentType: "application/x-www-form-urlencoded",
             callback: content => {
                 logPage(`challenge response: ${content}`)
