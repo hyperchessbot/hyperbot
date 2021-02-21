@@ -57,6 +57,8 @@ let envKeys = []
 
 const useStockfish13 = isEnvTrue('USE_STOCKFISH_13')
 envKeys.push('USE_STOCKFISH_13')
+const disableLogs = isEnvTrue('DISABLE_LOGS')
+envKeys.push('DISABLE_LOGS')
 const appName = process.env.APP_NAME || "hyperchessbot"
 envKeys.push('APP_NAME')
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
@@ -266,6 +268,10 @@ app.use(sseMiddleware)
 setupStream(app)
 
 function logPage(content){
+	if(disableLogs){
+		return
+	}
+
     console.log(content)
 
     ssesend({
@@ -827,7 +833,7 @@ function playGame(gameId){
 			state.lastmove = null
 			if(state.movesArray.length) state.lastmove = state.movesArray.slice().pop()
 			
-			if(realtime) ssesend({
+			if(realtime && (!disableLogs)) ssesend({
 				kind: "refreshGame",
 				gameId: gameId,
 				fen: state.fen,
@@ -1312,6 +1318,10 @@ app.use('/', express.static(__dirname))
 
 app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
+
+    if(disableLogs){
+    	console.log(`logs disabled`)
+    }
 
     if(KEEP_ALIVE_URL){
         console.log(`keep alive interval: ${KEEP_ALIVE_INTERVAL} , url: ${KEEP_ALIVE_URL}`)
