@@ -803,10 +803,11 @@ function playGame(gameId){
                 moves = state.moves.split(" ")
 				state.movesArray = moves
 
-                if(useScalachess){
+                if(useScalachess && (state.variant != "standard")){
 					let result = makeUciMoves(state.variant, state.initialFen, moves)					
                     state.fen = result.fen
                 }else{
+                	if(useScalachess) logPage(`switched to chess.js for variant standard`)
                     const chess = new Chess()
                     for(let move of moves) chess.move(move, {sloppy:true})
                     state.fen = chess.fen()
