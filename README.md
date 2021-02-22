@@ -54,7 +54,9 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
 ## Config vars
 **USE_STOCKFISH_13** : set it to 'true' to use Stockfish 13 ( Heroku / Linux only )  
   
-**DISABLE_LOGS** : set it to 'true' to disable logs  
+**DISABLE_LOGS** : set it to 'true' to disable logs, when true, logs, position and evaluation will not be shown on home page  
+  
+**SKIP_FEN** : set it to 'true' to skip calculating fen for current position beyond book depth, when true, fen will only be calculated for positions within book depth, this makes the bot play faster, but the position on the home page will not be shown beyond book depth  
   
 **KEEP_ALIVE_URL** : set this to the full link of your bot home page ( https://[yourappname].herokuapp.com , where change [yourappname] to your Heroku app name ) if you want your bot to be kept alive from early morning till late night Heroku server time, keeping alive a free Heroku bot for 24/7 is not possible, because a free Heroku account has a monthly quota of 550 hours  
   

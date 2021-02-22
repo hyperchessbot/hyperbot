@@ -59,6 +59,8 @@ const useStockfish13 = isEnvTrue('USE_STOCKFISH_13')
 envKeys.push('USE_STOCKFISH_13')
 const disableLogs = isEnvTrue('DISABLE_LOGS')
 envKeys.push('DISABLE_LOGS')
+const calcFen = (!(isEnvTrue('SKIP_FEN')))
+envKeys.push('SKIP_FEN')
 const appName = process.env.APP_NAME || "hyperchessbot"
 envKeys.push('APP_NAME')
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
@@ -839,7 +841,7 @@ function playGame(gameId){
                 moves = state.moves.split(" ")
 				state.movesArray = moves
 
-				if(getUseBook(moves)){
+				if(getUseBook(moves) || calcFen){
 					if(useScalachess && (state.variant != "standard")){
 						let result = makeUciMoves(state.variant, state.initialFen, moves)					
 	                    state.fen = result.fen
