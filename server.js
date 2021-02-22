@@ -267,6 +267,19 @@ app.use(sseMiddleware)
 
 setupStream(app)
 
+const logStream = isEnvTrue("LOG_FILE") ? fs.createWriteStream("log.txt", {flags: "a"}) : null
+
+let logFileT0 = new Date().getTime()
+
+function logFile(content){
+	if(logStream){
+		let time = new Date().getTime()
+		let elapsed = time - logFileT0
+		logFileT0 = time
+		logStream.write(`${elapsed} > ${content}\n`)
+	}
+}
+
 function logPage(content){
 	if(disableLogs){
 		return
@@ -511,7 +524,13 @@ function requestBook(state){
     })    
 }
 
+function getUseBook(moves){
+	return (useBook || useMongoBook || usePolyglot || useSolution) && (moves.length <= bookDepth)
+}
+
 async function makeMove(gameId, state, moves, analyzejob, actualengine){
+	logFile(`makeMove ${gameId} ${state} ${moves} ${analyzejob} ${actualengine}`)
+
     if(state.realtime && playingGameId && (gameId != playingGameId)){
         logPage(`refused to make move for real time game ${gameId} ( already playing real time : ${playingGameId} )`)
 		
@@ -549,7 +568,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
     let bookalgeb = null
 	let bookSource = null
 
-    if((useBook || useMongoBook || usePolyglot || useSolution) && (moves.length <= bookDepth)){
+    if(getUseBook(moves)){
         let blob = await requestBook(state)
 
         if(blob){
@@ -588,6 +607,8 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
     }
 
     if(!enginePromise){		
+    	logFile(`making engine move`)
+
 		let doPonder = ( ( state.botTime > ( 15 * SECOND ) ) || isEnvTrue("ALLOW_LATE_PONDER") ) && allowPonder
 		
 		if(isEnvTrue('REDUCE_LATE_TIME')){
@@ -619,6 +640,8 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 	}else{
 		if(state.realtime) engine.stop()
 	}
+
+	logFile(`launching search`)
     
     enginePromise.then(result => {
         let bestmove = result.bestmove
@@ -635,9 +658,12 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 
         logPage(logMsg)
 
+        logFile(`bestmove ${bestmove} ponder ${ponder} score ${score}`)
+
         lichessUtils.postApi({
             url: lichessUtils.makeBotMoveUrl(gameId, bestmove), log: logApi, token: process.env.TOKEN,
             callback: content => {
+            	logFile(`make move response ${content}`)
                 if(logApi) logPage(`move ack: ${content}`)
                 if(content.match(/error/)){
 					if(state.realtime && playingGameId && (gameId == playingGameId)){
@@ -681,6 +707,8 @@ function playGame(gameId){
 			playGame(gameId)	
 		}                
     }, callback: async function(blob){        
+    	logFile(`game event ${JSON.stringify(blob)}`)
+
 		if(!playgame) return
 		
 		lastPlayedAt = new Date().getTime()
@@ -806,18 +834,26 @@ function playGame(gameId){
 			state.realtime = realtime
 
             if(state.moves){
+            	logFile(`setting up fen from moves`)
+
                 moves = state.moves.split(" ")
 				state.movesArray = moves
 
-                if(useScalachess && (state.variant != "standard")){
-					let result = makeUciMoves(state.variant, state.initialFen, moves)					
-                    state.fen = result.fen
-                }else{
-                	if(useScalachess) logPage(`switched to chess.js for variant standard`)
-                    const chess = new Chess()
-                    for(let move of moves) chess.move(move, {sloppy:true})
-                    state.fen = chess.fen()
-                }
+				if(getUseBook(moves)){
+					if(useScalachess && (state.variant != "standard")){
+						let result = makeUciMoves(state.variant, state.initialFen, moves)					
+	                    state.fen = result.fen
+	                }else{
+	                	if(useScalachess) logPage(`switched to chess.js for variant standard`)
+	                    const chess = new Chess()
+	                    for(let move of moves) chess.move(move, {sloppy:true})
+	                    state.fen = chess.fen()
+	                }
+
+	                logFile(`setting up fen from moves done`)
+				}else{
+					logFile(`skipping setting up fen`)
+				}
             }
 			
 			if( abortGameTimeout && ( (botWhite && (state.movesArray.length > 1)) || ((!botWhite) && (state.movesArray.length > 0)) ) ){
@@ -1105,6 +1141,20 @@ app.get('/chr', (req, res) => {
 		res.send(`<div style="text-align:center;"><b>Challenging random bot is disabled.</b><hr>To enable this feature, set DISABLE_RANDOM_CHALLENGE config/env var to 'false' or delete it entirely.</div>`)
 	}else{
 		challengeRandomBot().then(result => res.send(result))
+	}
+})
+
+app.get('/logfile', (req, res) => {
+	if(logStream){
+		let lines = fs.readFileSync("log.txt").toString().split("\n").reverse()
+
+		if(lines.length > 10000){
+			lines = lines.slice(0, 10000)
+		}
+
+		res.send(lines.join(`<br>\n`))
+	}else{
+		res.send(`log file disabled`)
 	}
 })
 

@@ -3,3 +3,5 @@ node_modules
 
 *.7z
 *.pgn
+
+log.txt
