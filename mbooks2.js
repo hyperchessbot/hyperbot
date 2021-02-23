@@ -60,12 +60,18 @@ const BOT_TOKEN = process.env.TOKEN
 const BOOK_DEPTH = parseInt(process.env.BOOK_DEPTH || "40")
 
 const drop = false
- 
+
+function logFunc(...args){
+	if(process.env.DISABLE_MONGO2_LOGS == "true") return
+
+	console.log(...args)
+}
+
 MongoClient.connect(MONGODB_URI, {useNewUrlParser: true, useUnifiedTopology: true}, function(err, setClient) {  
 	if(err){
-		console.log("MongoDb connection failed.")
+		logFunc("MongoDb connection failed.")
 	}else{
-		console.log("MongoDb connected.")
+		logFunc("MongoDb connected.")
 		
 		client = setClient
 		
@@ -101,7 +107,7 @@ async function processPgn(pgn, resolve){
 		let variantKey = variantName2variantKey[tags.variant]
 		
 		if(!variantKey){
-			console.log(`unknown variant ${tags.variant}`)
+			logFunc(`unknown variant ${tags.variant}`)
 			
 			resolve(false)
 			
@@ -115,7 +121,7 @@ async function processPgn(pgn, resolve){
 	
 	if(PGN_URL){
 		tags.hash = pgn.hashCode().toString()
-		console.log(`created hash code ${tags.hash}`)
+		logFunc(`created hash code ${tags.hash}`)
 	}
 	
 	let stored = await gamecoll.findOne(tags)
@@ -129,7 +135,7 @@ async function processPgn(pgn, resolve){
 	}
 	
 	if(rebuild){
-		console.log(`${i}. processing game ${tags.white} - ${tags.black} ${tags.site}`)	
+		logFunc(`${i}. processing game ${tags.white} - ${tags.black} ${tags.site}`)	
 		
 		let ok = true
 		
@@ -157,17 +163,17 @@ async function processPgn(pgn, resolve){
 					let updateResult = await movecoll.updateOne(doc, {$set: doc}, {upsert: true})
 					let ok = false
 					if((typeof updateResult == "object")&&(typeof updateResult.result == "object")){						
-						console.log(`${san} update n ${updateResult.result.n}`)									
+						logFunc(`${san} update n ${updateResult.result.n}`)									
 						if(updateResult.result.n != 1){
-							console.log(`move update result n not 1`)
+							logFunc(`move update result n not 1`)
 							ok = false
 						}
 					}else{
-						console.log(`no move update result`)
+						logFunc(`no move update result`)
 						ok = false
 					}
 				}else{
-					console.log(`to few fen fields`)
+					logFunc(`to few fen fields`)
 				}
 			}
 		}
@@ -177,21 +183,21 @@ async function processPgn(pgn, resolve){
 				bookdepth: BOOK_DEPTH
 			}}
 
-			console.log(`updating game ${tags.site}`)
+			logFunc(`updating game ${tags.site}`)
 			let updateResult = await gamecoll.updateOne(tags, {$set: gameDoc}, {upsert: true})
 			if((typeof updateResult == "object")&&(typeof updateResult.result == "object")){						
-				console.log(`game update n ${updateResult.result.n}`)									
+				logFunc(`game update n ${updateResult.result.n}`)									
 				if(updateResult.result.n != 1){
-					console.log(`game update result n not 1`)
+					logFunc(`game update result n not 1`)
 				}
 			}else{
-				console.log(`no game update result`)
+				logFunc(`no game update result`)
 			}
 		}else{
-			console.log(`not updating game ${tags.site}`)
+			logFunc(`not updating game ${tags.site}`)
 		}
 	}else{
-		console.log(`${i}. skipping built game ${tags.white} - ${tags.black} ${tags.site}`)
+		logFunc(`${i}. skipping built game ${tags.white} - ${tags.black} ${tags.site}`)
 	}
 	
 	resolve(true)
@@ -217,26 +223,26 @@ async function processPgns(content){
 		await processPgnThen(pgn)
 	}
 	
-	console.log(`processing pgns done`)
+	logFunc(`processing pgns done`)
 	
 	client.close()
 	
-	console.log(`client closed`)
+	logFunc(`client closed`)
 }
 
 function loadGames(){
-	movecoll.countDocuments().then(result=>console.log("moves", result))
+	movecoll.countDocuments().then(result=>logFunc("moves", result))
 	
 	let url = PGN_URL || `https://lichess.org/api/games/user/${BOT_NAME}?max=${MAX_GAMES}`
 	
-	console.log(`downloading pgn games from ${url}`)
+	logFunc(`downloading pgn games from ${url}`)
 	
 	let headers = {}
 	
 	if(!PGN_URL) headers.Authorization = `Bearer ${BOT_TOKEN}`
 
 	if(PGN_URL && url.match(/\.7z$/)){
-		console.log(`7zip url detected`)
+		logFunc(`7zip url detected`)
 		
 		fetch(url, {
 			headers: headers
@@ -244,7 +250,7 @@ function loadGames(){
 			const dest = fs.createWriteStream(`temp.7z`)
         	response.body.pipe(dest)
         	response.body.on('end', _ => {
-				console.log(`7z file written to disk`)
+				logFunc(`7z file written to disk`)
 				
 				const Seven = require('node-7z')
  
@@ -255,7 +261,7 @@ function loadGames(){
 				let pgnFile = null
  
 				myStream.on('data', function (data) {
-					console.log(data)
+					logFunc(data)
 					
 					if(data.status == "extracted"){
 						let file = data.file
@@ -267,7 +273,7 @@ function loadGames(){
 				})
  
 				myStream.on('end', function () {					
-					console.log(`7z file extraced ok ${pgnFile}`)
+					logFunc(`7z file extraced ok ${pgnFile}`)
 					
 					let content = fs.readFileSync(pgnFile).toString()
 					
@@ -275,13 +281,13 @@ function loadGames(){
 				})
 
 				myStream.on('error', err => {
-					console.log(`an error occured unzipping 7z file`, err)
+					logFunc(`an error occured unzipping 7z file`, err)
 					
 					client.close()
 				})
 			})
 			dest.on('error', err => {
-				console.log(`an error occured writing 7z file`, err)
+				logFunc(`an error occured writing 7z file`, err)
 			})
 		})	
 	}else{
