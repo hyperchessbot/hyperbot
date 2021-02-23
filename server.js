@@ -63,6 +63,8 @@ const calcFen = (!(isEnvTrue('SKIP_FEN')))
 envKeys.push('SKIP_FEN')
 const incrementalUpdate = isEnvTrue('INCREMENTAL_UPDATE')
 envKeys.push('INCREMENTAL_UPDATE')
+const skipAfterFailed = parseInt(process.env.SKIP_AFTER_FAILED || "0")
+envKeys.push('SKIP_AFTER_FAILED')
 const appName = process.env.APP_NAME || "hyperchessbot"
 envKeys.push('APP_NAME')
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
@@ -528,11 +530,19 @@ function requestBook(state){
     })    
 }
 
-function getUseBook(moves){
+function getUseBook(moves, failedLookups){
+	if(skipAfterFailed){
+		if(failedLookups.count >= skipAfterFailed){
+			logFile(`skip use book after ${failedLookups.count} failed lookups`)
+
+			return false
+		}
+	}
+
 	return (useBook || useMongoBook || usePolyglot || useSolution) && (moves.length <= bookDepth)
 }
 
-async function makeMove(gameId, state, moves, analyzejob, actualengine){
+async function makeMove(gameId, state, moves, analyzejob, actualengine, failedLookups){
 	logFile(`makeMove ${gameId} ${state} ${moves} ${analyzejob} ${actualengine}`)
 
     if(state.realtime && playingGameId && (gameId != playingGameId)){
@@ -572,7 +582,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
     let bookalgeb = null
 	let bookSource = null
 
-    if(getUseBook(moves)){
+    if(getUseBook(moves, failedLookups)){
         let blob = await requestBook(state)
 
         if(blob){
@@ -608,6 +618,10 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
             bestmove: bookalgeb,
             source: bookSource + " book"
         })
+    }else{
+    	failedLookups.count++
+
+    	logFile(`failed lookups ${failedLookups.count}`)
     }
 
     if(!enginePromise){		
@@ -675,7 +689,7 @@ async function makeMove(gameId, state, moves, analyzejob, actualengine){
 					
 						engine.spawn() // restart engine for retry move
 
-						setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine), 10 * SECOND)
+						setTimeout(_ => makeMove(gameId, state, moves, analyzejob, actualengine, failedLookups), 10 * SECOND)
 					}                    
                 }
             }
@@ -706,6 +720,10 @@ function playGame(gameId){
 
 	let storedChess = null
 	let storedMoves = null
+
+	let failedLookups = {
+		count: 0
+	}
 
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
@@ -846,7 +864,7 @@ function playGame(gameId){
                 moves = state.moves.split(" ")
 				state.movesArray = moves
 
-				if(getUseBook(moves) || calcFen){
+				if(getUseBook(moves, failedLookups) || calcFen){
 					if(useScalachess && (state.variant != "standard")){
 						let result = makeUciMoves(state.variant, state.initialFen, moves)					
 	                    state.fen = result.fen
@@ -912,7 +930,7 @@ function playGame(gameId){
 
             if(botTurn){
                 try{
-                    makeMove(gameId, state, moves, analyzejob, actualengine)
+                    makeMove(gameId, state, moves, analyzejob, actualengine, failedLookups)
                 }catch(err){
 					console.log(err)
 				}

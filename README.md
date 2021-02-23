@@ -58,6 +58,8 @@ Post issues on GitHub https://github.com/hyperchessbot/hyperbot/issues .
   
 **SKIP_FEN** : set it to 'true' to skip calculating fen for current position beyond book depth, when true, fen will only be calculated for positions within book depth, this makes the bot play faster, but the position on the home page will not be shown beyond book depth  
   
+**SKIP_AFTER_FAILED** : set it to a positive integer to avoid book lookup after that many failed lookups ( default: don't skip )  
+  
 **INCREMENTAL_UPDATE** : set it to 'true' to allow incremental update of position for standard games ( by default position is rebuilt from movelist on every move )  
   
 **KEEP_ALIVE_URL** : set this to the full link of your bot home page ( https://[yourappname].herokuapp.com , where change [yourappname] to your Heroku app name ) if you want your bot to be kept alive from early morning till late night Heroku server time, keeping alive a free Heroku bot for 24/7 is not possible, because a free Heroku account has a monthly quota of 550 hours  
