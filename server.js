@@ -61,6 +61,8 @@ const disableLogs = isEnvTrue('DISABLE_LOGS')
 envKeys.push('DISABLE_LOGS')
 const calcFen = (!(isEnvTrue('SKIP_FEN')))
 envKeys.push('SKIP_FEN')
+const incrementalUpdate = isEnvTrue('INCREMENTAL_UPDATE')
+envKeys.push('INCREMENTAL_UPDATE')
 const appName = process.env.APP_NAME || "hyperchessbot"
 envKeys.push('APP_NAME')
 const generalTimeout = parseInt(process.env.GENERAL_TIMEOUT || "15")
@@ -702,6 +704,9 @@ function playGame(gameId){
 	let playgameTimeout = null
 	let duration = null
 
+	let storedChess = null
+	let storedMoves = null
+
     streamNdjson({url: lichessUtils.streamBotGameUrl(gameId), token: process.env.TOKEN, timeout: generalTimeout, log: logApi, timeoutCallback: _=>{
         logPage(`game ${gameId} timed out ( playing : ${playingGameId} )`)
 		
@@ -847,9 +852,29 @@ function playGame(gameId){
 	                    state.fen = result.fen
 	                }else{
 	                	if(useScalachess) logPage(`switched to chess.js for variant standard`)
-	                    const chess = new Chess()
-	                    for(let move of moves) chess.move(move, {sloppy:true})
+
+	                    let chess = new Chess()
+	                	let updateDone = false
+
+	                	if(storedMoves && ( (moves.length - storedMoves.split(" ").length) == 1 ) && incrementalUpdate ){
+	                		if(state.moves.substring(0, storedMoves.length) == storedMoves){
+	                			chess = storedChess
+	                			const lastMove = moves[moves.length - 1]
+	                			chess.move(lastMove, {sloppy:true})	                			
+	                			updateDone = true
+
+	                			logFile(`updated chess incrementally with move ${lastMove} , stored was ${storedMoves} , update was ${state.moves}`)
+	                		}
+	                	}
+
+	                	if(!updateDone){
+	                		for(let move of moves) chess.move(move, {sloppy:true})
+	                	}	                    
+
 	                    state.fen = chess.fen()
+
+	                    storedMoves = state.moves
+	                	storedChess = chess
 	                }
 
 	                logFile(`setting up fen from moves done`)
