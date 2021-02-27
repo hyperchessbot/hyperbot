@@ -706,9 +706,15 @@ function abortGame(gameId){
 	})
 }
 
-let abortGameTimeout = null
+function enqueueGame(gameId){
+	playQueue.push(gameId)
+
+	logFile(`enqueued game ${gameId} , queue ${playQueue}`)
+}
 
 function playGame(gameId){
+	let abortGameTimeout = null
+
     logPage(`playing game: ${gameId}`)
 
     let actualengine, analyzejob, speed, correspondence, realtime, botWhite, variant, initialFen, whiteName, blackName, whiteTitle, blackTitle, whiteRating, blackRating, rated, mode
@@ -974,7 +980,7 @@ function streamEvents(){
 			
 			if(correspondence && allowCorrespondence) speedok = true
 
-            if(realtime && playingGameId){
+            if( (realtime && playingGameId) || playQueue.length ){
                 decline(challengeId, `later`)
             }else if(!acceptVariants.includes(variant)){
                 decline(challengeId, `variant`)
@@ -999,7 +1005,7 @@ function streamEvents(){
         if(blob.type == "gameStart"){                
             let gameId = blob.game.id
 			
-            setTimeout(_=>playGame(gameId), gameStartDelay * SECOND)
+            setTimeout(_ => enqueueGame(gameId), gameStartDelay * SECOND)
         }
 
         if(blob.type == "gameFinish"){                
@@ -1422,6 +1428,34 @@ app.use('/', express.static(__dirname))
 ////////////////////////////////////////////////////////////////////////////////
 // launch
 
+const playQueue = []
+
+let lastPlayGame = null
+
+const playGameDelay = parseInt(process.env.PLAY_GAME_DELAY || "5000")
+
+function watchPlayQueue(){
+	if(playQueue.length){
+		const now = new Date().getTime()
+
+		if(lastPlayGame){
+			const elapsed = now - lastPlayGame
+
+			if(elapsed < playGameDelay){
+				return
+			}
+		}
+
+		lastPlayGame = now
+
+		const gameId = playQueue.shift()
+
+		logFile(`dequeued game ${gameId} , queue ${playQueue}`)
+
+		playGame(gameId)
+	}
+}
+
 app.listen(port, _ => {
     console.log(`Hyperbot listening on port ${port} !`)
 
@@ -1440,6 +1474,8 @@ app.listen(port, _ => {
             }        
         }, KEEP_ALIVE_INTERVAL * MINUTE)
     }
+
+    setInterval(watchPlayQueue, 200)
 
     streamEvents()
 
