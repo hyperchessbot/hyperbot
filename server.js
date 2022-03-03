@@ -136,6 +136,8 @@ const useSolution = isEnvTrue('USE_SOLUTION')
 envKeys.push('USE_SOLUTION')
 const welcomeMessage = process.env.WELCOME_MESSAGE || `Hello, My name is JPSBOT, @JPS838898's pet bot. I wish you good luck. Thank you`
 envKeys.push('WELCOME_MESSAGE')
+const goodLuckMessage = process.env.GOOD_LUCK_MESSAGE || `Good luck !`
+envKeys.push('GOOD_LUCK_MESSAGE')
 const goodGameMessage = process.env.GOOD_GAME_MESSAGE || `Good game !`
 envKeys.push('GOOD_GAME_MESSAGE')
 let disableSyzygy = isEnvTrue('DISABLE_SYZYGY')
