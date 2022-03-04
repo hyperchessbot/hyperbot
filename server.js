@@ -254,7 +254,7 @@ if(useStockfish13){
 }
 
 if(useStockfish14){	
-	stockfishPath = useScalachess ? 'stockfish14m' : 'stockfish14'
+	stockfishPath = useScalachess ? 'stockfish14.1m' : 'stockfish14.1'
 
 	console.log(`using Stockfish 14 ( ${stockfishPath} )`)
 }
