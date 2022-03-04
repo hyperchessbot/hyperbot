@@ -254,7 +254,7 @@ if(useStockfish13){
 }
 
 if(useStockfish14){	
-	stockfishPath = useScalachess ? 'fairy-stockfish-largeboard_x86-64-modern' : 'stockfish13'
+	stockfishPath = useScalachess ? 'stockfish14m' : 'stockfish14'
 
 	console.log(`using Stockfish 14 ( ${stockfishPath} )`)
 }
