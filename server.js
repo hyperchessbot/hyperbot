@@ -57,7 +57,7 @@ let envKeys = []
 
 const useStockfish13 = isEnvTrue('USE_STOCKFISH_13')
 envKeys.push('USE_STOCKFISH_13')
-const useStockfish13 = isEnvTrue('USE_STOCKFISH_14')
+const useStockfish14 = isEnvTrue('USE_STOCKFISH_14')
 envKeys.push('USE_STOCKFISH_14')
 const disableLogs = isEnvTrue('DISABLE_LOGS')
 envKeys.push('DISABLE_LOGS')
