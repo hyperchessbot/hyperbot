@@ -57,6 +57,8 @@ let envKeys = []
 
 const useStockfish13 = isEnvTrue('USE_STOCKFISH_13')
 envKeys.push('USE_STOCKFISH_13')
+const useStockfish13 = isEnvTrue('USE_STOCKFISH_14')
+envKeys.push('USE_STOCKFISH_14')
 const disableLogs = isEnvTrue('DISABLE_LOGS')
 envKeys.push('DISABLE_LOGS')
 const calcFen = (!(isEnvTrue('SKIP_FEN')))
@@ -249,6 +251,12 @@ if(useStockfish13){
 	stockfishPath = useScalachess ? 'stockfish13m' : 'stockfish13'
 
 	console.log(`using Stockfish 13 ( ${stockfishPath} )`)
+}
+
+if(useStockfish14){	
+	stockfishPath = useScalachess ? 'fairy-stockfish-largeboard_x86-64-modern' : 'stockfish13'
+
+	console.log(`using Stockfish 14 ( ${stockfishPath} )`)
 }
 
 const enginePath = useLc0 ? LC0_EXE : stockfishPath
